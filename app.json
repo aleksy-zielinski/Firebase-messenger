@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "RueBaRue",
+    "slug": "ruebarue",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "buildNumber": "1",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.instancea.Kata"
+    },
+    "android": {
+      "versionCode": 2,
+      "package": "com.instancea.Kata"
+    }
+  }
+}
