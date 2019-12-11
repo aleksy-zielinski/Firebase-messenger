@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, StatusBar } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text, StatusBar, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -20,6 +20,7 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <Text style={styles.loginText}>Login</Text>
@@ -72,6 +73,7 @@ export default class LoginScreen extends React.Component {
               <Text style={styles.loginButtonText}>Sign up with Google</Text>
             </TouchableOpacity>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

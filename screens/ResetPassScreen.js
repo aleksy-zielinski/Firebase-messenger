@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { FontAwesome } from '@expo/vector-icons';
 
@@ -19,41 +19,46 @@ export default class ResetPassScreen extends React.Component {
   }
 
   _resetAction = () => {
+    Keyboard.dismiss();
     alert('check mail');
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.loginText}>Reset Password</Text>
-        <View style={styles.fillBox}>
-          <TextInput
-            dense = {true}
-            mode = 'outlined'
-            style={styles.textInput1}
-            label='Email'
-            value={this.state.email}
-            onChangeText={text => this._handleTextChange(text) }
-            
-          />
-          <View style={styles.buttonContainer}>
-            <Button 
-              mode="contained" 
-              color = '#e66656'
-              labelStyle = {{color: 'white', fontSize: 16}}
-              style = {styles.buttonLogin}
-              onPress={() => this._resetAction()}>
-              RESET
-            </Button>
-            <TouchableOpacity
-                style={styles.loginButtonContainer}
-                onPress={() => this.props.navigation.goBack()}
-                underlayColor='#fff'>
-                <Text style={styles.loginButtonText}>Login</Text>
-              </TouchableOpacity>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      {/* <KeyboardAvoidingView style={styles.container} behavior="padding" enabled> */}
+        <View style={styles.container}>
+          <Text style={styles.loginText}>Reset Password</Text>
+          <View style={styles.fillBox}>
+            <TextInput
+              dense = {true}
+              mode = 'outlined'
+              style={styles.textInput1}
+              label='Email'
+              value={this.state.email}
+              onChangeText={text => this._handleTextChange(text) }
+              
+            />
+            <View style={styles.buttonContainer}>
+              <Button 
+                mode="contained" 
+                color = '#e66656'
+                labelStyle = {{color: 'white', fontSize: 16}}
+                style = {styles.buttonLogin}
+                onPress={() => this._resetAction()}>
+                RESET
+              </Button>
+              <TouchableOpacity
+                  style={styles.loginButtonContainer}
+                  onPress={() => this.props.navigation.goBack()}
+                  underlayColor='#fff'>
+                  <Text style={styles.loginButtonText}>Login</Text>
+                </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      {/* </KeyboardAvoidingView> */}
+      </TouchableWithoutFeedback>
     );
   }
 }

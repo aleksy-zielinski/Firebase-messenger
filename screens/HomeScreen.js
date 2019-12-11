@@ -1,8 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
-  Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,38 +8,67 @@ import {
   View,
   StatusBar,
 } from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
+import {  FontAwesome } from '@expo/vector-icons';
 
+const options = [
+  'All messages',
+  'Priority',
+  'Unread',
+];
 
-export default function MessagesScreen() {
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="light-content" />
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
+export default class MessagesScreen extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedIndex: 0,
+    };
+  }
+
+  _selectOption = (index) =>{
+
+    const selectCate =  options[index]
+    console.log(selectCate)
+    this.setState({ selectedIndex: index });  
+
+  }
+
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+
+        <View style={styles.topContainer}>
+        
+          <ModalDropdown 
+            onSelect={(index)=> this._selectOption(index)}
+            defaultIndex = {0}
+            defaultValue={'All messages'} 
+            options={options}
+            style={styles.buttonDropDown}
+            textStyle={styles.dropDownButtonText}
+            dropdownStyle={{left: 0, right: 10, height: 120}}
+            dropdownTextStyle={{fontSize:16, textAlign:'center'}}
           />
+          <FontAwesome
+            style = {styles.arrow}
+            name={'angle-down'}
+            size={30}
+          />
+
         </View>
-
-        <View style={styles.getStartedContainer}>
-
-          <Text style={styles.getStartedText}>Get started by opening</Text>
-
-
-          <Text style={styles.getStartedText}>
-            Change this text and your app will automatically reload.
-          </Text>
-        </View>
-      </ScrollView>
-    </View>
-  );
+       
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.contentContainer}>
+         
+  
+        </ScrollView>
+      </View>
+    );
+  }
+  
 }
 
 MessagesScreen.navigationOptions = {
@@ -61,88 +88,36 @@ function handleLearnMorePress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
+    backgroundColor: 'lightgray',
   },
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
+  topContainer: {
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginLeft: 10, 
+    marginRight: 10,
+    marginTop: 10, 
+    marginBottom: 0,
+    height: 40,
+    flexDirection: 'row',
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
+  arrow: {
+    color: 'gray',
+    marginRight: 10,
+    marginTop: 5
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  buttonDropDown:{
+    flex: 1,
+    
   },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
+  dropDownButtonText:{
+    fontSize:16, 
+    marginTop:10, 
+    marginLeft: 10,
+    marginBottom: 10
   },
 });
