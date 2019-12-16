@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   View,
   StatusBar,
+  FlatList,
+  Platform
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {  FontAwesome } from '@expo/vector-icons';
+import TaskCell from '../components/TaskCell';
 
 const options = [
   'All messages',
@@ -35,6 +38,31 @@ export default class MessagesScreen extends React.Component {
   }
 
   render(){
+
+    const data = [
+      {
+        'user_name':'David Fincher',
+        'location':'Beach house',
+        'message':'what up',
+        'start_time':'12/01/2019',
+        'end_time':'12/10/2019',
+        'creat_time': '12/02/2019 10:30 pm',
+        'is_read' : false,
+        'content' : 'Specifies font weight. The values normal and bold are supported for most fonts. Not all fonts have a variant for each of the numeric values, in that case the closest one is chosen.'
+      },
+      {
+        'user_name':'Danny Boyle',
+        'location':'Beach house',
+        'message':'what up',
+        'start_time':'12/01/2019',
+        'end_time':'12/10/2019',
+        'creat_time': '12/02/2019 10:30 pm',
+        'is_read' : true,
+        'content' : 'It takes input in the form of values for Red, Green and Blue ranging from 0 to 255 and then converts those values to a hexadecimal string that can be used to specify color in html/css code.'
+      },
+
+    ]
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -59,12 +87,24 @@ export default class MessagesScreen extends React.Component {
 
         </View>
        
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.contentContainer}>
-         
-  
-        </ScrollView>
+        <FlatList
+              ref={notiRef => this.listView = notiRef}
+              data={data}
+              // key={keyGrid}
+              // numColumns={2}
+              keyExtractor={item => item.user_name}
+              // refreshing={isRefresh}
+              // onRefresh={this.actionRefresh}
+              // ListFooterComponent={this.renderFooter}
+              renderItem={({ item }) => (
+                <TaskCell
+                  item={item}
+                />
+              )}
+              // onEndReached={this.actionLoadMore}
+              // onEndReachedThreshold={0.01}
+              removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
+            />
       </View>
     );
   }
@@ -88,14 +128,14 @@ function handleLearnMorePress() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'lightgray',
+    backgroundColor: '#f2f2f2',
   },
   contentContainer: {
     paddingTop: 30,
   },
   topContainer: {
     backgroundColor: 'white',
-    borderColor: 'gray',
+    borderColor: 'lightgray',
     borderWidth: 1,
     borderRadius: 5,
     marginLeft: 10, 
