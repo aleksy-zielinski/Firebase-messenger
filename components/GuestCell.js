@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   StyleSheet,
-  TouchableOpacity
  } from 'react-native';
  import {  Entypo } from '@expo/vector-icons';
 
@@ -15,9 +14,7 @@ export default class PostCell extends React.PureComponent {
 
     return (
       <View style={styles.container}> 
-         <TouchableOpacity 
-          style={{flex: 1}}
-          onPress={this.props.onPress}>
+
         <View style={styles.topContainer}>
           <Image
             style={styles.avatar}
@@ -25,26 +22,19 @@ export default class PostCell extends React.PureComponent {
           />
           <View style={{marginLeft: 10, flex: 1}}>
 
-            <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText}>{item.user_name}</Text>
-              <Text style= {styles.creatTimeText}>{item.creat_time}</Text>
-            </View>
+
             <View style={{flexDirection: 'row'}}>
               <View style={{flex:1}}>
+               <Text style= {styles.nameText}>{item.user_name}</Text>
                 <Text style={styles.locationText}>{item.location}</Text>
                 <Text style={styles.durationText}>{item.start_time} - {item.end_time}</Text>
               </View>
+
               <Entypo
                 style = {styles.box}
-                color =  'darkgray'
-                name={'box'}
-                size={25}
-              />
-              <Entypo
-                style = {styles.box}
-                color =  {item.is_read ? 'darkgray' : 'salmon'}
-                name={'flag'}
-                size={25}
+                color =  'black'
+                name={'chevron-thin-right'}
+                size={20}
               />
 
               
@@ -53,8 +43,12 @@ export default class PostCell extends React.PureComponent {
           </View>
 
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.content} </Text>
-        </TouchableOpacity>
+        <Text style={[styles.contentText]}> {item.content} </Text>
+        <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
+        <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
+        <Text style={styles.codeText}> {item.code} </Text>
+        </View>
+        
       </View>
     );
   }
@@ -84,27 +78,34 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 20,
   },
-  locationText: {
-    color: 'dimgray',
-    fontSize: 13,
-  },
   durationText: {
     color: 'dimgray',
     fontSize: 13,
   },
+  locationText: {
+    color: 'dimgray',
+    fontSize: 15,
+  },
   creatTimeText: {
     color: 'dimgray',
-    fontSize: 13,
+    fontSize: 15,
     marginLeft:'auto',
     marginRight: 0,
   },
   box: {
+    marginTop: 20,
     marginLeft: 10,
     marginRight: 0,
   },
   contentText: {
     textAlign: 'justify',
-    marginHorizontal: 20,
-    marginBottom: 20
+    fontWeight: '300',
+    fontSize: 15,
+    marginHorizontal: 20
+  },
+  codeText: {
+    textAlign: 'justify',
+    fontWeight: '300',
+    fontSize: 15,
   }
 })

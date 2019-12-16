@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
+// import {  AntDesign } from '@expo/vector-icons';
+// import Colors from '../constants/Colors';
 
 
 // export default function LogoutScreen() {
@@ -21,6 +23,14 @@ import { View, StyleSheet } from 'react-native';
 
 LogoutScreen.navigationOptions = {
   header: null,
+  // tabBarIcon: ({ focused }) => (
+  //   <AntDesign
+  //     name={'logout'}
+  //     size={20}
+  //     style={{ marginBottom: -10}}
+  //     color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+  //   />
+  // ),
 };
 
 const styles = StyleSheet.create({

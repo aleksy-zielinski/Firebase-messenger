@@ -5,8 +5,9 @@ import { MaterialIcons, FontAwesome, AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 
-import MessagesScreen from '../screens/HomeScreen';
-import GuestsScreen from '../screens/LinksScreen';
+import MessagesScreen from '../screens/MessageScreen';
+import ChatScreen from '../screens/ChatScreen';
+import GuestsScreen from '../screens/GuestScreen';
 import LogoutScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ResetPassScreen from '../screens/ResetPassScreen';
@@ -29,7 +30,7 @@ HomeStack.navigationOptions = {
     <MaterialIcons
       name={'message'}
       size={25}
-      // style={{ marginBottom: -3 }}
+      style={{ marginBottom: -10 }}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
@@ -49,7 +50,7 @@ LinksStack.navigationOptions = {
     <FontAwesome
       name={'user'}
       size={25}
-      // style={{ marginBottom: -3 }}
+      style={{ marginBottom: -10 }}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
@@ -69,7 +70,7 @@ SettingsStack.navigationOptions = {
     <AntDesign
       name={'logout'}
       size={20}
-      // style={{ marginBottom: -3 }}
+      style={{ marginBottom: -10}}
       color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
     />
   ),
@@ -80,35 +81,36 @@ const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-}, {tabBarOptions:{
-  style:{backgroundColor:'#455a69'},
-  activeTintColor: 'white',
-}});
+}, {
+  tabBarOptions:{
+    activeTintColor: 'white',
+    style:{
+      backgroundColor:'#455a69'
+    }
+  }
+});
+
+const messageStack = createStackNavigator({
+  Home: tabNavigator,
+  Chat: ChatScreen
+},
+{
+  headerMode: "none",
+})
 
 
 const loginStack = createStackNavigator({
-  Login : {
-    screen: LoginScreen,
-    navigationOptions: {
-      header: null,
-    }
-  },
-  Reset : {
-    screen: ResetPassScreen,
-    navigationOptions: {
-      header: null,
-    }
-  },
+  Login : LoginScreen,
+  Reset : ResetPassScreen,
 },
   {
-    initialRouteName: 'Login',
-    headerMode: 'screen',
+    headerMode: 'none',
   }
 );
 
 const rootStack = createSwitchNavigator({
   LoginScreen: loginStack,
-  MainTabbar: tabNavigator
+  MainTabbar: messageStack
 })
 
 

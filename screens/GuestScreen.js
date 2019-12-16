@@ -1,18 +1,14 @@
-import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   View,
   StatusBar,
   FlatList,
   Platform
 } from 'react-native';
-import ModalDropdown from 'react-native-modal-dropdown';
-import {  FontAwesome } from '@expo/vector-icons';
-import TaskCell from '../components/TaskCell';
+import { Searchbar } from 'react-native-paper';
+import {  Ionicons } from '@expo/vector-icons';
+import GuestCell from '../components/GuestCell';
 
 const options = [
   'All messages',
@@ -20,13 +16,36 @@ const options = [
   'Unread',
 ];
 
-export default class MessagesScreen extends React.Component {
+export default class GuestsScreen extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       selectedIndex: 0,
+      firstQuery: '',
     };
+    this.data = [
+      {
+        'user_name':'David Fincher',
+        'location':'Beach house',
+        'start_time':'12/01/2019',
+        'end_time':'12/10/2019',
+        'creat_time': '12/02/2019 10:30 pm',
+        'content' : 'david.fincher@gmail.com / 617-216-9862',
+        'code': '1244'
+      },
+      {
+        'user_name':'Danny Boyle',
+        'location':'Beach house',
+        'start_time':'12/01/2019',
+        'end_time':'12/10/2019',
+        'creat_time': '12/02/2019 10:30 pm',
+        'is_read' : true,
+        'content' : 'david.fincher@gmail.com / 617-216-9862',
+        'code': '1244'
+      },
+
+    ]
   }
 
   _selectOption = (index) =>{
@@ -38,30 +57,7 @@ export default class MessagesScreen extends React.Component {
   }
 
   render(){
-
-    const data = [
-      {
-        'user_name':'David Fincher',
-        'location':'Beach house',
-        'message':'what up',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : false,
-        'content' : 'Specifies font weight. The values normal and bold are supported for most fonts. Not all fonts have a variant for each of the numeric values, in that case the closest one is chosen.'
-      },
-      {
-        'user_name':'Danny Boyle',
-        'location':'Beach house',
-        'message':'what up',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : true,
-        'content' : 'It takes input in the form of values for Red, Green and Blue ranging from 0 to 255 and then converts those values to a hexadecimal string that can be used to specify color in html/css code.'
-      },
-
-    ]
+    const { firstQuery } = this.state;
 
     return (
       <View style={styles.container}>
@@ -69,19 +65,15 @@ export default class MessagesScreen extends React.Component {
 
         <View style={styles.topContainer}>
         
-          <ModalDropdown 
-            onSelect={(index)=> this._selectOption(index)}
-            defaultIndex = {0}
-            defaultValue={'All messages'} 
-            options={options}
+          <Searchbar
             style={styles.buttonDropDown}
-            textStyle={styles.dropDownButtonText}
-            dropdownStyle={{left: 0, right: 10, height: 120}}
-            dropdownTextStyle={{fontSize:16, textAlign:'center'}}
+            placeholder="Search"
+            onChangeText={query => { this.setState({ firstQuery: query }); }}
+            value={firstQuery}
           />
-          <FontAwesome
+          <Ionicons
             style = {styles.arrow}
-            name={'angle-down'}
+            name={'ios-options'}
             size={30}
           />
 
@@ -89,7 +81,7 @@ export default class MessagesScreen extends React.Component {
        
         <FlatList
               ref={notiRef => this.listView = notiRef}
-              data={data}
+              data={this.data}
               // key={keyGrid}
               // numColumns={2}
               keyExtractor={item => item.user_name}
@@ -97,7 +89,7 @@ export default class MessagesScreen extends React.Component {
               // onRefresh={this.actionRefresh}
               // ListFooterComponent={this.renderFooter}
               renderItem={({ item }) => (
-                <TaskCell
+                <GuestCell
                   item={item}
                 />
               )}
@@ -111,19 +103,14 @@ export default class MessagesScreen extends React.Component {
   
 }
 
-MessagesScreen.navigationOptions = {
-  title: 'Message',
+GuestsScreen.navigationOptions = {
+  title: 'Guests',
   headerTintColor: 'white',
   headerStyle: {
     backgroundColor: '#455a69',
-  },
+  }
 };
 
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -134,10 +121,6 @@ const styles = StyleSheet.create({
     paddingTop: 30,
   },
   topContainer: {
-    backgroundColor: 'white',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 5,
     marginLeft: 10, 
     marginRight: 10,
     marginTop: 10, 
@@ -147,6 +130,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     color: 'gray',
+    marginLeft: 10,
     marginRight: 10,
     marginTop: 5
   },

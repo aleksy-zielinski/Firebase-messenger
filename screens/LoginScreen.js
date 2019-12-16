@@ -78,10 +78,6 @@ export default class LoginScreen extends React.Component {
   }
 }
 
-LoginScreen.navigationOptions = {
-  title: 'Login',
-};
-
 const styles = StyleSheet.create({
   buttonLogin:{
     flex: 1,
