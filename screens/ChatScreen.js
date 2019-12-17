@@ -9,8 +9,9 @@ import {
   Text
 } from 'react-native';
 import {  FontAwesome, Entypo } from '@expo/vector-icons';
-import TaskCell from '../components/TaskCell';
+import ChatCell from '../components/ChatCell';
 import { Appbar } from 'react-native-paper';
+import { GiftedChat } from 'react-native-gifted-chat'
 
 const options = [
   'All messages',
@@ -24,6 +25,28 @@ export default class ChatScreen extends React.Component {
     super(props);
     this.state = {
       selectedIndex: 0,
+      messages: [
+        {
+          _id: 2,
+          text: 'Hi',
+          createdAt: new Date(),
+          user: {
+            _id: 1,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        },
+        {
+          _id: 1,
+          text: 'Hello',
+          createdAt: new Date(),
+          user: {
+            _id: 2,
+            name: 'React Native',
+            avatar: 'https://placeimg.com/140/140/any',
+          },
+        },
+      ]
     };
     this.data = [
       {
@@ -49,14 +72,6 @@ export default class ChatScreen extends React.Component {
 
   }
 
-  _selectOption = (index) =>{
-
-    const selectCate =  options[index]
-    console.log(selectCate)
-    this.setState({ selectedIndex: index });  
-
-  }
-
   _onPressCell = (item) => {
 
     this.props.navigation.navigate('Chat',{
@@ -70,6 +85,12 @@ export default class ChatScreen extends React.Component {
   _handleBox = () => console.log('Searching');
 
   _handleMore = () => console.log('Shown more');
+
+  onSend(messages = []) {
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }))
+  }
 
   render(){
 
@@ -128,7 +149,7 @@ export default class ChatScreen extends React.Component {
 
           </View>
         </View>
-       
+{/*        
         <FlatList 
             ref={notiRef => this.listView = notiRef}
             data={this.data}
@@ -137,9 +158,8 @@ export default class ChatScreen extends React.Component {
             keyExtractor={item => item.user_name}
             // refreshing={isRefresh}
             // onRefresh={this.actionRefresh}
-            // ListFooterComponent={this.renderFooter}
             renderItem={({ item }) => (
-              <TaskCell
+              <ChatCell
                 item={item}
                 onPress={()=> this._onPressCell(item.post) }
               />
@@ -147,7 +167,14 @@ export default class ChatScreen extends React.Component {
             // onEndReached={this.actionLoadMore}
             // onEndReachedThreshold={0.01}
             removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
-          />
+          /> */}
+           <GiftedChat
+            messages={this.state.messages}
+            onSend={messages => this.onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+            />
     </View>
     );
   }

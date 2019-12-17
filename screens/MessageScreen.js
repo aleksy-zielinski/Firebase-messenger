@@ -59,7 +59,7 @@ export default class MessagesScreen extends React.Component {
 
   _onPressCell = (item) => {
 
-    console.log(item)
+    // console.log(item)
     this.props.navigation.navigate('Chat',{
       item: item
     });
