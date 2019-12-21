@@ -4,8 +4,10 @@ import {
   View,
   StatusBar,
   FlatList,
-  Platform
+  Platform,
+  TouchableOpacity,
 } from 'react-native';
+import ActionSheet from 'react-native-actionsheet';
 import { Searchbar } from 'react-native-paper';
 import {  Ionicons } from '@expo/vector-icons';
 import GuestCell from '../components/GuestCell';
@@ -21,8 +23,8 @@ export default class GuestsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedIndex: 0,
       firstQuery: '',
+      seletedIndex: 3,
     };
     this.data = [
       {
@@ -45,7 +47,18 @@ export default class GuestsScreen extends React.Component {
         'code': '1244'
       },
 
-    ]
+    ];
+    this.sortTitle = [
+      'Checked Out', 
+      'Currently Staying',
+      'Arriving Today',
+      'Arriving Soon (+3 Days)',
+      'Arriving This Week (+7 Days)',
+      'Arriving Next Week (+14 Days)',
+      'Show All',
+      'Huỷ'
+    ];
+    this.sortActionSheet;
   }
 
   _selectOption = (index) =>{
@@ -53,6 +66,21 @@ export default class GuestsScreen extends React.Component {
     const selectCate =  options[index]
     console.log(selectCate)
     this.setState({ selectedIndex: index });  
+
+  }
+
+  _onbtFilterPress = () => {
+
+    this.sortActionSheet.show()
+    
+  }
+
+  _sortActionSheetDidSelect = (index) =>{
+
+    if (index != this.sortTitle.length - 1){
+      this.setState({seletedIndex: index});
+    }
+    
 
   }
 
@@ -71,13 +99,27 @@ export default class GuestsScreen extends React.Component {
             onChangeText={query => { this.setState({ firstQuery: query }); }}
             value={firstQuery}
           />
-          <Ionicons
-            style = {styles.arrow}
-            name={'ios-options'}
-            size={30}
-          />
-
+          <TouchableOpacity onPress={this._onbtFilterPress}>
+            <Ionicons
+              style = {styles.arrow}
+              name={'ios-options'}
+              size={30}
+            />
+          </TouchableOpacity>
+         
         </View>
+
+        <ActionSheet 
+            ref={sort => this.sortActionSheet = sort}
+            options={this.sortTitle}
+            destructiveButtonIndex={this.state.seletedIndex}
+            cancelButtonIndex={this.sortTitle.length - 1}
+            onPress={(index) => { 
+              // console.log(index)
+              this._sortActionSheetDidSelect(index)
+
+            }}
+          />
        
         <FlatList
               ref={notiRef => this.listView = notiRef}

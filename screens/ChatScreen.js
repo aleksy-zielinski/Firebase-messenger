@@ -8,10 +8,9 @@ import {
   Image,
   Text
 } from 'react-native';
-import {  FontAwesome, Entypo } from '@expo/vector-icons';
-import ChatCell from '../components/ChatCell';
+import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 
 const options = [
   'All messages',
@@ -92,6 +91,31 @@ export default class ChatScreen extends React.Component {
     }))
   }
 
+  renderBubble= (props) => {
+    return (
+      <Bubble
+        {...props}
+        textStyle={{
+          left: {
+            color: 'white',
+          },
+          right: {
+            color: 'white',
+          },
+        }}
+        wrapperStyle={{
+          left: {
+            backgroundColor: '#4d6b85',
+          },
+          right: {
+            backgroundColor: 'darkgray',
+          },
+        }}
+        
+      />
+    );
+  }
+
   render(){
 
     const item = this.props.navigation.getParam('item');
@@ -169,6 +193,7 @@ export default class ChatScreen extends React.Component {
             removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
           /> */}
            <GiftedChat
+            renderBubble={this.renderBubble}
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
             user={{

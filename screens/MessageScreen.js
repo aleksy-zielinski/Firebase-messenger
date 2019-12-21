@@ -10,7 +10,6 @@ import {
 import ModalDropdown from 'react-native-modal-dropdown';
 import {  FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
-import { NavigationEvents } from 'react-navigation';
 
 const options = [
   'All messages',
@@ -89,6 +88,7 @@ export default class MessagesScreen extends React.Component {
             dropdownTextStyle={{fontSize:16, textAlign:'center'}}
           />
           <FontAwesome
+            pointerEvents= 'none'
             style = {styles.arrow}
             name={'angle-down'}
             size={30}
@@ -156,9 +156,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   arrow: {
+    position: 'absolute',
     color: 'gray',
-    marginRight: 10,
-    marginTop: 5
+    right: 10,
+    top: 5,
   },
   buttonDropDown:{
     flex: 1,
