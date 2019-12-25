@@ -10,6 +10,7 @@ import {
 import ModalDropdown from 'react-native-modal-dropdown';
 import {  FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
+import SetCookieParser from "set-cookie-parser"
 
 const options = [
   'All messages',
@@ -49,19 +50,25 @@ export default class MessagesScreen extends React.Component {
   }
 
   componentDidMount(){
+    
     this.getInboxRequest()
     // this.getThread()
   }
 
   getInboxRequest = async () => {
+
     
     try {
 
       let response = await fetch('https://www.ruebarue.com/api/messaging/inbox/current', {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
       });
-      // let responseJson = await response.json();
-      console.log(response);
+      let responseJson = await response.json();
+      console.log(responseJson);
+      // console.log(response);
       // this.setState({isLoading:false})
 
       // if (responseJson.status == 'OK'){

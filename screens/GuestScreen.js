@@ -7,7 +7,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import ActionSheet from 'react-native-actionsheet';
+// import ActionSheet from 'react-native-actionsheet';
 import { Searchbar } from 'react-native-paper';
 import {  Ionicons } from '@expo/vector-icons';
 import GuestCell from '../components/GuestCell';

@@ -19,13 +19,12 @@ export default class LoginScreen extends React.Component {
   }
 
   get_set_cookies = (headers) => {
-    const set_cookies = []
     for (const [name, value] of headers) {
         if (name === "set-cookie") {
-            set_cookies.push(value)
+            return value;
         }
     }
-    return set_cookies
+    return ''
   }
 
   loginRequest = async () => {
@@ -48,6 +47,7 @@ export default class LoginScreen extends React.Component {
       // this.setState({isLoading:false})
       const set_cookies = this.get_set_cookies(response.headers)
       console.log(set_cookies);
+      global.cookies = set_cookies;
 
       if (responseJson.status == 'OK'){
         global.userToken = responseJson.token;
