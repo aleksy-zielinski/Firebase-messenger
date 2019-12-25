@@ -18,6 +18,50 @@ export default class LoginScreen extends React.Component {
     this.setState({ 'email': text })
   }
 
+  get_set_cookies = (headers) => {
+    const set_cookies = []
+    for (const [name, value] of headers) {
+        if (name === "set-cookie") {
+            set_cookies.push(value)
+        }
+    }
+    return set_cookies
+  }
+
+  loginRequest = async () => {
+
+    try {
+
+      let formdata = new FormData();
+
+      formdata.append("email", 'pathum@ruebarue.com')
+      formdata.append("password", 'o1@8P7Az3v')
+      formdata.append("device_id", '1234')
+      formdata.append("fcm_id", '6789')
+
+      let response = await fetch('https://www.ruebarue.com/m/auth/login', {
+        method: 'POST',
+        body: formdata,
+      });
+      let responseJson = await response.json();
+      // console.log(responseJson);
+      // this.setState({isLoading:false})
+      const set_cookies = this.get_set_cookies(response.headers)
+      console.log(set_cookies);
+
+      if (responseJson.status == 'OK'){
+        global.userToken = responseJson.token;
+        this.props.navigation.navigate('MainTabbar')
+      } else{
+        console.log(responseJson.message);
+      }
+      
+    } catch (error) {
+      console.error(error);
+      this.setState({isLoading:false})
+    }
+  }
+
   render() {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -51,7 +95,7 @@ export default class LoginScreen extends React.Component {
               color = '#e66656'
               labelStyle = {{color: 'white', fontSize: 16}}
               style = {styles.buttonLogin}
-              onPress={() => this.props.navigation.navigate('MainTabbar')}>
+              onPress={() => this.loginRequest()}>
               LOG IN
             </Button>
             <TouchableOpacity

@@ -48,6 +48,55 @@ export default class MessagesScreen extends React.Component {
 
   }
 
+  componentDidMount(){
+    this.getInboxRequest()
+    // this.getThread()
+  }
+
+  getInboxRequest = async () => {
+    
+    try {
+
+      let response = await fetch('https://www.ruebarue.com/api/messaging/inbox/current', {
+        method: 'POST'
+      });
+      // let responseJson = await response.json();
+      console.log(response);
+      // this.setState({isLoading:false})
+
+      // if (responseJson.status == 'OK'){
+
+      // } else{
+      //   console.log(responseJson.message);
+      // }
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  getThread = async () => {
+    
+    try {
+
+      let response = await fetch('https://www.ruebarue.com/api/messaging/inbox/0/threads?page=1', {
+        method: 'GET'
+      });
+      // let responseJson = await response.json();
+      console.log(response);
+      // this.setState({isLoading:false})
+
+      // if (responseJson.status == 'OK'){
+
+      // } else{
+      //   console.log(responseJson.message);
+      // }
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   _selectOption = (index) =>{
 
     const selectCate =  options[index]

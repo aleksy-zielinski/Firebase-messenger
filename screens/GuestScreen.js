@@ -81,6 +81,11 @@ export default class GuestsScreen extends React.Component {
       this.setState({seletedIndex: index});
     }
     
+  }
+
+  _onPressCell = (item) => {
+
+    this.props.navigation.navigate('Scheduler',{item: item});
 
   }
 
@@ -133,6 +138,7 @@ export default class GuestsScreen extends React.Component {
               renderItem={({ item }) => (
                 <GuestCell
                   item={item}
+                  onPress={()=> this._onPressCell(item) }
                 />
               )}
               // onEndReached={this.actionLoadMore}

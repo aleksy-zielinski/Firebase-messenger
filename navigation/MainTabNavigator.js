@@ -7,6 +7,7 @@ import Colors from '../constants/Colors';
 
 import MessagesScreen from '../screens/MessageScreen';
 import ChatScreen from '../screens/ChatScreen';
+import ScheduledScreen from '../screens/ScheduledScreen';
 import GuestsScreen from '../screens/GuestScreen';
 import LogoutScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
@@ -92,7 +93,8 @@ const tabNavigator = createBottomTabNavigator({
 
 const messageStack = createStackNavigator({
   Home: tabNavigator,
-  Chat: ChatScreen
+  Chat: ChatScreen,
+  Scheduler: ScheduledScreen,
 },
 {
   headerMode: "none",
