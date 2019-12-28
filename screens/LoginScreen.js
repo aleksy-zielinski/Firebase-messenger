@@ -1,128 +1,195 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, StatusBar, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { 
+  TouchableOpacity, 
+  StyleSheet, 
+  View, 
+  Text, 
+  StatusBar, 
+  TouchableWithoutFeedback, 
+  Keyboard, 
+  ActivityIndicator, 
+  Alert,
+  Image
+} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { FontAwesome } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 
 export default class LoginScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      email: '',
-      password: ''
-    };
+
+    if (__DEV__){
+      this.state = {
+        email: 'pathum@ruebarue.com',
+        isValidEmai: true,
+        password: 'o1@8P7Az3v',
+        isValidPass: true,
+        isLoading: false,
+      };
+    } else {
+      this.state = {
+        email: '',
+        isValidEmai: true,
+        password: '',
+        isValidPass: true,
+        isLoading: false,
+      };
+    }
+   
   }
 
-  _handleTextChange = text => {
-    // this.setState({zip: event.nativeEvent.text});
-    this.setState({ 'email': text })
+  _handleEmailTextChange = text => {
+    let valid = this.checkValidateEmail(text);
+    this.setState({ email: text, isValidEmai: valid })
   }
 
-  get_set_cookies = (headers) => {
+  _handlePassTextChange = text => {
+
+    let valid = text.length > 3  || text === '';
+    this.setState({ password: text, isValidPass: valid })
+  }
+
+  checkValidateEmail = (text) => {
+    if (text === ''){
+      return true;
+    }
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(reg.test(text) === false){
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
+  saveCookies = (headers) => {
+    let cookieStr = '';
     for (const [name, value] of headers) {
         if (name === "set-cookie") {
-            return value;
+            cookieStr = value //+ '; path=/; domain=.mobile-dot-ruebarue-curator.appspot.com;'
+            break;
         }
     }
-    return ''
+    console.log(cookieStr);
+    global.cookies = cookieStr;
   }
-
+ 
   loginRequest = async () => {
+
+    Keyboard.dismiss();
+    this.setState({isLoading:true})
+    const {email, password} = this.state
 
     try {
 
       let formdata = new FormData();
 
-      formdata.append("email", 'pathum@ruebarue.com')
-      formdata.append("password", 'o1@8P7Az3v')
-      formdata.append("device_id", '1234')
-      formdata.append("fcm_id", '6789')
+      formdata.append("email", email)
+      formdata.append("password", password)
+      formdata.append("device_id", Constants.installationId)
+      formdata.append("fcm_id", 'test')
 
-      let response = await fetch('https://www.ruebarue.com/m/auth/login', {
+      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/auth/login', {
         method: 'POST',
         body: formdata,
       });
+      this.setState({isLoading:false})
       let responseJson = await response.json();
       // console.log(responseJson);
-      // this.setState({isLoading:false})
-      const set_cookies = this.get_set_cookies(response.headers)
-      console.log(set_cookies);
-      global.cookies = set_cookies;
+      this.saveCookies(response.headers)
 
       if (responseJson.status == 'OK'){
         global.userToken = responseJson.token;
         this.props.navigation.navigate('MainTabbar')
       } else{
-        console.log(responseJson.message);
+        Alert.alert('Error', responseJson.message)
       }
       
     } catch (error) {
-      console.error(error);
       this.setState({isLoading:false})
+      Alert.alert('Error',error.message)
+      console.error(error);
     }
   }
 
   render() {
+
+    const {isValidEmai, isValidPass, email, password} = this.state
+    const enableBtLogin = this.checkValidateEmail(email) && email.length > 0 && password.length > 3;
+
     return (
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <Text style={styles.loginText}>Login</Text>
-        <View style={styles.fillBox}>
-          <TextInput
-            dense = {true}
-            mode = 'outlined'
-            style={styles.textInput1}
-            label='Email'
-            value={this.state.email}
-            onChangeText={text => this._handleTextChange(text) }
-            
-          />
-          <TextInput
-            dense = {true}
-            secureTextEntry = {true}
-            mode = 'outlined'
-            style={styles.textInput2}
-            label='Password'
-            value={this.state.password}
-            onChangeText={text => {
-              this.setState({ 'password': text })
-            }}
-          />
-          <View style={styles.buttonContainer}>
-            <Button 
-              mode="contained" 
-              color = '#e66656'
-              labelStyle = {{color: 'white', fontSize: 16}}
-              style = {styles.buttonLogin}
-              onPress={() => this.loginRequest()}>
-              LOG IN
-            </Button>
-            <TouchableOpacity
-                style={styles.resetButtonContainer}
-                onPress={() => this.props.navigation.navigate('Reset')}
-                underlayColor='#fff'>
-                <Text style={styles.resetButtonText}>Reset Password</Text>
-              </TouchableOpacity>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
+            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 140, resizeMode: 'contain', marginBottom: 20}}  />
+            <Text style={styles.loginText}>Login</Text>
           </View>
+          
+          <View style={styles.fillBox}>
+            <TextInput
+              error = {!isValidEmai}
+              dense = {true}
+              mode = 'outlined'
+              style={styles.textInput1}
+              label='Email'
+              value={email}
+              onChangeText={text => this._handleEmailTextChange(text) }
+              
+            />
+            <TextInput
+              error = {!isValidPass}
+              dense = {true}
+              secureTextEntry = {true}
+              mode = 'outlined'
+              style={styles.textInput2}
+              label='Password'
+              value={password}
+              onChangeText={text => {this._handlePassTextChange(text)}}
+            />
+            <View style={styles.buttonContainer}>
+              <Button 
+                mode="contained" 
+                color = '#e66656'
+                labelStyle = {{color: 'white', fontSize: 16}}
+                style = {styles.buttonLogin}
+                disabled = {!enableBtLogin}
+                onPress={() => this.loginRequest()}>
+                LOG IN
+              </Button>
+              <TouchableOpacity
+                  style={styles.resetButtonContainer}
+                  onPress={() => this.props.navigation.navigate('Reset')}
+                  underlayColor='#fff'>
+                  <Text style={styles.resetButtonText}>Reset Password</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+           {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator size='large' />
+              </View>
+            }
         </View>
-        <TouchableOpacity
-              style={styles.loginButtonContainer}
-              onPress={() => this.props.navigation.navigate('MainTabbar')}
-              underlayColor='#fff'>
-              <FontAwesome
-                style= {styles.googleIcon}
-                name= {"google"}
-              />
-              <Text style={styles.loginButtonText}>Sign up with Google</Text>
-            </TouchableOpacity>
-      </View>
       </TouchableWithoutFeedback>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  loadingStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   buttonLogin:{
     flex: 1,
   },
@@ -141,7 +208,8 @@ const styles = StyleSheet.create({
   fillBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 7,
-    margin: 20
+    marginHorizontal: 20,
+    marginBottom: 240
   },
   loginButtonContainer:{
     backgroundColor: 'white',

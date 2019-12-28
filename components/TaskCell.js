@@ -7,11 +7,21 @@ import {
   TouchableOpacity
  } from 'react-native';
  import {  Entypo } from '@expo/vector-icons';
+ import Moment from 'moment';
 
 export default class PostCell extends React.PureComponent {
 
+  formatTime = (timeStr) => {
+    let newDate = new Date(timeStr);
+    return Moment(newDate).format("DD/MM/YYYY");
+  }
+
   render(){
     const item = this.props.item
+
+    let created_at = this.formatTime(item.created_at);
+    let start_time = this.formatTime(item.schedule[0].start_time);
+    let end_time = this.formatTime(item.schedule[0].end_time);
 
     return (
       <View style={styles.container}> 
@@ -26,13 +36,13 @@ export default class PostCell extends React.PureComponent {
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText}>{item.user_name}</Text>
-              <Text style= {styles.creatTimeText}>{item.creat_time}</Text>
+              <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
+              <Text style= {styles.creatTimeText}>{created_at}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
               <View style={{flex:1}}>
                 <Text style={styles.locationText}>{item.location}</Text>
-                <Text style={styles.durationText}>{item.start_time} - {item.end_time}</Text>
+                <Text style={styles.durationText}>{start_time} - {end_time}</Text>
               </View>
               <Entypo
                 style = {styles.box}
@@ -42,7 +52,7 @@ export default class PostCell extends React.PureComponent {
               />
               <Entypo
                 style = {styles.box}
-                color =  {item.is_read ? 'darkgray' : 'salmon'}
+                color =  {item.primary ? 'darkgray' : 'salmon'}
                 name={'flag'}
                 size={25}
               />
@@ -53,7 +63,7 @@ export default class PostCell extends React.PureComponent {
           </View>
 
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.content} </Text>
+        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.mms} </Text>
         </TouchableOpacity>
       </View>
     );

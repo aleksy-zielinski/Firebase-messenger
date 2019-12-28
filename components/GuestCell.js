@@ -7,11 +7,21 @@ import {
   TouchableOpacity,
  } from 'react-native';
  import {  Entypo } from '@expo/vector-icons';
+ import Moment from 'moment';
 
 export default class PostCell extends React.PureComponent {
 
+  formatTime = (timeStr) => {
+    let newDate = new Date(timeStr);
+    return Moment(newDate).format("DD/MM/YYYY");
+  }
+
   render(){
     const item = this.props.item
+
+    let created_at = this.formatTime(item.created_at);
+    let start_time = this.formatTime(item.schedule[0].start_time);
+    let end_time = this.formatTime(item.schedule[0].end_time);
 
     return (
       <View style={styles.container}> 
@@ -29,9 +39,9 @@ export default class PostCell extends React.PureComponent {
 
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex:1}}>
-                <Text style= {styles.nameText}>{item.user_name}</Text>
+                <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
                   <Text style={styles.locationText}>{item.location}</Text>
-                  <Text style={styles.durationText}>{item.start_time} - {item.end_time}</Text>
+                  <Text style={styles.durationText}>{start_time} - {end_time}</Text>
                 </View>
 
                 <Entypo
@@ -47,10 +57,10 @@ export default class PostCell extends React.PureComponent {
             </View>
 
           </View>
-          <Text style={[styles.contentText]}> {item.content} </Text>
+          <Text style={[styles.contentText]}> {`${item.email} /${item.phone}`} </Text>
           <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
           <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-          <Text style={styles.codeText}> {item.code} </Text>
+          <Text style={styles.codeText}> {item.mms} </Text>
           </View>
         </TouchableOpacity>
       </View>

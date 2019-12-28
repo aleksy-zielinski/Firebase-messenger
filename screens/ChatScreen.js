@@ -3,14 +3,13 @@ import {
   StyleSheet,
   View,
   StatusBar,
-  FlatList,
-  Platform,
   Image,
   Text
 } from 'react-native';
 import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
+import Moment from 'moment';
 
 const options = [
   'All messages',
@@ -47,36 +46,6 @@ export default class ChatScreen extends React.Component {
         },
       ]
     };
-    this.data = [
-      {
-        'user_name':'David Fincher',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : false,
-        'content' : 'Specifies font weight. The values normal and bold are supported for most fonts. Not all fonts have a variant for each of the numeric values, in that case the closest one is chosen.'
-      },
-      {
-        'user_name':'Danny Boyle',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : true,
-        'content' : 'It takes input in the form of values for Red, Green and Blue ranging from 0 to 255 and then converts those values to a hexadecimal string that can be used to specify color in html/css code.'
-      },
-
-    ]
-
-  }
-
-  _onPressCell = (item) => {
-
-    this.props.navigation.navigate('Chat',{
-      item: item
-    });
-
   }
 
   _goBack = () => this.props.navigation.goBack();
@@ -116,9 +85,17 @@ export default class ChatScreen extends React.Component {
     );
   }
 
+  formatTime = (timeStr) => {
+    let newDate = new Date(timeStr);
+    return Moment(newDate).format("DD/MM/YYYY");
+  }
+
+
   render(){
 
     const item = this.props.navigation.getParam('item');
+    let start_time = this.formatTime(item.schedule[0].start_time);
+    let end_time = this.formatTime(item.schedule[0].end_time);
 
     return (
       <View style={styles.container}>
@@ -158,40 +135,21 @@ export default class ChatScreen extends React.Component {
               />
               <View style={{marginLeft: 10, flex: 1}}>
               
-                  <Text style= {styles.nameText}>{item.user_name}</Text>
+                  <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
                   <Text style={styles.locationText}>{item.location}</Text>
-                  <Text style={styles.durationText}>{item.start_time} - {item.end_time}</Text>
+                  <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>
 
             </View>
 
-            <Text style={[styles.contentText]}> david.fincher@gmail.com / 617-216-9862 </Text>
+            <Text style={[styles.contentText]}> {`${item.email} /${item.phone}`} </Text>
             <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
             <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-            <Text style={styles.codeText}> 1244 </Text>
+            <Text style={styles.codeText}> {item.mms} </Text>
 
           </View>
         </View>
-{/*        
-        <FlatList 
-            ref={notiRef => this.listView = notiRef}
-            data={this.data}
-            // key={keyGrid}
-            // numColumns={2}
-            keyExtractor={item => item.user_name}
-            // refreshing={isRefresh}
-            // onRefresh={this.actionRefresh}
-            renderItem={({ item }) => (
-              <ChatCell
-                item={item}
-                onPress={()=> this._onPressCell(item.post) }
-              />
-            )}
-            // onEndReached={this.actionLoadMore}
-            // onEndReachedThreshold={0.01}
-            removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
-          /> */}
            <GiftedChat
             renderBubble={this.renderBubble}
             messages={this.state.messages}

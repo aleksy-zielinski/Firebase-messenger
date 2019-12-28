@@ -6,8 +6,9 @@ import {
   FlatList,
   Platform,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-// import ActionSheet from 'react-native-actionsheet';
+import ActionSheet from 'react-native-actionsheet';
 import { Searchbar } from 'react-native-paper';
 import {  Ionicons } from '@expo/vector-icons';
 import GuestCell from '../components/GuestCell';
@@ -24,30 +25,10 @@ export default class GuestsScreen extends React.Component {
     super(props);
     this.state = {
       firstQuery: '',
-      seletedIndex: 3,
+      seletedIndex: 1,
+      recipients: [],
+      isLoading: false,
     };
-    this.data = [
-      {
-        'user_name':'David Fincher',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'content' : 'david.fincher@gmail.com / 617-216-9862',
-        'code': '1244'
-      },
-      {
-        'user_name':'Danny Boyle',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : true,
-        'content' : 'david.fincher@gmail.com / 617-216-9862',
-        'code': '1244'
-      },
-
-    ];
     this.sortTitle = [
       'Checked Out', 
       'Currently Staying',
@@ -59,6 +40,57 @@ export default class GuestsScreen extends React.Component {
       'Huỷ'
     ];
     this.sortActionSheet;
+    this.chatData = [];
+  }
+
+  componentDidMount(){
+    
+    this.getInboxRequest()
+
+  }
+
+  getInboxRequest = async () => {
+
+    const realOption = [
+      "checked-out",
+      "current",
+      "today",
+      "soon",
+      "this-week",
+      "next-week",
+      "month",
+      "",
+    ]
+    const selectOption = realOption[this.state.seletedIndex];
+
+    this.setState({isLoading:true})
+    
+    try {
+
+      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/current', {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: JSON.stringify({
+          filter: selectOption
+        }),
+      });
+      let responseJson = await response.json();
+
+      if (responseJson){
+        console.log(responseJson.recipients.length);
+        this.setState({isLoading:false, recipients: responseJson.recipients})
+        this.chatData = responseJson.page;
+      } else{
+        console.log('no data');
+        this.setState({isLoading:false})
+      }
+      
+    } catch (error) {
+      console.error(error);
+      this.setState({isLoading:false})
+    }
   }
 
   _selectOption = (index) =>{
@@ -80,12 +112,13 @@ export default class GuestsScreen extends React.Component {
     if (index != this.sortTitle.length - 1){
       this.setState({seletedIndex: index});
     }
+    this.getInboxRequest();
     
   }
 
   _onPressCell = (item) => {
 
-    this.props.navigation.navigate('Scheduler',{item: item});
+    this.props.navigation.navigate('Scheduler',{item: item, chatData: this.chatData});
 
   }
 
@@ -128,10 +161,10 @@ export default class GuestsScreen extends React.Component {
        
         <FlatList
               ref={notiRef => this.listView = notiRef}
-              data={this.data}
+              data={this.state.recipients}
               // key={keyGrid}
               // numColumns={2}
-              keyExtractor={item => item.user_name}
+              keyExtractor={item =>`${item.id}`}
               // refreshing={isRefresh}
               // onRefresh={this.actionRefresh}
               // ListFooterComponent={this.renderFooter}
@@ -145,6 +178,11 @@ export default class GuestsScreen extends React.Component {
               // onEndReachedThreshold={0.01}
               removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
             />
+           {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator size='small' />
+              </View>
+            }
       </View>
     );
   }
@@ -161,6 +199,15 @@ GuestsScreen.navigationOptions = {
 
 
 const styles = StyleSheet.create({
+  loadingStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container: {
     flex: 1,
     backgroundColor: '#f2f2f2',

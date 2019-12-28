@@ -1,36 +1,74 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFeedback, ActivityIndicator, Alert, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
-import { FontAwesome } from '@expo/vector-icons';
 
 export default class ResetPassScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      email: '',
-      password: ''
-    };
+
+    if (__DEV__){
+      this.state = {
+        email: 'pathum@ruebarue.com',
+        isValidEmai: true,
+        isLoading: false,
+      };
+    } else {
+      this.state = {
+        email: '',
+        isValidEmai: true,
+        isLoading: false,
+      };
+    }
   }
 
   _handleTextChange = text => {
-    // this.setState({zip: event.nativeEvent.text});
-    this.setState({ 'email': text })
+    let valid = this.checkValidateEmail(text);
+    this.setState({ email: text, isValidEmai: valid })
+  }
+
+  checkValidateEmail = (text) => {
+    if (text === ''){
+      return true;
+    }
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+    if(reg.test(text) === false){
+      return false;
+    } else {
+      return true;
+    }
   }
 
   _resetAction = () => {
+
     Keyboard.dismiss();
-    alert('check mail');
+    this.setState({isLoading:true});
+    setTimeout( () => {
+      this.setState({isLoading:false});
+      Alert.alert('Done', 'Please check your mail');
+    },1000);
+
   }
 
+  
+
   render() {
+
+    const {email, isValidEmai} = this.state
+    const enableBtLogin = this.checkValidateEmail(email) && email.length > 0
+
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      {/* <KeyboardAvoidingView style={styles.container} behavior="padding" enabled> */}
         <View style={styles.container}>
-          <Text style={styles.loginText}>Reset Password</Text>
+
+          <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
+            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 140, resizeMode: 'contain', marginBottom: 20}}  />
+            <Text style={styles.loginText}>Reset Password</Text>
+          </View>
+
           <View style={styles.fillBox}>
             <TextInput
+              error = {!isValidEmai}
               dense = {true}
               mode = 'outlined'
               style={styles.textInput1}
@@ -45,6 +83,7 @@ export default class ResetPassScreen extends React.Component {
                 color = '#e66656'
                 labelStyle = {{color: 'white', fontSize: 16}}
                 style = {styles.buttonLogin}
+                disabled = {!enableBtLogin}
                 onPress={() => this._resetAction()}>
                 RESET
               </Button>
@@ -56,8 +95,12 @@ export default class ResetPassScreen extends React.Component {
                 </TouchableOpacity>
             </View>
           </View>
+          {this.state.isLoading &&
+            <View style={styles.loadingStyle}>
+              <ActivityIndicator size='large' />
+            </View>
+          }
         </View>
-      {/* </KeyboardAvoidingView> */}
       </TouchableWithoutFeedback>
     );
   }
@@ -65,6 +108,17 @@ export default class ResetPassScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+  loadingStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   buttonLogin:{
     flex: 1,
   },
@@ -83,7 +137,8 @@ const styles = StyleSheet.create({
   fillBox: {
     backgroundColor: 'rgba(255, 255, 255, 0.8)',
     borderRadius: 7,
-    margin: 20
+    marginHorizontal: 20,
+    marginBottom: 250
   },
   loginButtonContainer:{
     flex: 2,

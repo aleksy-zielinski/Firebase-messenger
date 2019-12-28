@@ -5,12 +5,12 @@ import {
   View,
   StatusBar,
   FlatList,
-  Platform
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {  FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
-import SetCookieParser from "set-cookie-parser"
 
 const options = [
   'All messages',
@@ -24,97 +24,60 @@ export default class MessagesScreen extends React.Component {
     super(props);
     this.state = {
       selectedIndex: 0,
+      recipients: [],
+      filter: '',
+      isLoading: false,
     };
-    this.data = [
-      {
-        'user_name':'David Fincher',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : false,
-        'content' : 'Specifies font weight. The values normal and bold are supported for most fonts. Not all fonts have a variant for each of the numeric values, in that case the closest one is chosen.'
-      },
-      {
-        'user_name':'Danny Boyle',
-        'location':'Beach house',
-        'start_time':'12/01/2019',
-        'end_time':'12/10/2019',
-        'creat_time': '12/02/2019 10:30 pm',
-        'is_read' : true,
-        'content' : 'It takes input in the form of values for Red, Green and Blue ranging from 0 to 255 and then converts those values to a hexadecimal string that can be used to specify color in html/css code.'
-      },
-
-    ]
-
   }
 
   componentDidMount(){
     
-    this.getInboxRequest()
-    // this.getThread()
+    this.getThread()
+
   }
 
-  getInboxRequest = async () => {
-
+  getThread = async () => {
     
+    this.setState({isLoading:true})
+
     try {
 
-      let response = await fetch('https://www.ruebarue.com/api/messaging/inbox/current', {
-        method: 'POST',
+      let response = await fetch(`https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/threads?page=1&filter=${this.state.filter}`, {
+        method: 'GET',
         headers: {
           Cookie: global.cookies,
         },
       });
       let responseJson = await response.json();
-      console.log(responseJson);
-      // console.log(response);
-      // this.setState({isLoading:false})
+      
 
-      // if (responseJson.status == 'OK'){
-
-      // } else{
-      //   console.log(responseJson.message);
-      // }
+      if (responseJson){
+        console.log(responseJson.recipients.length);
+        this.setState({isLoading:false, recipients: responseJson.recipients})
+      } else{
+        console.log('no data');
+        this.setState({isLoading:false})
+      }
+       
       
     } catch (error) {
       console.error(error);
-    }
-  }
-
-  getThread = async () => {
-    
-    try {
-
-      let response = await fetch('https://www.ruebarue.com/api/messaging/inbox/0/threads?page=1', {
-        method: 'GET'
-      });
-      // let responseJson = await response.json();
-      console.log(response);
-      // this.setState({isLoading:false})
-
-      // if (responseJson.status == 'OK'){
-
-      // } else{
-      //   console.log(responseJson.message);
-      // }
-      
-    } catch (error) {
-      console.error(error);
+      this.setState({isLoading:false})
     }
   }
 
   _selectOption = (index) =>{
 
-    const selectCate =  options[index]
-    console.log(selectCate)
-    this.setState({ selectedIndex: index });  
+    // const selectCate =  options[index]
+    let filter = ['all', 'priority','unread'][index];
+    console.log(filter)
+    this.setState({ selectedIndex: index, filter: filter });
+    this.getThread()
 
   }
 
   _onPressCell = (item) => {
 
-    // console.log(item)
     this.props.navigation.navigate('Chat',{
       item: item
     });
@@ -123,13 +86,11 @@ export default class MessagesScreen extends React.Component {
 
   render(){
 
+    const {recipients} = this.state;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        {/* <NavigationEvents onDidFocus={payload => {
-          console.log('reload')
-          }}
-        /> */}
 
         <View style={styles.topContainer}>
         
@@ -154,10 +115,10 @@ export default class MessagesScreen extends React.Component {
        
         <FlatList
               ref={notiRef => this.listView = notiRef}
-              data={this.data}
+              data={recipients}
               // key={keyGrid}
               // numColumns={2}
-              keyExtractor={item => item.user_name}
+              keyExtractor={item => `${item.id}`}
               // refreshing={isRefresh}
               // onRefresh={this.actionRefresh}
               // ListFooterComponent={this.renderFooter}
@@ -171,6 +132,11 @@ export default class MessagesScreen extends React.Component {
               // onEndReachedThreshold={0.01}
               removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
             />
+             {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator size='small' />
+              </View>
+            }
       </View>
     );
   }
@@ -192,6 +158,15 @@ function handleLearnMorePress() {
 }
 
 const styles = StyleSheet.create({
+  loadingStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container: {
     flex: 1,
     backgroundColor: '#f2f2f2',
