@@ -19,9 +19,9 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
-    let created_at = this.formatTime(item.created_at);
-    let start_time = this.formatTime(item.schedule[0].start_time);
-    let end_time = this.formatTime(item.schedule[0].end_time);
+    let last_msg_on = this.formatTime(item.last_msg_on);
+    let check_in = this.formatTime(item.check_in);
+    let check_out = this.formatTime(item.check_out);
 
     return (
       <View style={styles.container}> 
@@ -36,13 +36,13 @@ export default class PostCell extends React.PureComponent {
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-              <Text style= {styles.creatTimeText}>{created_at}</Text>
+              <Text style= {styles.nameText}>{item.guest_name}</Text>
+              <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
               <View style={{flex:1}}>
                 <Text style={styles.locationText}>{item.location}</Text>
-                <Text style={styles.durationText}>{start_time} - {end_time}</Text>
+                <Text style={styles.durationText}>{check_in} - {check_out}</Text>
               </View>
               <Entypo
                 style = {styles.box}
@@ -63,7 +63,7 @@ export default class PostCell extends React.PureComponent {
           </View>
 
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.mms} </Text>
+        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.meta_values} </Text>
         </TouchableOpacity>
       </View>
     );

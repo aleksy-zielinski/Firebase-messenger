@@ -25,6 +25,7 @@ export default class MessagesScreen extends React.Component {
     this.state = {
       selectedIndex: 0,
       recipients: [],
+      page: [],
       filter: '',
       isLoading: false,
     };
@@ -42,7 +43,7 @@ export default class MessagesScreen extends React.Component {
 
     try {
 
-      let response = await fetch(`https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/threads?page=1&filter=${this.state.filter}`, {
+      let response = await fetch(`https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/threads?page=0&filter=${this.state.filter}`, {
         method: 'GET',
         headers: {
           Cookie: global.cookies,
@@ -52,8 +53,8 @@ export default class MessagesScreen extends React.Component {
       
 
       if (responseJson){
-        console.log(responseJson.recipients.length);
-        this.setState({isLoading:false, recipients: responseJson.recipients})
+        console.log(responseJson.page);
+        this.setState({isLoading:false, page: responseJson.page})
       } else{
         console.log('no data');
         this.setState({isLoading:false})
@@ -79,14 +80,14 @@ export default class MessagesScreen extends React.Component {
   _onPressCell = (item) => {
 
     this.props.navigation.navigate('Chat',{
-      item: item
+      page: item
     });
 
   }
 
   render(){
 
-    const {recipients} = this.state;
+    const {page} = this.state;
 
     return (
       <View style={styles.container}>
@@ -115,7 +116,7 @@ export default class MessagesScreen extends React.Component {
        
         <FlatList
               ref={notiRef => this.listView = notiRef}
-              data={recipients}
+              data={page}
               // key={keyGrid}
               // numColumns={2}
               keyExtractor={item => `${item.id}`}

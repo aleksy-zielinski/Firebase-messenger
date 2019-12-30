@@ -67,7 +67,7 @@ export default class GuestsScreen extends React.Component {
     
     try {
 
-      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/current', {
+      let response = await fetch('https://www.ruebarue.com//m/api/messaging/inbox/current', {
         method: 'POST',
         headers: {
           Cookie: global.cookies,
