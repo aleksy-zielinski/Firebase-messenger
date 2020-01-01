@@ -124,7 +124,7 @@ export default class LoginScreen extends React.Component {
         <View style={styles.container}>
           <StatusBar barStyle="light-content" />
           <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
-            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 140, resizeMode: 'contain', marginBottom: 20}}  />
+            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20}}  />
             <Text style={styles.loginText}>Login</Text>
           </View>
           
@@ -245,6 +245,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textInput1: {
+    height: 48,
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
@@ -252,6 +253,7 @@ const styles = StyleSheet.create({
     borderColor: 'black'
   },
   textInput2: {
+    height: 48,
     marginLeft: 20,
     marginRight: 20,
     // marginTop: 10,

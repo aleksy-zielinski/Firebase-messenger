@@ -36,7 +36,7 @@ export default class PostCell extends React.PureComponent {
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText}>{item.guest_name}</Text>
+              <Text style= {styles.nameText} numberOfLines={1}>{item.guest_name}</Text>
               <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
+    flex:1,
     fontSize: 20,
   },
   locationText: {
