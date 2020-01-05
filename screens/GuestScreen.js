@@ -7,6 +7,7 @@ import {
   Platform,
   TouchableOpacity,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 import ActionSheet from 'react-native-actionsheet';
 import { Searchbar } from 'react-native-paper';
@@ -25,8 +26,8 @@ export default class GuestsScreen extends React.Component {
     super(props);
     this.state = {
       firstQuery: '',
-      seletedIndex: 1,
-      recipients: [],
+      seletedIndex: 7,
+      reservations: [],
       isLoading: false,
     };
     this.sortTitle = [
@@ -36,11 +37,12 @@ export default class GuestsScreen extends React.Component {
       'Arriving Soon (+3 Days)',
       'Arriving This Week (+7 Days)',
       'Arriving Next Week (+14 Days)',
+      'This month',
       'Show All',
       'Huỷ'
     ];
     this.sortActionSheet;
-    this.chatData = [];
+    this.timer;
   }
 
   componentDidMount(){
@@ -67,24 +69,21 @@ export default class GuestsScreen extends React.Component {
     
     try {
 
-      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/current', {
-        method: 'POST',
+      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/reservations/0?f=${selectOption}&q=${this.state.firstQuery}`;
+      console.log(url);
+      let response = await fetch(url, {
+        method: 'GET',
         headers: {
           Cookie: global.cookies,
         },
-        body: JSON.stringify({
-          filter: selectOption
-        }),
       });
       let responseJson = await response.json();
-
-      if (responseJson){
-        console.log(responseJson.recipients.length);
-        this.setState({isLoading:false, recipients: responseJson.recipients})
-        this.chatData = responseJson.page;
+      if (responseJson.reservations !== null){
+        console.log(responseJson.reservations.length);
+        this.setState({isLoading:false, reservations: responseJson.reservations})
       } else{
         console.log('no data');
-        this.setState({isLoading:false})
+        this.setState({isLoading:false, reservations: []})
       }
       
     } catch (error) {
@@ -118,12 +117,23 @@ export default class GuestsScreen extends React.Component {
 
   _onPressCell = (item) => {
 
-    this.props.navigation.navigate('Scheduler',{item: item, chatData: this.chatData});
+    this.props.navigation.navigate('Scheduler',{item: item});
+
+  }
+
+  searchBarTextChange = (text) => {
+
+    this.setState({ firstQuery: text});
+
+    clearTimeout(this.timer);
+    this.timer = setTimeout( () => {
+      this.getInboxRequest()
+    },1000);
 
   }
 
   render(){
-    const { firstQuery } = this.state;
+    const { firstQuery, reservations } = this.state;
 
     return (
       <View style={styles.container}>
@@ -134,7 +144,7 @@ export default class GuestsScreen extends React.Component {
           <Searchbar
             style={styles.buttonDropDown}
             placeholder="Search"
-            onChangeText={query => { this.setState({ firstQuery: query }); }}
+            onChangeText={query => { this.searchBarTextChange(query)}}
             value={firstQuery}
           />
           <TouchableOpacity onPress={this._onbtFilterPress}>
@@ -161,7 +171,7 @@ export default class GuestsScreen extends React.Component {
        
         <FlatList
               ref={notiRef => this.listView = notiRef}
-              data={this.state.recipients}
+              data={reservations}
               // key={keyGrid}
               // numColumns={2}
               keyExtractor={item =>`${item.id}`}
@@ -181,6 +191,11 @@ export default class GuestsScreen extends React.Component {
            {this.state.isLoading &&
               <View style={styles.loadingStyle}>
                 <ActivityIndicator size='small' />
+              </View>
+            }
+            {!this.state.isLoading && reservations.length == 0 &&
+              <View style={styles.loadingStyle} pointerEvents="none" disabled= {true}>
+                  <Text> No data </Text>
               </View>
             }
       </View>

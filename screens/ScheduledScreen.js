@@ -4,7 +4,8 @@ import {
   View,
   StatusBar,
   Image,
-  Text
+  Text,
+  Alert
 } from 'react-native';
 import {   MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
@@ -18,49 +19,71 @@ export default class ScheduledScreen extends React.Component {
     super(props);
     this.state = {
       selectedIndex: 0,
-      messages: [
-        {
-          _id: 2,
-          text: 'Hi',
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-        {
-          _id: 1,
-          text: 'Hello',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ]
+      messages: [],
     };
+
+    this.item = this.props.navigation.getParam('item');
 
   }
 
   componentDidMount(){
-    
-    let message = []
-    const chatData = this.props.navigation.getParam('chatData');
-    chatData.forEach( item =>{
-      let mess = {
+    this.getMessage()
+  }
+
+  creatMessage = (res) => {
+
+    let messages = [];
+    res.forEach( item =>{
+      const m = {
         _id: item.id,
-        text: 'Hello',
-        createdAt: new Date(),
+        text: item.content,
+        createdAt: item.created_at,
         user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },}
+          _id: item.sender_id,
+          name: item.sender_type,
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Facebook_default_male_avatar.gif',
+        },
+      }
+      messages.push(m);
     })
+    return messages
 
+  }
 
+  getMessage = async () => {
+
+    if (!this.item.thread_id){
+      Alert.alert('Error', 'Thread id null')
+      return
+    }
+    
+    this.setState({isLoading:true})
+
+    try {
+      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.item.thread_id}`
+      console.log(url)
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Cookie: global.cookies,
+        },
+      });
+      let responseJson = await response.json();
+
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        let mes = this.creatMessage(responseJson.messages)
+        this.setState({isLoading:false, guest: responseJson.guest, messages: mes})
+      } else{
+        console.log('no data');
+        this.setState({isLoading:false})
+      }
+       
+      
+    } catch (error) {
+      console.error(error);
+      this.setState({isLoading:false})
+    }
   }
 
 
@@ -109,8 +132,8 @@ export default class ScheduledScreen extends React.Component {
   render(){
 
     const item = this.props.navigation.getParam('item');
-    let start_time = this.formatTime(item.schedule[0].start_time);
-    let end_time = this.formatTime(item.schedule[0].end_time);
+    let start_time = this.formatTime(item.check_in);
+    let end_time = this.formatTime(item.check_out);
 
     return (
       <View style={styles.container}>
@@ -187,7 +210,7 @@ export default class ScheduledScreen extends React.Component {
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  <Text style={styles.locationText}>{item.location}</Text>
+                  <Text style={styles.locationText}>{item.rental_name}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>
@@ -197,7 +220,7 @@ export default class ScheduledScreen extends React.Component {
             <Text style={[styles.contentText]}>  {`${item.email} /${item.phone}`} </Text>
             <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
             <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-            <Text style={styles.codeText}> {item.mms} </Text>
+            <Text style={styles.codeText}> {item.door_code} </Text>
 
           </View>
         </View>

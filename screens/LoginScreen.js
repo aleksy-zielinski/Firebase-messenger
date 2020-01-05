@@ -130,6 +130,7 @@ export default class LoginScreen extends React.Component {
           
           <View style={styles.fillBox}>
             <TextInput
+              underlineColor = {'red'}
               error = {!isValidEmai}
               dense = {true}
               mode = 'outlined'
