@@ -24,98 +24,136 @@ export default class PostCell extends React.PureComponent {
     let check_out = this.formatTime(item.check_out);
 
     return (
-      <View style={styles.container}> 
-         <TouchableOpacity 
-          style={{flex: 1}}
-          onPress={this.props.onPress}>
-        <View style={styles.topContainer}>
-          <Image
-            style={styles.avatar}
-            source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
-          />
-          <View style={{marginLeft: 10, flex: 1}}>
 
-            <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText} numberOfLines={1}>{item.guest_name}</Text>
-              <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
+      <View
+        style={{
+          backgroundColor: '#ffffff',
+          borderWidth: 1,
+          borderColor: '#cccccc',
+          padding: 16,
+          marginTop: 8,
+          marginRight: 8,
+          marginLeft: 8,
+          borderRadius: 3,
+          display: 'flex'
+        }}
+      >        
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row'
+          }}
+        >
+          <Image 
+            source={ { uri: 'https://i.pravatar.cc/150?img=59' } }
+            style={{
+              width: 48,
+              height: 48,
+              borderRadius: 24,
+              marginRight: 16,
+              overflow: 'hidden'
+            }}
+          />
+          <View
+            style={{
+              marginTop: 8,
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Text
+              style={{
+                flex: 1,
+                fontSize: 18,
+                lineHeight: 24,
+                fontWeight: '400'
+              }}
+            >
+              David Fincher
+            </Text>
+            <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '300',
+                lineHeight: 24,
+                opacity: 0.6
+              }}
+            >
+              12/2/2019 10:30 pm
+            </Text>
+          </View>
+        </View>
+        <View>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                display: 'flex',
+                marginLeft: 64
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '300',
+                  lineHeight: 16,
+                  opacity: 0.6
+                }}
+              >Beach House</Text>
+              <Text
+              style={{
+                fontSize: 14,
+                fontWeight: '300',
+                lineHeight: 16,
+                opacity: 0.6
+              }}
+              >12/1/2019 - 12/10/2019</Text>
             </View>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex:1}}>
-                <Text style={styles.locationText}>{item.location}</Text>
-                <Text style={styles.durationText}>{check_in} - {check_out}</Text>
-              </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row'
+              }}
+            >
               <Entypo
-                style = {styles.box}
+                style = {{
+                  marginRight: 8,
+                }}
                 color =  'darkgray'
                 name={'box'}
-                size={25}
+                size={20}
               />
-              <Entypo
-                style = {styles.box}
+              <Entypo               
                 color =  {item.primary ? 'darkgray' : 'salmon'}
                 name={'flag'}
-                size={25}
+                size={20}
               />
-
-              
             </View>
-
-          </View>
-
+          </View>       
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.meta_values} </Text>
-        </TouchableOpacity>
+        <Text
+          style={{
+            marginTop: 16,
+            fontSize: 16,
+            color: '#2d2d2d',
+            lineHeight: 24,
+            fontWeight: '300'
+          }}
+        >
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, facere modi! In expedita quos id doloribus ipsa suscipit quod?
+        </Text>
       </View>
-    );
+   
+   );
   }
  
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginHorizontal: 10, 
-    marginTop: 10, 
-    marginBottom: 0,
-  },
-  topContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    margin: 20,
-  },
-  avatar: {
-    width: 50, 
-    height: 50,
-    borderRadius: 25,
-  },
-  nameText: {
-    flex:1,
-    fontSize: 20,
-  },
-  locationText: {
-    color: 'dimgray',
-    fontSize: 13,
-  },
-  durationText: {
-    color: 'dimgray',
-    fontSize: 13,
-  },
-  creatTimeText: {
-    color: 'dimgray',
-    fontSize: 13,
-    marginLeft:'auto',
-    marginRight: 0,
-  },
-  box: {
-    marginLeft: 10,
-    marginRight: 0,
-  },
-  contentText: {
-    textAlign: 'justify',
-    marginHorizontal: 20,
-    marginBottom: 20
-  }
-})
