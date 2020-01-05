@@ -77,6 +77,12 @@ export default class LoginScreen extends React.Component {
  
   loginRequest = async () => {
 
+    if (__DEV__){
+      global.cookies = 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1NjczMzA4OTczOTU3MTIwLCJleHAiOjE1NzgzMzMyMTR9.aWSEcCda74tKuuwZmQutqvNWs7M3uac_DulxNQssZ0U; Expires=Mon, 06 Jan 2020 17:53:34 GMT'
+      this.props.navigation.navigate('MainTabbar')
+      return
+    }
+
     Keyboard.dismiss();
     this.setState({isLoading:true})
     const {email, password} = this.state
@@ -100,7 +106,7 @@ export default class LoginScreen extends React.Component {
       this.saveCookies(response.headers)
 
       if (responseJson.status == 'OK'){
-        global.userToken = responseJson.token;
+        // global.userToken = responseJson.token;
         this.props.navigation.navigate('MainTabbar')
       } else{
         Alert.alert('Error', responseJson.message)

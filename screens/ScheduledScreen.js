@@ -5,12 +5,15 @@ import {
   StatusBar,
   Image,
   Text,
-  Alert
+  Alert,
 } from 'react-native';
 import {   MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
+import SchedulerView from '../components/Guests/SchedulerView';
+import ShareView from '../components/Guests/ShareView';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 
 export default class ScheduledScreen extends React.Component {
@@ -20,6 +23,11 @@ export default class ScheduledScreen extends React.Component {
     this.state = {
       selectedIndex: 0,
       messages: [],
+      viewSelect: 0,
+      selectIndexTop: 0,
+      selectIndexBot: 0,
+      emai: '',
+      phone: '',
     };
 
     this.item = this.props.navigation.getParam('item');
@@ -89,9 +97,11 @@ export default class ScheduledScreen extends React.Component {
 
   _goBack = () => this.props.navigation.goBack();
 
-  _handleBox = () => console.log('Searching');
 
-  _handleMore = () => console.log('Shown more');
+  appBarSetect = (index) => {
+    console.log('Shown more');
+    this.setState({viewSelect:index})
+  }
 
   onSend(messages = []) {
     this.setState(previousState => ({
@@ -135,6 +145,50 @@ export default class ScheduledScreen extends React.Component {
     let start_time = this.formatTime(item.check_in);
     let end_time = this.formatTime(item.check_out);
 
+    let contentView;
+    switch (this.state.viewSelect) {
+      case 0:
+        contentView = (
+          <SchedulerView/>
+        )
+        break;
+      case 1:
+        contentView = (
+          <GiftedChat
+            renderBubble={this.renderBubble}
+            messages={this.state.messages}
+            onSend={messages => this.onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          />
+        )
+        break;
+      case 2:
+        contentView=(
+          <KeyboardAwareScrollView>
+            <ShareView 
+              isEmail={true}
+              emai={this.state.email} 
+              selectIndexTop={this.state.selectIndexTop} 
+              onPress={(index)=> this.setState({selectIndexTop:index}) }
+            />
+            <ShareView
+              isEmail={false}
+              phone={this.state.phone} 
+              selectIndexTop={this.state.selectIndexBot} 
+              onPress={(index)=> this.setState({selectIndexBot:index}) }
+            />
+          </KeyboardAwareScrollView>
+        )
+        break
+      default:
+        contentView = (
+          <View/>
+        )
+        break;
+    }
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -153,7 +207,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(0)} 
           />
            <Appbar.Action icon={({ size, color }) => (
               <Ionicons
@@ -162,7 +216,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(1)} 
           />
           <Appbar.Action icon={({ size, color }) => (
               <Ionicons
@@ -171,7 +225,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(2)} 
           />
           <Appbar.Action icon={({ size, color }) => (
               <MaterialCommunityIcons
@@ -180,24 +234,26 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(3)} 
           />
           <Appbar.Action icon={({ size, color }) => (
-            <Feather
-              color =  {'lightgray'}
-              name={'link'}
-              size={23}
+              <Feather
+                color =  {'lightgray'}
+                name={'link'}
+                size={23}
+              />
+            )} 
+            onPress={()=>this.appBarSetect(4)} 
             />
-          )} 
-          onPress={this._handleBox} />
           <Appbar.Action icon={({ size, color }) => (
-            <MaterialCommunityIcons
-              color =  {'lightgray'}
-              name={'delete-forever'}
-              size={28}
-            />
-          )} 
-          onPress={this._handleMore} />
+              <MaterialCommunityIcons
+                color =  {'lightgray'}
+                name={'delete-forever'}
+                size={28}
+              />
+            )} 
+            onPress={()=>this.appBarSetect(5)} 
+          />
         </Appbar.Header>
 
         <View style={styles.headContainer}> 
@@ -224,15 +280,8 @@ export default class ScheduledScreen extends React.Component {
 
           </View>
         </View>
-
-        <GiftedChat
-            renderBubble={this.renderBubble}
-            messages={this.state.messages}
-            onSend={messages => this.onSend(messages)}
-            user={{
-              _id: 1,
-            }}
-          />
+          
+          {contentView}
 
           
     </View>
