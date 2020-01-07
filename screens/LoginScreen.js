@@ -9,9 +9,11 @@ import {
   Keyboard, 
   ActivityIndicator, 
   Alert,
-  Image
+  Image,
+  TextInput,
+  Button
 } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import FormLabel from '../components/FormLabel';
 import Constants from 'expo-constants';
 
 export default class LoginScreen extends React.Component {
@@ -121,57 +123,55 @@ export default class LoginScreen extends React.Component {
     return (
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <View style={styles.container}>
+        <View style={{
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: '#3a5161',
+          height: '100%'
+        }}>
           <StatusBar barStyle="light-content" />
           <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
             <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20}}  />
             <Text style={styles.loginText}>Login</Text>
           </View>
-          
-          <View style={styles.fillBox}>
+          <View
+            style={{
+              margin: 8,
+              paddingTop: 24,
+              paddingRight: 20,
+              paddingBottom: 24,
+              paddingLeft: 20,
+              backgroundColor: '#ffffff',
+              opacity: 0.9,
+              borderRadius: 2,
+            }}
+          >
+            <FormLabel>Name</FormLabel>
             <TextInput
-              error = {!isValidEmai}
-              dense = {true}
-              mode = 'outlined'
-              style={styles.textInput1}
-              label='Email'
+              style={{
+                ...styles.textInput,
+                marginBottom: 12,
+              }}
+              placeholder="Enter email"
               value={email}
-              onChangeText={text => this._handleEmailTextChange(text) }
-              
             />
+            <FormLabel>Password</FormLabel>
             <TextInput
-              error = {!isValidPass}
-              dense = {true}
-              secureTextEntry = {true}
-              mode = 'outlined'
-              style={styles.textInput2}
-              label='Password'
+              secureTextEntry
+              style={{
+                ...styles.textInput,
+                marginBottom: 20
+              }}
+              placeholder="Enter email"
               value={password}
-              onChangeText={text => {this._handlePassTextChange(text)}}
             />
-            <View style={styles.buttonContainer}>
-              <Button 
-                mode="contained" 
-                color = '#e66656'
-                labelStyle = {{color: 'white', fontSize: 16}}
-                style = {styles.buttonLogin}
-                disabled = {!enableBtLogin}
-                onPress={() => this.loginRequest()}>
-                LOG IN
-              </Button>
-              <TouchableOpacity
-                  style={styles.resetButtonContainer}
-                  onPress={() => this.props.navigation.navigate('Reset')}
-                  underlayColor='#fff'>
-                  <Text style={styles.resetButtonText}>Reset Password</Text>
-              </TouchableOpacity>
-            </View>
+            <Button
+            style={{
+              height: 40
+            }}
+            title="Log In"
+            />
           </View>
-           {this.state.isLoading &&
-              <View style={styles.loadingStyle}>
-                <ActivityIndicator size='large' />
-              </View>
-            }
         </View>
       </TouchableWithoutFeedback>
     );
@@ -244,20 +244,15 @@ const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: 'center',
   },
-  textInput1: {
+  textInput: {
+    paddingTop: 16,
+    paddingRight: 12,
+    paddingBottom: 16,
+    paddingLeft: 16,
+    backgroundColor: '#ffffff',
     height: 48,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    borderColor: 'black'
-  },
-  textInput2: {
-    height: 48,
-    marginLeft: 20,
-    marginRight: 20,
-    // marginTop: 10,
-    marginBottom: 20,
-    borderColor: 'black'
-  }
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#cccccc',
+  }  
 });
