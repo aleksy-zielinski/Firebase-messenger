@@ -79,7 +79,7 @@ export default class GuestsScreen extends React.Component {
       });
       let responseJson = await response.json();
       if (responseJson.reservations !== null){
-        console.log(responseJson.reservations.length);
+        console.log(responseJson.reservations);
         this.setState({isLoading:false, reservations: responseJson.reservations})
       } else{
         console.log('no data');
@@ -111,7 +111,12 @@ export default class GuestsScreen extends React.Component {
     if (index != this.sortTitle.length - 1){
       this.setState({seletedIndex: index});
     }
-    this.getInboxRequest();
+
+    setTimeout( () => {
+      this.getInboxRequest();
+    },300);
+
+    
     
   }
 

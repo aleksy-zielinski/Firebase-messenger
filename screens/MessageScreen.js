@@ -53,7 +53,7 @@ export default class MessagesScreen extends React.Component {
       
 
       if (responseJson){
-        console.log(responseJson.page);
+        // console.log(responseJson.page);
         this.setState({isLoading:false, page: responseJson.page})
       } else{
         console.log('no data');

@@ -65,7 +65,7 @@ export default class ShareView extends React.PureComponent {
     )
 
     return (
-      <View style={{marginVertical: 10}}>
+      <View style={{marginVertical: 20}}>
 
           <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> SHARE</Text>
 

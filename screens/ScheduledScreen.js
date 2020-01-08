@@ -11,9 +11,13 @@ import {   MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons'
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import DateTimePicker from 'react-native-modal-datetime-picker';
+
 import SchedulerView from '../components/Guests/SchedulerView';
 import ShareView from '../components/Guests/ShareView';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import EditReservationView from '../components/Guests/EditReservationView';
+
 
 
 export default class ScheduledScreen extends React.Component {
@@ -28,6 +32,7 @@ export default class ScheduledScreen extends React.Component {
       selectIndexBot: 0,
       emai: '',
       phone: '',
+      isDateTimePickerVisible: false,
     };
 
     this.item = this.props.navigation.getParam('item');
@@ -139,6 +144,25 @@ export default class ScheduledScreen extends React.Component {
     return Moment(newDate).format("DD/MM/YYYY");
   }
 
+  _showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
+  }
+
+  _hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false});
+  }
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    if (this.pickingBirthDay){
+      this.setState({ birthDate: date, isDateTimePickerVisible: false });
+    } else{
+      this.setState({ adopDate: date, isDateTimePickerVisible: false });
+    }
+    
+  };
+
+
   render(){
 
     const item = this.props.navigation.getParam('item');
@@ -182,6 +206,17 @@ export default class ScheduledScreen extends React.Component {
           </KeyboardAwareScrollView>
         )
         break
+      case 3:
+          contentView = (
+            <KeyboardAwareScrollView>
+              <EditReservationView 
+                item= {item} 
+                showDatePicker={this.state.isDateTimePickerVisible} 
+                onPress={(value)=> {this.setState({isDateTimePickerVisible: value})} }
+                />
+            </KeyboardAwareScrollView>
+          )
+          break;
       default:
         contentView = (
           <View/>
@@ -255,6 +290,14 @@ export default class ScheduledScreen extends React.Component {
             onPress={()=>this.appBarSetect(5)} 
           />
         </Appbar.Header>
+
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+          // date={toDay}
+          // maximumDate = {toDay}
+        />
 
         <View style={styles.headContainer}> 
             <View style={styles.topContainer}>
