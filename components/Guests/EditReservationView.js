@@ -17,25 +17,20 @@ export default class EditReservationView extends React.PureComponent {
       email: props.item.email,
       fistName: props.item.first_name,
       lastName: props.item.last_name,
-      checkIn:'',
-      checkOut:'',
+      checkIn: props.checkIn,
+      checkOut: props.checkOut,
       phone: props.item.phone,
       doorCode: props.item.door_code,
       showPicker: props.showDatePicker,
     };
   }
 
-  formatTime = (timeStr) => {
-    let newDate = new Date(timeStr);
-    return Moment(newDate).format("DD/MM/YYYY");
-  }
-
   render(){
 
     const item = this.props.item
 
-    let start_time = this.formatTime(item.check_in);
-    let end_time = this.formatTime(item.check_out);
+    let start_time = Moment(this.state.checkIn).format("DD/MM/YYYY");
+    let end_time = Moment(this.state.checkOut).format("DD/MM/YYYY");
 
     return (
       <View style={{marginVertical: 20}}>
@@ -91,6 +86,7 @@ export default class EditReservationView extends React.PureComponent {
                   <View style={{flex: 1}}>
                     <Text style={styles.textHeaderStyle}>CHECK IN</Text>
                     <TextInput
+                      keyboardType = 'numbers-and-punctuation'
                       style={styles.textInputStyle}
                       placeholder= { "Check in time"} 
                       onChangeText={(text) => {
@@ -103,6 +99,7 @@ export default class EditReservationView extends React.PureComponent {
                   <View style={{flex: 1}}>
                     <Text style={styles.textHeaderStyle}>CHECK OUT</Text>
                     <TextInput
+                      keyboardType = 'numbers-and-punctuation'
                       style={styles.textInputStyle}
                       placeholder= { "Check out time"} 
                       onChangeText={(text) => {
@@ -156,7 +153,9 @@ export default class EditReservationView extends React.PureComponent {
             </View>
 
             <View style={{flexDirection: 'row', marginHorizontal: 10}}>
-              <TouchableOpacity style={styles.saveButton} onPress={()=>this.props.onPress(true)}>
+              <TouchableOpacity style={styles.saveButton} 
+                // onPress={()=>this.props.onPress(true)}
+                >
                 <Text style={{color: 'white'}}>SAVE</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.cancelButton}>

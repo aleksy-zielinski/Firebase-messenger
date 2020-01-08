@@ -24,6 +24,9 @@ export default class ScheduledScreen extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.item = this.props.navigation.getParam('item');
+
     this.state = {
       selectedIndex: 0,
       messages: [],
@@ -33,9 +36,13 @@ export default class ScheduledScreen extends React.Component {
       emai: '',
       phone: '',
       isDateTimePickerVisible: false,
+      isPickingCheckIn: true,
+      checkInDate: new Date(this.item.check_in),
+      checkOutDate: new Date(this.item.check_out),
     };
 
-    this.item = this.props.navigation.getParam('item');
+    
+    
 
   }
 
@@ -154,10 +161,10 @@ export default class ScheduledScreen extends React.Component {
 
   _handleDatePicked = (date) => {
     console.log('A date has been picked: ', date);
-    if (this.pickingBirthDay){
-      this.setState({ birthDate: date, isDateTimePickerVisible: false });
+    if (this.isPickingCheckIn){
+      this.setState({  isDateTimePickerVisible: false, checkInDate: date }); 
     } else{
-      this.setState({ adopDate: date, isDateTimePickerVisible: false });
+      this.setState({ isDateTimePickerVisible: false, checkOutDate: date });
     }
     
   };
@@ -190,7 +197,7 @@ export default class ScheduledScreen extends React.Component {
         break;
       case 2:
         contentView=(
-          <KeyboardAwareScrollView>
+          <KeyboardAwareScrollView enableOnAndroid={true}>
             <ShareView 
               isEmail={true}
               emai={this.state.email} 
@@ -208,10 +215,12 @@ export default class ScheduledScreen extends React.Component {
         break
       case 3:
           contentView = (
-            <KeyboardAwareScrollView>
+            <KeyboardAwareScrollView enableOnAndroid={true}>
               <EditReservationView 
                 item= {item} 
                 showDatePicker={this.state.isDateTimePickerVisible} 
+                checkIn = {this.state.checkInDate}
+                checkOut = {this.state.checkOutDate}
                 onPress={(value)=> {this.setState({isDateTimePickerVisible: value})} }
                 />
             </KeyboardAwareScrollView>

@@ -78,7 +78,7 @@ export default class LoginScreen extends React.Component {
   loginRequest = async () => {
 
     if (__DEV__){
-      global.cookies = 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1NjczMzA4OTczOTU3MTIwLCJleHAiOjE1Nzg0OTc5MTR9.1sUjKLPAvoAb97ebZQwgECFzq34MdJ0D7Fc8GG3Z9LE; Expires=Wed, 08 Jan 2020 15:38:34 GMT'
+      global.cookies = 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1NjczMzA4OTczOTU3MTIwLCJleHAiOjE1Nzg1ODk2Njl9.AdjwMUIutdVkTUOsZRdZsn4uIhG8jomWvmz6VU6rMYg; Expires=Thu, 09 Jan 2020 17:07:49 GMT'
       this.props.navigation.navigate('MainTabbar')
       return
     }
