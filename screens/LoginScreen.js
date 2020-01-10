@@ -165,12 +165,40 @@ export default class LoginScreen extends React.Component {
               placeholder="Enter email"
               value={password}
             />
-            <Button
+            <View
             style={{
-              height: 40
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',              
             }}
-            title="Log In"
-            />
+            >
+            <TouchableOpacity
+              onPress={() => this.loginRequest()}
+            >
+              <Text
+                style={{                 
+                  backgroundColor: '#E66656',
+                  color: '#ffffff',
+                  height: 48,
+                  lineHeight: 48,
+                  paddingHorizontal: 48,
+                  textTransform: 'uppercase',
+                  textAlign: 'center',
+                  borderRadius: 3
+                }}
+              >Log in</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Reset')}
+            >
+              <Text
+              style={{
+                color: '#4D6B85'
+              }}
+            >Reset password</Text>
+            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
