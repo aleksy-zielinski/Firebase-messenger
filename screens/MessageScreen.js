@@ -53,7 +53,7 @@ export default class MessagesScreen extends React.Component {
       
 
       if (responseJson){
-        console.log(responseJson.page);
+        // console.log(responseJson.page);
         this.setState({isLoading:false, page: responseJson.page})
       } else{
         console.log('no data');
@@ -106,6 +106,7 @@ export default class MessagesScreen extends React.Component {
             dropdownTextStyle={{fontSize:16, textAlign:'center'}}
           />
           <FontAwesome
+            disabled= {true}
             pointerEvents= 'none'
             style = {styles.arrow}
             name={'angle-down'}
@@ -183,7 +184,7 @@ const styles = StyleSheet.create({
     marginLeft: 10, 
     marginRight: 10,
     marginTop: 10, 
-    marginBottom: 0,
+    marginBottom: 10,
     height: 40,
     flexDirection: 'row',
   },

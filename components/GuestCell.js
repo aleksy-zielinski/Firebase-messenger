@@ -19,9 +19,8 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
-    let created_at = this.formatTime(item.created_at);
-    let start_time = this.formatTime(item.schedule[0].start_time);
-    let end_time = this.formatTime(item.schedule[0].end_time);
+    let start_time = this.formatTime(item.check_in);
+    let end_time = this.formatTime(item.check_out);
 
     return (
       <View style={styles.container}> 
@@ -40,7 +39,7 @@ export default class PostCell extends React.PureComponent {
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex:1}}>
                 <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  <Text style={styles.locationText}>{item.location}</Text>
+                  <Text style={styles.locationText}>{item.rental_name}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
                 </View>
 
@@ -60,7 +59,7 @@ export default class PostCell extends React.PureComponent {
           <Text style={[styles.contentText]}> {`${item.email} /${item.phone}`} </Text>
           <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
           <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-          <Text style={styles.codeText}> {item.mms} </Text>
+          <Text style={styles.codeText}> {item.door_code} </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -76,8 +75,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginHorizontal: 10, 
-    marginTop: 10, 
-    marginBottom: 0,
+    marginTop: 0, 
+    marginBottom: 10,
   },
   topContainer: {
     flex: 1,

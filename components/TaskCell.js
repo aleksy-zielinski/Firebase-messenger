@@ -156,4 +156,3 @@ export default class PostCell extends React.PureComponent {
   }
  
 }
-

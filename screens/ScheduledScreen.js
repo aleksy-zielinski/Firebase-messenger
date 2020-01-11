@@ -4,71 +4,116 @@ import {
   View,
   StatusBar,
   Image,
-  Text
+  Text,
+  Alert,
 } from 'react-native';
 import {   MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import DateTimePicker from 'react-native-modal-datetime-picker';
+
+import SchedulerView from '../components/Guests/SchedulerView';
+import ShareView from '../components/Guests/ShareView';
+import EditReservationView from '../components/Guests/EditReservationView';
+
 
 
 export default class ScheduledScreen extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.item = this.props.navigation.getParam('item');
+
     this.state = {
       selectedIndex: 0,
-      messages: [
-        {
-          _id: 2,
-          text: 'Hi',
-          createdAt: new Date(),
-          user: {
-            _id: 1,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-        {
-          _id: 1,
-          text: 'Hello',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ]
+      messages: [],
+      viewSelect: 0,
+      selectIndexTop: 0,
+      selectIndexBot: 0,
+      emai: '',
+      phone: '',
+      isDateTimePickerVisible: false,
+      isPickingCheckIn: true,
+      checkInDate: new Date(this.item.check_in),
+      checkOutDate: new Date(this.item.check_out),
     };
+
+    
+    
 
   }
 
   componentDidMount(){
-    
-    let message = []
-    const chatData = this.props.navigation.getParam('chatData');
-    chatData.forEach( item =>{
-      let mess = {
+    this.getMessage()
+  }
+
+  creatMessage = (res) => {
+
+    let messages = [];
+    res.forEach( item =>{
+      const m = {
         _id: item.id,
-        text: 'Hello',
-        createdAt: new Date(),
+        text: item.content,
+        createdAt: item.created_at,
         user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },}
+          _id: item.sender_id,
+          name: item.sender_type,
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Facebook_default_male_avatar.gif',
+        },
+      }
+      messages.push(m);
     })
+    return messages
 
+  }
 
+  getMessage = async () => {
+
+    if (!this.item.thread_id){
+      Alert.alert('Error', 'Thread id null')
+      return
+    }
+    
+    this.setState({isLoading:true})
+
+    try {
+      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.item.thread_id}`
+      console.log(url)
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Cookie: global.cookies,
+        },
+      });
+      let responseJson = await response.json();
+
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        let mes = this.creatMessage(responseJson.messages)
+        this.setState({isLoading:false, guest: responseJson.guest, messages: mes})
+      } else{
+        console.log('no data');
+        this.setState({isLoading:false})
+      }
+       
+      
+    } catch (error) {
+      console.error(error);
+      this.setState({isLoading:false})
+    }
   }
 
 
   _goBack = () => this.props.navigation.goBack();
 
-  _handleBox = () => console.log('Searching');
 
-  _handleMore = () => console.log('Shown more');
+  appBarSetect = (index) => {
+    console.log('Shown more');
+    this.setState({viewSelect:index})
+  }
 
   onSend(messages = []) {
     this.setState(previousState => ({
@@ -106,11 +151,87 @@ export default class ScheduledScreen extends React.Component {
     return Moment(newDate).format("DD/MM/YYYY");
   }
 
+  _showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
+  }
+
+  _hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false});
+  }
+
+  _handleDatePicked = (date) => {
+    console.log('A date has been picked: ', date);
+    if (this.isPickingCheckIn){
+      this.setState({  isDateTimePickerVisible: false, checkInDate: date }); 
+    } else{
+      this.setState({ isDateTimePickerVisible: false, checkOutDate: date });
+    }
+    
+  };
+
+
   render(){
 
     const item = this.props.navigation.getParam('item');
-    let start_time = this.formatTime(item.schedule[0].start_time);
-    let end_time = this.formatTime(item.schedule[0].end_time);
+    let start_time = this.formatTime(item.check_in);
+    let end_time = this.formatTime(item.check_out);
+
+    let contentView;
+    switch (this.state.viewSelect) {
+      case 0:
+        contentView = (
+          <SchedulerView/>
+        )
+        break;
+      case 1:
+        contentView = (
+          <GiftedChat
+            renderBubble={this.renderBubble}
+            messages={this.state.messages}
+            onSend={messages => this.onSend(messages)}
+            user={{
+              _id: 1,
+            }}
+          />
+        )
+        break;
+      case 2:
+        contentView=(
+          <KeyboardAwareScrollView enableOnAndroid={true}>
+            <ShareView 
+              isEmail={true}
+              emai={this.state.email} 
+              selectIndexTop={this.state.selectIndexTop} 
+              onPress={(index)=> this.setState({selectIndexTop:index}) }
+            />
+            <ShareView
+              isEmail={false}
+              phone={this.state.phone} 
+              selectIndexTop={this.state.selectIndexBot} 
+              onPress={(index)=> this.setState({selectIndexBot:index}) }
+            />
+          </KeyboardAwareScrollView>
+        )
+        break
+      case 3:
+          contentView = (
+            <KeyboardAwareScrollView enableOnAndroid={true}>
+              <EditReservationView 
+                item= {item} 
+                showDatePicker={this.state.isDateTimePickerVisible} 
+                checkIn = {this.state.checkInDate}
+                checkOut = {this.state.checkOutDate}
+                onPress={(value)=> {this.setState({isDateTimePickerVisible: value})} }
+                />
+            </KeyboardAwareScrollView>
+          )
+          break;
+      default:
+        contentView = (
+          <View/>
+        )
+        break;
+    }
 
     return (
       <View style={styles.container}>
@@ -130,7 +251,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(0)} 
           />
            <Appbar.Action icon={({ size, color }) => (
               <Ionicons
@@ -139,7 +260,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(1)} 
           />
           <Appbar.Action icon={({ size, color }) => (
               <Ionicons
@@ -148,7 +269,7 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(2)} 
           />
           <Appbar.Action icon={({ size, color }) => (
               <MaterialCommunityIcons
@@ -157,25 +278,35 @@ export default class ScheduledScreen extends React.Component {
                 size={28}
               />
             )} 
-            onPress={this._handleMore} 
+            onPress={()=>this.appBarSetect(3)} 
           />
           <Appbar.Action icon={({ size, color }) => (
-            <Feather
-              color =  {'lightgray'}
-              name={'link'}
-              size={23}
+              <Feather
+                color =  {'lightgray'}
+                name={'link'}
+                size={23}
+              />
+            )} 
+            onPress={()=>this.appBarSetect(4)} 
             />
-          )} 
-          onPress={this._handleBox} />
           <Appbar.Action icon={({ size, color }) => (
-            <MaterialCommunityIcons
-              color =  {'lightgray'}
-              name={'delete-forever'}
-              size={28}
-            />
-          )} 
-          onPress={this._handleMore} />
+              <MaterialCommunityIcons
+                color =  {'lightgray'}
+                name={'delete-forever'}
+                size={28}
+              />
+            )} 
+            onPress={()=>this.appBarSetect(5)} 
+          />
         </Appbar.Header>
+
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this._handleDatePicked}
+          onCancel={this._hideDateTimePicker}
+          // date={toDay}
+          // maximumDate = {toDay}
+        />
 
         <View style={styles.headContainer}> 
             <View style={styles.topContainer}>
@@ -187,7 +318,7 @@ export default class ScheduledScreen extends React.Component {
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  <Text style={styles.locationText}>{item.location}</Text>
+                  <Text style={styles.locationText}>{item.rental_name}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>
@@ -197,19 +328,12 @@ export default class ScheduledScreen extends React.Component {
             <Text style={[styles.contentText]}>  {`${item.email} /${item.phone}`} </Text>
             <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
             <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-            <Text style={styles.codeText}> {item.mms} </Text>
+            <Text style={styles.codeText}> {item.door_code} </Text>
 
           </View>
         </View>
-
-        <GiftedChat
-            renderBubble={this.renderBubble}
-            messages={this.state.messages}
-            onSend={messages => this.onSend(messages)}
-            user={{
-              _id: 1,
-            }}
-          />
+          
+          {contentView}
 
           
     </View>
