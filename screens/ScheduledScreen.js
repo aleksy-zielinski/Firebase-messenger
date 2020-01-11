@@ -28,7 +28,6 @@ export default class ScheduledScreen extends React.Component {
     this.item = this.props.navigation.getParam('item');
 
     this.state = {
-      selectedIndex: 0,
       messages: [],
       viewSelect: 0,
       selectIndexTop: 0,
@@ -111,7 +110,7 @@ export default class ScheduledScreen extends React.Component {
 
 
   appBarSetect = (index) => {
-    console.log('Shown more');
+    console.log('Index:', index);
     this.setState({viewSelect:index})
   }
 
@@ -173,11 +172,30 @@ export default class ScheduledScreen extends React.Component {
   render(){
 
     const item = this.props.navigation.getParam('item');
-    let start_time = this.formatTime(item.check_in);
-    let end_time = this.formatTime(item.check_out);
+    const start_time = this.formatTime(item.check_in);
+    const end_time = this.formatTime(item.check_out);
+    const {viewSelect} = this.state
+
+    const appBarIcon = [
+      'calendar-text',
+      'chart-bubble',
+      'share',
+      'square-edit-outline',
+      'link-variant',
+      'delete-forever'
+    ]
+
+    const appBar = appBarIcon.map( (icon, index) =>
+      <Appbar.Action 
+        key = {icon}
+        color =  {viewSelect == index ? 'white' : 'darkgray'} 
+        icon= {icon}
+        onPress={()=>this.appBarSetect(index)} 
+      />
+    )
 
     let contentView;
-    switch (this.state.viewSelect) {
+    switch (viewSelect) {
       case 0:
         contentView = (
           <SchedulerView/>
@@ -244,60 +262,7 @@ export default class ScheduledScreen extends React.Component {
           <Appbar.Content
             title=""
           />
-          <Appbar.Action icon={({ size, color }) => (
-              <MaterialCommunityIcons
-                color =  {'lightgray'}
-                name={'calendar-text'}
-                size={28}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(0)} 
-          />
-           <Appbar.Action icon={({ size, color }) => (
-              <Ionicons
-                color =  {'lightgray'}
-                name={'ios-chatbubbles'}
-                size={28}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(1)} 
-          />
-          <Appbar.Action icon={({ size, color }) => (
-              <Ionicons
-                color =  {'lightgray'}
-                name={'ios-share-alt'}
-                size={28}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(2)} 
-          />
-          <Appbar.Action icon={({ size, color }) => (
-              <MaterialCommunityIcons
-                color =  {'lightgray'}
-                name={'square-edit-outline'}
-                size={28}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(3)} 
-          />
-          <Appbar.Action icon={({ size, color }) => (
-              <Feather
-                color =  {'lightgray'}
-                name={'link'}
-                size={23}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(4)} 
-            />
-          <Appbar.Action icon={({ size, color }) => (
-              <MaterialCommunityIcons
-                color =  {'lightgray'}
-                name={'delete-forever'}
-                size={28}
-              />
-            )} 
-            onPress={()=>this.appBarSetect(5)} 
-          />
+          {appBar}
         </Appbar.Header>
 
         <DateTimePicker
