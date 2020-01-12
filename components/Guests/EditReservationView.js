@@ -17,11 +17,8 @@ export default class EditReservationView extends React.PureComponent {
       email: props.item.email,
       fistName: props.item.first_name,
       lastName: props.item.last_name,
-      checkIn: props.checkIn,
-      checkOut: props.checkOut,
       phone: props.item.phone,
       doorCode: props.item.door_code,
-      showPicker: props.showDatePicker,
     };
   }
 
@@ -29,8 +26,9 @@ export default class EditReservationView extends React.PureComponent {
 
     const item = this.props.item
 
-    let start_time = Moment(this.state.checkIn).format("DD/MM/YYYY");
-    let end_time = Moment(this.state.checkOut).format("DD/MM/YYYY");
+    // console.log('redener edit view', this.state.checkIn)
+    let start_time = Moment(this.props.checkIn).format("DD/MM/YYYY");
+    let end_time = Moment(this.props.checkOut).format("DD/MM/YYYY");
 
     return (
       <View style={{marginVertical: 20}}>
@@ -56,7 +54,7 @@ export default class EditReservationView extends React.PureComponent {
                 />
 
                 <View style={{flexDirection: 'row'}}> 
-                  <View tyle={{flex: 1}}>
+                  <View style={{flex: 1}}>
                     <Text style={styles.textHeaderStyle}>FIRST NAME</Text>
                     <TextInput
                       style={styles.textInputStyle}
@@ -68,7 +66,7 @@ export default class EditReservationView extends React.PureComponent {
                     />
                   </View>
 
-                  <View tyle={{flex: 1}}>
+                  <View style={{flex: 1}}>
                     <Text style={styles.textHeaderStyle}>LAST NAME</Text>
                     <TextInput
                       style={styles.textInputStyle}
@@ -83,30 +81,22 @@ export default class EditReservationView extends React.PureComponent {
                 </View>
 
                 <View style={{flexDirection: 'row'}}> 
-                  <View style={{flex: 1}}>
+                  <View style={{flex: 1}} onPress={()=>this.props.onPressTimePicker(true)}>
                     <Text style={styles.textHeaderStyle}>CHECK IN</Text>
-                    <TextInput
-                      keyboardType = 'numbers-and-punctuation'
-                      style={styles.textInputStyle}
-                      placeholder= { "Check in time"} 
-                      onChangeText={(text) => {
-                          this.setState({checkIn: text, showPicker: true})
-                      }}
-                      value={start_time}
-                    />
+                    <TouchableOpacity 
+                      style={styles.timePickerStyle}
+                      onPress={()=>this.props.onPressTimePicker(true)}>
+                      <Text>{start_time}</Text>
+                    </TouchableOpacity>
                   </View>
                   
                   <View style={{flex: 1}}>
                     <Text style={styles.textHeaderStyle}>CHECK OUT</Text>
-                    <TextInput
-                      keyboardType = 'numbers-and-punctuation'
-                      style={styles.textInputStyle}
-                      placeholder= { "Check out time"} 
-                      onChangeText={(text) => {
-                          this.setState({checkOut: text})
-                      }}
-                      value={end_time}
-                    />
+                    <TouchableOpacity 
+                      style={styles.timePickerStyle}
+                      onPress={()=>this.props.onPressTimePicker(false)}>
+                        <Text>{end_time}</Text>
+                    </TouchableOpacity>
                   </View>
 
                 </View>
@@ -191,6 +181,16 @@ const styles = StyleSheet.create({
     marginHorizontal: 10, 
     marginTop: 5, 
     borderColor: 'lightgray', 
+    borderWidth: 1, 
+    paddingHorizontal: 10
+  },
+  timePickerStyle:{
+    borderRadius: 5, 
+    height: 40, 
+    marginHorizontal: 10, 
+    marginTop: 5, 
+    borderColor: 'lightgray', 
+    justifyContent: 'center',
     borderWidth: 1, 
     paddingHorizontal: 10
   },

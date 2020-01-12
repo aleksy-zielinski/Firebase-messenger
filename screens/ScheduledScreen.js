@@ -160,7 +160,7 @@ export default class ScheduledScreen extends React.Component {
 
   _handleDatePicked = (date) => {
     console.log('A date has been picked: ', date);
-    if (this.isPickingCheckIn){
+    if (this.state.isPickingCheckIn){
       this.setState({  isDateTimePickerVisible: false, checkInDate: date }); 
     } else{
       this.setState({ isDateTimePickerVisible: false, checkOutDate: date });
@@ -239,7 +239,9 @@ export default class ScheduledScreen extends React.Component {
                 showDatePicker={this.state.isDateTimePickerVisible} 
                 checkIn = {this.state.checkInDate}
                 checkOut = {this.state.checkOutDate}
-                onPress={(value)=> {this.setState({isDateTimePickerVisible: value})} }
+                onPressTimePicker={(value)=> {
+                  this.setState({isDateTimePickerVisible: true, isPickingCheckIn: value})} 
+                }
                 />
             </KeyboardAwareScrollView>
           )
