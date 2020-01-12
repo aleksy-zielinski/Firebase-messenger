@@ -210,6 +210,11 @@ export default class LoginScreen extends React.Component {
             </TouchableOpacity>
             </View>
           </View>
+          {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator size='large' />
+              </View>
+            }
         </View>
       </TouchableWithoutFeedback>
     );

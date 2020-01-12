@@ -25,15 +25,16 @@ export default class PostCell extends React.PureComponent {
 
     return (
 
-      <View
+      <TouchableOpacity
+        onPress={this.props.onPress}
         style={{
           backgroundColor: '#ffffff',
           borderWidth: 1,
           borderColor: '#cccccc',
           padding: 16,
-          marginTop: 8,
           marginRight: 8,
           marginLeft: 8,
+          marginBottom: 8,
           borderRadius: 3,
           display: 'flex'
         }}
@@ -150,7 +151,7 @@ export default class PostCell extends React.PureComponent {
         >
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, facere modi! In expedita quos id doloribus ipsa suscipit quod?
         </Text>
-      </View>
+      </TouchableOpacity>
    
    );
   }
