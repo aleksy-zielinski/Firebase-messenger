@@ -27,12 +27,12 @@ export default class EditReservationView extends React.PureComponent {
     const item = this.props.item
 
     // console.log('redener edit view', this.state.checkIn)
-    let start_time = Moment(this.props.checkIn).format("DD/MM/YYYY");
-    let end_time = Moment(this.props.checkOut).format("DD/MM/YYYY");
+    let start_time = Moment(this.props.checkIn).format("MM/DD/YYYY");
+    let end_time = Moment(this.props.checkOut).format("MM/DD/YYYY");
 
     return (
       <View style={{marginVertical: 20}}>
-            <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> EDIT </Text>
+            <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> Edit </Text>
 
             <View style={styles.container}>
               <Text style={styles.textHeaderStyle}>RESERVATION ID</Text>
@@ -148,7 +148,9 @@ export default class EditReservationView extends React.PureComponent {
                 >
                 <Text style={{color: 'white'}}>SAVE</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.cancelButton}>
+              <TouchableOpacity style={styles.cancelButton}
+                onPress={()=>this.props.cancelPress()}
+              >
                 <Text style={{color: '#e66656'}}>CANCEL</Text>
               </TouchableOpacity>
             </View>

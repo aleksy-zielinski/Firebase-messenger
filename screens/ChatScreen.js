@@ -127,7 +127,7 @@ export default class ChatScreen extends React.Component {
 
   formatTime = (timeStr) => {
     let newDate = new Date(timeStr);
-    return Moment(newDate).format("DD/MM/YYYY");
+    return Moment(newDate).format("MM/DD/YYYY");
   }
 
 
@@ -181,7 +181,7 @@ export default class ChatScreen extends React.Component {
           onPress={this._handleBox} />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {'lightgray'}
+              color =  {this.pageData.meta_values.includes('priority') ? 'salmon' : 'darkgray'}
               name={'flag'}
               size={25}
             />
@@ -190,6 +190,7 @@ export default class ChatScreen extends React.Component {
         </Appbar.Header>
 
         <View style={styles.headContainer}> 
+
             <View style={styles.topContainer}>
 
               <Image
@@ -199,19 +200,30 @@ export default class ChatScreen extends React.Component {
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{guest.name}</Text>
-                  <Text style={styles.locationText}>{guest.location}</Text>
+                  {/* <Text style={styles.locationText}>{guest.location}</Text> */}
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>
 
             </View>
 
-            <Text style={[styles.contentText]}> {`${guest.email} /${guest.phone}`} </Text>
-            <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
-            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-            <Text style={styles.codeText}> {guest.reservation_id} </Text>
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText]}>{guest.email}</Text>
+            </View>
 
-          </View>
+            <View style={{flexDirection:'row', marginTop: 4, marginBottom: 20,}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
+              <Text style={[styles.codeText]}>{guest.phone}</Text>
+            </View>
+
+            {guest.door_code && 
+              <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
+                <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+                <Text style={styles.codeText}>{guest.door_code}</Text>
+              </View>
+            }
+            
         </View>
            <GiftedChat
             renderBubble={this.renderBubble}
@@ -256,7 +268,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: 'row',
-    margin: 20,
+    margin: 20
   },
   avatar: {
     width: 50, 
@@ -269,6 +281,7 @@ const styles = StyleSheet.create({
   durationText: {
     color: 'dimgray',
     fontSize: 13,
+    marginTop: 4
   },
   locationText: {
     color: 'dimgray',

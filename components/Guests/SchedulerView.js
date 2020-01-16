@@ -14,7 +14,7 @@ export default class SchedulerView extends React.PureComponent {
 
     return (
       <View style={{marginTop: 20}}>
-            <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> RE/SEND SCHEDULED MESSAGE </Text>
+            <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
 
             <View style={styles.container}>
               <TouchableOpacity style={styles.rowStyle}>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   textStyle: {
-    color: '#455a69', 
+    color: '#0074D9', 
     fontSize: 15, 
     fontWeight: '300',
   }

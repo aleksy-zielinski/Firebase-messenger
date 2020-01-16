@@ -1,4 +1,3 @@
-import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import {
   StyleSheet,
@@ -9,7 +8,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
-import {  FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
 
 const options = [
@@ -31,118 +30,126 @@ export default class MessagesScreen extends React.Component {
     };
   }
 
-  componentDidMount(){
-    
+  componentDidMount() {
+
     this.getThread()
 
   }
 
   getThread = async () => {
-    
-    this.setState({isLoading:true})
+
+    this.setState({ isLoading: true })
 
     try {
-
-      let response = await fetch(`https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/threads?page=0&filter=${this.state.filter}`, {
+      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/meta?page=0&filter=${this.state.filter}`
+      console.log(url)
+      let response = await fetch(url, {
         method: 'GET',
         headers: {
           Cookie: global.cookies,
         },
       });
       let responseJson = await response.json();
-      
 
-      if (responseJson){
-        // console.log(responseJson.page);
-        this.setState({isLoading:false, page: responseJson.page})
-      } else{
+
+      if (responseJson) {
+        console.log(responseJson.page);
+        this.setState({ isLoading: false, page: responseJson.page })
+      } else {
         console.log('no data');
-        this.setState({isLoading:false})
+        this.setState({ isLoading: false })
       }
-       
-      
+
+
     } catch (error) {
       console.error(error);
-      this.setState({isLoading:false})
+      this.setState({ isLoading: false })
     }
   }
 
-  _selectOption = (index) =>{
+  _selectOption = (index) => {
 
     // const selectCate =  options[index]
-    let filter = ['all', 'priority','unread'][index];
+    let filter = ['', 'priority', 'unread'][index];
     console.log(filter)
-    this.setState({ selectedIndex: index, filter: filter });
-    this.getThread()
+    this.setState({
+      selectedIndex: index,
+      filter: filter
+    },
+      () => {
+        this.getThread();
+      }
+    );
+
 
   }
 
   _onPressCell = (item) => {
 
-    this.props.navigation.navigate('Chat',{
+    this.props.navigation.navigate('Chat', {
       page: item
     });
 
   }
 
-  render(){
+  render() {
 
-    const {page} = this.state;
+    const { page } = this.state;
 
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
 
         <View style={styles.topContainer}>
-        
-          <ModalDropdown 
-            onSelect={(index)=> this._selectOption(index)}
-            defaultIndex = {0}
-            defaultValue={'All messages'} 
+
+          <ModalDropdown
+            onSelect={(index) => this._selectOption(index)}
+            defaultIndex={0}
+            defaultValue={'All messages'}
             options={options}
             style={styles.buttonDropDown}
             textStyle={styles.dropDownButtonText}
-            dropdownStyle={{left: 0, right: 10, height: 120}}
-            dropdownTextStyle={{fontSize:16, textAlign:'center'}}
+            dropdownStyle={{ left: 0, right: 10, height: 120 }}
+            dropdownTextStyle={{ fontSize: 16, textAlign: 'center' }}
           />
           <FontAwesome
-            disabled= {true}
-            pointerEvents= 'none'
-            style = {styles.arrow}
+            disabled={true}
+            pointerEvents='none'
+            style={styles.arrow}
             name={'angle-down'}
             size={30}
           />
 
         </View>
-       
+
         <FlatList
-              ref={notiRef => this.listView = notiRef}
-              data={page}
-              // key={keyGrid}
-              // numColumns={2}
-              keyExtractor={item => `${item.id}`}
-              // refreshing={isRefresh}
-              // onRefresh={this.actionRefresh}
-              // ListFooterComponent={this.renderFooter}
-              renderItem={({ item }) => (
-                <TaskCell
-                  item={item}
-                  onPress={()=> this._onPressCell(item) }
-                />
-              )}
-              // onEndReached={this.actionLoadMore}
-              // onEndReachedThreshold={0.01}
-              removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
+          ref={notiRef => this.listView = notiRef}
+          data={page}
+          // key={keyGrid}
+          // numColumns={2}
+          keyExtractor={item => `${item.id}`}
+          // refreshing={isRefresh}
+          // onRefresh={this.actionRefresh}
+          // ListFooterComponent={this.renderFooter}
+          renderItem={({ item }) => (
+            <TaskCell
+              item={item}
+              onPress={() => this._onPressCell(item)}
             />
-             {this.state.isLoading &&
-              <View style={styles.loadingStyle}>
-                <ActivityIndicator size='small' />
-              </View>
-            }
+          )}
+          // onEndReached={this.actionLoadMore}
+          // onEndReachedThreshold={0.01}
+          removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
+        />
+        {this.state.isLoading &&
+          <View style={styles.loadingStyle}>
+            <ActivityIndicator size='small' />
+          </View>
+        }
       </View>
     );
   }
-  
+
 }
 
 MessagesScreen.navigationOptions = {
@@ -153,11 +160,6 @@ MessagesScreen.navigationOptions = {
   }
 };
 
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/workflow/development-mode/'
-  );
-}
 
 const styles = StyleSheet.create({
   loadingStyle: {
@@ -181,9 +183,9 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     borderWidth: 1,
     borderRadius: 5,
-    marginLeft: 10, 
+    marginLeft: 10,
     marginRight: 10,
-    marginTop: 10, 
+    marginTop: 10,
     marginBottom: 10,
     height: 40,
     flexDirection: 'row',
@@ -194,13 +196,13 @@ const styles = StyleSheet.create({
     right: 10,
     top: 5,
   },
-  buttonDropDown:{
+  buttonDropDown: {
     flex: 1,
-    
+
   },
-  dropDownButtonText:{
-    fontSize:16, 
-    marginTop:10, 
+  dropDownButtonText: {
+    fontSize: 16,
+    marginTop: 10,
     marginLeft: 10,
     marginBottom: 10
   },

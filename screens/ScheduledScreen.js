@@ -7,7 +7,7 @@ import {
   Text,
   Alert,
 } from 'react-native';
-import {   MaterialCommunityIcons, Ionicons, Feather } from '@expo/vector-icons';
+import * as WebBrowser from 'expo-web-browser'
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
@@ -29,7 +29,7 @@ export default class ScheduledScreen extends React.Component {
 
     this.state = {
       messages: [],
-      viewSelect: 0,
+      viewSelect: 1,
       selectIndexTop: 0,
       selectIndexBot: 0,
       emai: '',
@@ -39,9 +39,6 @@ export default class ScheduledScreen extends React.Component {
       checkInDate: new Date(this.item.check_in),
       checkOutDate: new Date(this.item.check_out),
     };
-
-    
-    
 
   }
 
@@ -72,7 +69,6 @@ export default class ScheduledScreen extends React.Component {
   getMessage = async () => {
 
     if (!this.item.thread_id){
-      Alert.alert('Error', 'Thread id null')
       return
     }
     
@@ -111,6 +107,24 @@ export default class ScheduledScreen extends React.Component {
 
   appBarSetect = (index) => {
     console.log('Index:', index);
+    if (index == 4){
+      if (this.item.rental_id){
+        WebBrowser.openBrowserAsync(`https://www.ruebarue.com/guestbook/${this.item.guestlink_id}`)
+      } else if (this.item.rental_id){
+        WebBrowser.openBrowserAsync(`https://www.ruebarue.com/rental/${this.item.rental_id}`)
+      } else{
+        Alert.alert('Delete guest', 'Are you sure?', 
+        [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
+        { text: 'Cancel'}])
+        return
+      }
+      
+    } else if (index == 5){
+      Alert.alert('Delete guest', 'Are you sure?', 
+        [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
+        { text: 'Cancel'}])
+        return
+    } 
     this.setState({viewSelect:index})
   }
 
@@ -147,7 +161,7 @@ export default class ScheduledScreen extends React.Component {
 
   formatTime = (timeStr) => {
     let newDate = new Date(timeStr);
-    return Moment(newDate).format("DD/MM/YYYY");
+    return Moment(newDate).format("MM/DD/YYYY");
   }
 
   _showDateTimePicker = () => {
@@ -176,14 +190,25 @@ export default class ScheduledScreen extends React.Component {
     const end_time = this.formatTime(item.check_out);
     const {viewSelect} = this.state
 
-    const appBarIcon = [
+    let appBarIcon = [
       'calendar-text',
       'chart-bubble',
       'share',
       'square-edit-outline',
-      'link-variant',
       'delete-forever'
     ]
+
+    if (this.item.rental_id || this.item.guestlink_id){
+      appBarIcon = [
+        'calendar-text',
+        'chart-bubble',
+        'share',
+        'square-edit-outline',
+        'link-variant',
+        'delete-forever'
+      ]
+    }
+    
 
     const appBar = appBarIcon.map( (icon, index) =>
       <Appbar.Action 
@@ -221,12 +246,9 @@ export default class ScheduledScreen extends React.Component {
               emai={this.state.email} 
               selectIndexTop={this.state.selectIndexTop} 
               onPress={(index)=> this.setState({selectIndexTop:index}) }
-            />
-            <ShareView
-              isEmail={false}
-              phone={this.state.phone} 
-              selectIndexTop={this.state.selectIndexBot} 
-              onPress={(index)=> this.setState({selectIndexBot:index}) }
+              cancelPress={()=>
+                this.props.navigation.goBack()
+              }
             />
           </KeyboardAwareScrollView>
         )
@@ -241,6 +263,9 @@ export default class ScheduledScreen extends React.Component {
                 checkOut = {this.state.checkOutDate}
                 onPressTimePicker={(value)=> {
                   this.setState({isDateTimePickerVisible: true, isPickingCheckIn: value})} 
+                }
+                cancelPress={()=>
+                  this.props.navigation.goBack()
                 }
                 />
             </KeyboardAwareScrollView>

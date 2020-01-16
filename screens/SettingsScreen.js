@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Alert } from 'react-native';
 // import {  AntDesign } from '@expo/vector-icons';
 // import Colors from '../constants/Colors';
 
@@ -8,7 +8,11 @@ import { View, StyleSheet } from 'react-native';
   export default class LogoutScreen extends React.Component {
   
   componentDidMount(){
-    this.props.navigation.navigate('LoginScreen');
+    // this.props.navigation.navigate('LoginScreen');
+
+    Alert.alert('Logout', 'Are you sure?', 
+        [{ text: 'OK', onPress: () => {  this.props.navigation.navigate('LoginScreen');} },
+        { text: 'Cancel'}])
   }
 
   render(){

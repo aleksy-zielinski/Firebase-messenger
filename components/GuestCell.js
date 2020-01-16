@@ -13,7 +13,7 @@ export default class PostCell extends React.PureComponent {
 
   formatTime = (timeStr) => {
     let newDate = new Date(timeStr);
-    return Moment(newDate).format("DD/MM/YYYY");
+    return Moment(newDate).format("MM/DD/YYYY");
   }
 
   render(){
@@ -23,129 +23,63 @@ export default class PostCell extends React.PureComponent {
     let end_time = this.formatTime(item.check_out);
 
     return (
-     <TouchableOpacity
-        onPress={this.props.onPress}
-        style={{
-          backgroundColor: '#ffffff',
-          borderWidth: 1,
-          borderColor: '#cccccc',
-          padding: 16,
-          marginRight: 8,
-          marginLeft: 8,
-          marginBottom: 8,
-          borderRadius: 3,
-          display: 'flex'
-        }}
-      >        
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <Image 
-            source={ { uri: 'https://i.pravatar.cc/150?img=59' } }
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 24,
-              marginRight: 16,
-              overflow: 'hidden'
-            }}
-          />
-          <View
-            style={{
-              marginTop: 8,
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
-            <Text
-              style={{
-                flex: 1,
-                fontSize: 18,
-                lineHeight: 24,
-                fontWeight: '400'
-              }}
-            >
-              Joel Weber
-            </Text>
-            <Entypo                  
-              color =  'black'
-              name={'chevron-thin-right'}
-              size={20}
+      <View style={styles.container}> 
+        <TouchableOpacity 
+          style={{flex: 1}}
+          onPress={this.props.onPress}>
+
+          <View style={styles.topContainer}>
+            <Image
+              style={styles.avatar}
+              source={{ uri: 'https://i.pravatar.cc/150?img=59' }}
             />
-          </View>
-        </View>
-        <View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between'
-            }}
-          >
-            <View
-              style={{
-                flex: 1,
-                display: 'flex',
-                marginLeft: 64
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 14,
-                  fontWeight: '300',
-                  lineHeight: 16,
-                  opacity: 0.6
-                }}
-              >101 Main Street Guide</Text>
-              <Text
-              style={{
-                fontSize: 14,
-                fontWeight: '300',
-                lineHeight: 16,
-                opacity: 0.6
-              }}
-              >12/1/2019 - 12/10/2019</Text>
+            <View style={{marginLeft: 16, flex: 1}}>
+
+
+              <View style={{flexDirection: 'row'}}>
+                <View style={{flex:1}}>
+                <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
+                  {item.rental_name &&
+                    <Text style={styles.locationText}>{item.rental_name}</Text>
+                  }
+                  {item.check_in !== '0001-01-01T00:00:00Z' &&
+                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
+                  }
+                </View>
+
+                <Entypo
+                  style = {styles.box}
+                  color =  'black'
+                  name={'chevron-thin-right'}
+                  size={20}
+                />
+
+                
+              </View>
+
             </View>
-          </View>       
-        </View>
-        <Text
-          style={{
-            marginTop: 16,
-            fontSize: 16,
-            color: '#2d2d2d',
-            lineHeight: 24,
-            fontWeight: '300'
-          }}
-        >
-        david.fincher@gmail.com / 617-216-9862
-        </Text>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 14,
-              opacity: 0.6,
-              fontWeight: '300',
-              lineHeight: 24
-            }}
-          >Door Code: </Text>
-          <Text
-            style={{
-              fontSize: 14,
-              lineHeight: 24 
-            }}
-          >1244</Text>
-        </View>
-      </TouchableOpacity> 
+
+          </View>
+
+          <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.email}</Text>
+            </View>
+
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
+              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
+            </View>
+
+        {item.door_code && 
+          <View style={{flexDirection:'row', marginTop: 4}}>
+            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+            <Text style={styles.codeText}>{item.door_code}</Text>
+          </View>
+        }
+
+        </TouchableOpacity>
+      </View>
     );
   }
  
@@ -160,6 +94,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10, 
     marginTop: 0, 
     marginBottom: 10,
+    paddingBottom: 20,
   },
   topContainer: {
     flex: 1,

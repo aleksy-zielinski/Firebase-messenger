@@ -67,13 +67,13 @@ export default class ShareView extends React.PureComponent {
     return (
       <View style={{marginVertical: 20}}>
 
-          <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> SHARE</Text>
+          <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
 
             <View style={styles.container}>
               {lines}
 
               <View style={{height: 1, marginLeft: 10, marginTop: 20, backgroundColor: 'lightgray'}}/>
-              <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
+              <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {'EMAIL or PHONE'}</Text>
               <TextInput
                 style={styles.textInputStyle}
                 placeholder= {isEmail ? "Enter email": "Enter phone number" } 
@@ -92,7 +92,9 @@ export default class ShareView extends React.PureComponent {
             <TouchableOpacity style={styles.sendButton}>
               <Text style={{color: 'white'}}>SEND</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton}>
+            <TouchableOpacity style={styles.cancelButton}
+              onPress={()=>this.props.cancelPress()}
+            >
               <Text style={{color: '#519f4f'}}>CANCEL</Text>
             </TouchableOpacity>
           </View>
