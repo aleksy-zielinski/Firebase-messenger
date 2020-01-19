@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
@@ -28,6 +29,7 @@ export default class ChatScreen extends React.Component {
       messages: [],
     };
     this.pageData = this.props.navigation.getParam('page');
+    this.isChange = false;
   }
 
   componentDidMount(){
@@ -86,13 +88,75 @@ export default class ChatScreen extends React.Component {
   }
 
   _goBack = () => {
-    console.log('back')
+    if (this.isChange){
+      this.props.navigation.state.params.onSelect();
+    }
     this.props.navigation.goBack()
   }
 
-  _handleBox = () => console.log('Searching');
+  _handleAchieve = () => {
 
-  _handleMore = () => console.log('Shown more');
+    this.setMetadata('unread')
+
+  }
+
+  _handleFlag = async () => {
+
+    this.setMetadata('priority')
+    
+  }
+
+  setMetadata = async (type)=>{
+
+    this.isChange = true
+    this.setState({isLoading:true})
+
+    const isAdd = this.pageData.meta_values.includes(type) ? false : true;
+
+    try {
+      let formdata = new FormData();
+
+      formdata.append('token', type)
+
+      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.pageData.id}/meta`
+      console.log(url)
+      console.log('method: ', isAdd ? 'POST' : 'DELETE', type)
+
+      let response = await fetch(url, {
+        method: isAdd ? 'POST' : 'DELETE',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      console.log(responseJson);
+      this.setState({isLoading:false})
+
+      if (responseJson.status == 'ok'){
+        if (isAdd){
+          const newMeta = this.pageData.meta_values.concat(`,${type}`)
+          this.pageData.meta_values = newMeta
+        } else{
+          const newMeta = this.pageData.meta_values.replace(type, '')
+          this.pageData.meta_values = newMeta
+          if (type == 'unread'){
+            this._goBack()
+          }
+        }
+        this.setState({});
+      } else{
+        Alert.alert('Error', responseJson.message)
+      }
+      
+    } catch (error) {
+      this.setState({isLoading:false})
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
+
+  }
 
   onSend(messages = []) {
     this.setState(previousState => ({
@@ -173,12 +237,12 @@ export default class ChatScreen extends React.Component {
           />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {'lightgray'}
-              name={'box'}
+              color =  {this.pageData.meta_values.includes('unread') ? 'salmon' : 'darkgray'}
+              name = {'box'}
               size={25}
             />
           )} 
-          onPress={this._handleBox} />
+          onPress={this._handleAchieve} />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
               color =  {this.pageData.meta_values.includes('priority') ? 'salmon' : 'darkgray'}
@@ -186,7 +250,7 @@ export default class ChatScreen extends React.Component {
               size={25}
             />
           )} 
-          onPress={this._handleMore} />
+          onPress={this._handleFlag} />
         </Appbar.Header>
 
         <View style={styles.headContainer}> 

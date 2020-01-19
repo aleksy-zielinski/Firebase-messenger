@@ -7,6 +7,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+import { Notifications } from 'expo';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
@@ -28,13 +29,37 @@ export default class MessagesScreen extends React.Component {
       filter: '',
       isLoading: false,
     };
+    this.notificationSubscription;
   }
 
   componentDidMount() {
 
     this.getThread()
+    this.notificationSubscription = Notifications.addListener(this._handleNotification);
 
   }
+
+  componentWillUnmount(){
+    this.notificationSubscription.remove()
+  }
+
+  _handleNotification = (notification) => {
+    
+    console.log(JSON.stringify(notification.data))
+
+    this.state.page.forEach( item =>{
+
+      console.log('item', item.id, notification.data.thread_id)
+      if (item.id == notification.data.thread_id){
+        this.props.navigation.navigate('Chat', {
+          page: item,
+          onSelect:this.callBack
+        });
+      }
+      
+    })
+
+  };
 
   getThread = async () => {
 
@@ -87,9 +112,15 @@ export default class MessagesScreen extends React.Component {
   _onPressCell = (item) => {
 
     this.props.navigation.navigate('Chat', {
-      page: item
+      page: item,
+      onSelect:this.callBack
     });
 
+  }
+
+  callBack = () => {
+    //reload data
+    this.getThread()
   }
 
   render() {

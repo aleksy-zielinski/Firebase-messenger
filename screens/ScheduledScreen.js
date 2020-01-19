@@ -247,7 +247,8 @@ export default class ScheduledScreen extends React.Component {
               selectIndexTop={this.state.selectIndexTop} 
               onPress={(index)=> this.setState({selectIndexTop:index}) }
               cancelPress={()=>
-                this.props.navigation.goBack()
+                // this.props.navigation.goBack()
+                this.setState({viewSelect:1})
               }
             />
           </KeyboardAwareScrollView>
@@ -265,7 +266,8 @@ export default class ScheduledScreen extends React.Component {
                   this.setState({isDateTimePickerVisible: true, isPickingCheckIn: value})} 
                 }
                 cancelPress={()=>
-                  this.props.navigation.goBack()
+                  // this.props.navigation.goBack()
+                  this.setState({viewSelect:1})
                 }
                 />
             </KeyboardAwareScrollView>
@@ -317,12 +319,23 @@ export default class ScheduledScreen extends React.Component {
 
             </View>
 
-            <Text style={[styles.contentText]}>  {`${item.email} /${item.phone}`} </Text>
-            <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
-            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}> Door Code: </Text>
-            <Text style={styles.codeText}> {item.door_code} </Text>
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.email}</Text>
+            </View>
 
-          </View>
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
+              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
+            </View>
+
+            {item.door_code && 
+              <View style={{flexDirection:'row', marginTop: 4}}>
+                <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+                <Text style={styles.codeText}>{item.door_code}</Text>
+              </View>
+            }
+
         </View>
           
           {contentView}
@@ -351,6 +364,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'darkgray',
     margin: 0,
+    paddingBottom: 20,
   },
   topContainer: {
     flexDirection: 'row',

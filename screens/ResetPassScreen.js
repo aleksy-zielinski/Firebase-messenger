@@ -39,15 +39,39 @@ export default class ResetPassScreen extends React.Component {
     }
   }
 
-  _resetAction = () => {
+  _resetAction = async () => {
 
     Keyboard.dismiss();
     this.setState({isLoading:true});
-    setTimeout( () => {
-      this.setState({isLoading:false});
-      Alert.alert('Done', 'Please check your mail');
-    },1000);
 
+    const {email} = this.state
+
+    try {
+
+      let formdata = new FormData();
+
+      formdata.append("email", email)
+
+      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/auth/password-reset', {
+        method: 'POST',
+        body: formdata,
+      });
+      this.setState({isLoading:false})
+      let responseJson = await response.json();
+      console.log(responseJson);
+
+      if (responseJson.status == 'OK'){
+        Alert.alert('Request success', responseJson.message)
+        this.setState({email:''})
+      } else{
+        Alert.alert('Error', responseJson.message)
+      }
+      
+    } catch (error) {
+      this.setState({isLoading:false})
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
   }
 
   

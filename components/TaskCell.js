@@ -11,17 +11,12 @@ import {
 
 export default class PostCell extends React.PureComponent {
 
-  formatTime = (timeStr) => {
-    let newDate = new Date(timeStr);
-    return Moment(newDate).format("MM/DD/YYYY");
-  }
-
   render(){
     const item = this.props.item
 
-    let last_msg_on = this.formatTime(item.last_msg_on);
-    let check_in = this.formatTime(item.check_in);
-    let check_out = this.formatTime(item.check_out);
+    let last_msg_on = Moment(item.last_msg_on).format('MM/DD/YYYY hh:mm a')
+    let check_in = Moment(item.check_in).format("MM/DD/YYYY");
+    let check_out = Moment(item.check_out).format("MM/DD/YYYY");
 
     return (
       <View style={styles.container}> 
@@ -48,7 +43,7 @@ export default class PostCell extends React.PureComponent {
               </View>
               <Entypo
                 style = {styles.box}
-                color =  'darkgray'
+                color =  {item.meta_values.includes('unread') ? 'salmon' : 'darkgray'}
                 name={'box'}
                 size={25}
               />

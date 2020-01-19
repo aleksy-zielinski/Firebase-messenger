@@ -99,7 +99,7 @@ export default class LoginScreen extends React.Component {
       formdata.append("email", email)
       formdata.append("password", password)
       formdata.append("device_id", Constants.installationId)
-      formdata.append("fcm_id", 'test')
+      formdata.append("fcm_id", global.expoToken ? global.expoToken : '')
 
       let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/auth/login', {
         method: 'POST',
