@@ -129,9 +129,45 @@ export default class ScheduledScreen extends React.Component {
   }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    console.log(messages[0].text);
+    this.sendMessage(messages);
+  }
+
+  sendMessage = async (messages)=>{
+
+    try {
+      let formdata = new FormData();
+
+      formdata.append('message', messages[0].text)
+      formdata.append('thread_id', this.item.thread_id)
+
+      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbound/app`
+      console.log(url)
+      console.log(formdata)
+
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      console.log(responseJson);
+      if (responseJson.status == 'ok'){
+        this.setState(previousState => ({
+          messages: GiftedChat.append(previousState.messages, messages),
+        }))
+      } else{
+        // Alert.alert('Error', responseJson.message)
+      }
+      
+    } catch (error) {
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
+
   }
 
   renderBubble= (props) => {
