@@ -171,7 +171,7 @@ export default class ChatScreen extends React.Component {
       let formdata = new FormData();
 
       formdata.append('message', messages[0].text)
-      formdata.append('thread_id', this.item.thread_id)
+      formdata.append('thread_id', this.pageData.id)
 
       const url = Constant.severUrl + 'api/messaging/inbound/app'
       console.log(url)
@@ -192,7 +192,7 @@ export default class ChatScreen extends React.Component {
           messages: GiftedChat.append(previousState.messages, messages),
         }))
       } else{
-        // Alert.alert('Error', responseJson.message)
+        Alert.alert('Error', 'no response from sever')
       }
       
     } catch (error) {
