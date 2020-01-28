@@ -11,6 +11,7 @@ import { Notifications } from 'expo';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { FontAwesome } from '@expo/vector-icons';
 import TaskCell from '../components/TaskCell';
+import Constant from '../constants/Constant';
 
 const options = [
   'All messages',
@@ -66,7 +67,7 @@ export default class MessagesScreen extends React.Component {
     this.setState({ isLoading: true })
 
     try {
-      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbox/0/meta?page=0&filter=${this.state.filter}`
+      const url = Constant.severUrl + `api/messaging/inbox/0/meta?page=0&filter=${this.state.filter}`
       console.log(url)
       let response = await fetch(url, {
         method: 'GET',
@@ -75,10 +76,10 @@ export default class MessagesScreen extends React.Component {
         },
       });
       let responseJson = await response.json();
+      // console.log(response)
 
-
-      if (responseJson) {
-        console.log(responseJson.page);
+      if (responseJson && Object.keys(responseJson).length > 0) {
+        console.log(responseJson);
         this.setState({ isLoading: false, page: responseJson.page })
       } else {
         console.log('no data');

@@ -5,17 +5,16 @@ import {
   View, 
   Text, 
   StatusBar, 
-  TouchableWithoutFeedback, 
   Keyboard, 
   ActivityIndicator, 
   Alert,
   Image,
-  TextInput,
-  Button
+  TextInput
 } from 'react-native';
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import FormLabel from '../components/FormLabel';
 import Constants from 'expo-constants';
+import Constant from '../constants/Constant';
 
 export default class LoginScreen extends React.Component {
 
@@ -81,7 +80,7 @@ export default class LoginScreen extends React.Component {
   loginRequest = async () => {
 
     if (__DEV__){
-      console.log(global.cookies)
+      console.log('current cookie: '+ global.cookies)
       if (typeof global.cookies != "undefined") {
         this.props.navigation.navigate('MainTabbar')
         return
@@ -101,7 +100,9 @@ export default class LoginScreen extends React.Component {
       formdata.append("device_id", Constants.installationId)
       formdata.append("fcm_id", global.expoToken ? global.expoToken : '')
 
-      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/auth/login', {
+      const url = Constant.severUrl + 'auth/login'
+      console.log(url)
+      let response = await fetch(url, {
         method: 'POST',
         body: formdata,
       });
@@ -131,16 +132,15 @@ export default class LoginScreen extends React.Component {
 
     return (
 
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={{backgroundColor: '#3a5161', flex: 1}}>
+        <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{
-          display: 'flex',
           justifyContent: 'center',
-          backgroundColor: '#3a5161',
-          height: '100%'
+          // backgroundColor: 'gray'
         }}>
           <StatusBar barStyle="light-content" />
           <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
-            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20}}  />
+            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20, marginTop: 100}}  />
             <Text style={styles.loginText}>Login</Text>
           </View>
           <View
@@ -212,13 +212,14 @@ export default class LoginScreen extends React.Component {
             </TouchableOpacity>
             </View>
           </View>
-          {this.state.isLoading &&
+        </View>
+      </KeyboardAwareScrollView>
+      {this.state.isLoading &&
               <View style={styles.loadingStyle}>
                 <ActivityIndicator size='large' />
               </View>
             }
-        </View>
-      </TouchableWithoutFeedback>
+      </View>
     );
   }
 }

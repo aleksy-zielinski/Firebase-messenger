@@ -43,7 +43,9 @@ export default class App extends React.Component {
 
     console.log(nextAppState)
     if (nextAppState === 'active') {
-      this.checkForUpdateAsync()
+      if (!__DEV__){
+        this.checkForUpdateAsync()
+      }
     }
 
   }

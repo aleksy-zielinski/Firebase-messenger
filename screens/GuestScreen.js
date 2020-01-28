@@ -13,6 +13,7 @@ import ActionSheet from 'react-native-actionsheet';
 import { Searchbar } from 'react-native-paper';
 import {  Ionicons } from '@expo/vector-icons';
 import GuestCell from '../components/GuestCell';
+import Constant from '../constants/Constant';
 
 const options = [
   'All messages',
@@ -69,7 +70,7 @@ export default class GuestsScreen extends React.Component {
     
     try {
 
-      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/reservations/0?f=${selectOption}&q=${this.state.firstQuery}`;
+      const url = Constant.severUrl + `api/reservations/0?f=${selectOption}&q=${this.state.firstQuery}`
       console.log(url);
       let response = await fetch(url, {
         method: 'GET',

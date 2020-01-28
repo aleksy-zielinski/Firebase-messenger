@@ -1,6 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFeedback, ActivityIndicator, Alert, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
+import Constant from '../constants/Constant';
 
 export default class ResetPassScreen extends React.Component {
 
@@ -52,7 +53,8 @@ export default class ResetPassScreen extends React.Component {
 
       formdata.append("email", email)
 
-      let response = await fetch('https://mobile-dot-ruebarue-curator.appspot.com/m/auth/password-reset', {
+      const url = Constant.severUrl + 'auth/password-reset'
+      let response = await fetch(url, {
         method: 'POST',
         body: formdata,
       });

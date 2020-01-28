@@ -60,7 +60,7 @@ export default class PostCell extends React.PureComponent {
           </View>
 
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.is_read ? '300': '500'}]}> {item.meta_values} </Text>
+        <Text style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}> {item.last_msg} </Text>
         </TouchableOpacity>
       </View>
     );

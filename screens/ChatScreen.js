@@ -12,6 +12,7 @@ import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
+import Constant from '../constants/Constant';
 
 const options = [
   'All messages',
@@ -61,7 +62,7 @@ export default class ChatScreen extends React.Component {
     this.setState({isLoading:true})
 
     try {
-      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.pageData.id}`
+      const url = Constant.severUrl + `api/messaging/thread/${this.pageData.id}`
       console.log(url)
       let response = await fetch(url, {
         method: 'GET',
@@ -118,7 +119,7 @@ export default class ChatScreen extends React.Component {
 
       formdata.append('token', type)
 
-      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.pageData.id}/meta`
+      const url = Constant.severUrl + `api/messaging/thread/${this.pageData.id}/meta`
       console.log(url)
       console.log('method: ', isAdd ? 'POST' : 'DELETE', type)
 
@@ -159,9 +160,46 @@ export default class ChatScreen extends React.Component {
   }
 
   onSend(messages = []) {
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+    console.log(messages[0].text);
+    this.sendMessage(messages);
+  }
+
+  
+  sendMessage = async (messages)=>{
+
+    try {
+      let formdata = new FormData();
+
+      formdata.append('message', messages[0].text)
+      formdata.append('thread_id', this.item.thread_id)
+
+      const url = Constant.severUrl + 'api/messaging/inbound/app'
+      console.log(url)
+      console.log(formdata)
+
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      console.log(responseJson);
+      if (responseJson.status == 'ok'){
+        this.setState(previousState => ({
+          messages: GiftedChat.append(previousState.messages, messages),
+        }))
+      } else{
+        // Alert.alert('Error', responseJson.message)
+      }
+      
+    } catch (error) {
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
+
   }
 
   renderBubble= (props) => {

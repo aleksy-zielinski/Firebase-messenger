@@ -35,34 +35,35 @@ export default class ShareView extends React.PureComponent {
     super(props);
 
     this.state = {
-      phone: props.phone,
-      email: props.email
     };
   }
 
 
   render(){
 
-    const {selectIndexTop, isEmail} = this.props
+    const {selectIndexTop, options, item} = this.props
 
-    const options = [
-      'Resend Guestbook by SMS',
-      'Resend Guestbook by Email',
-      'Send Rebook and Review',
-      'Send Post Departure Survey by SMS',
-      'Resend Five Star Review by SMS',
-      'Send Social Media Campain by SMS'
-    ]
+    // const options = [
+    //   'Resend Guestbook by SMS',
+    //   'Resend Guestbook by Email',
+    //   'Send Rebook and Review',
+    //   'Send Post Departure Survey by SMS',
+    //   'Resend Five Star Review by SMS',
+    //   'Send Social Media Campain by SMS'
+    // ]
 
     const lines = options.map( (item, index) =>
         <SelectView 
-          title={item}
+          title={item.name}
           index={index}
           isSelected={index === selectIndexTop} 
           key={`index${index}`}
           onPress={(index)=> this.props.onPress(index)}
         />  
     )
+
+    const currentItem = options[selectIndexTop]
+    const isEmail = currentItem.email
 
     return (
       <View style={{marginVertical: 20}}>
@@ -73,18 +74,12 @@ export default class ShareView extends React.PureComponent {
               {lines}
 
               <View style={{height: 1, marginLeft: 10, marginTop: 20, backgroundColor: 'lightgray'}}/>
-              <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {'EMAIL or PHONE'}</Text>
-              <TextInput
+              <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
+              <TextInput 
+                editable={false}
                 style={styles.textInputStyle}
-                placeholder= {isEmail ? "Enter email": "Enter phone number" } 
-                onChangeText={(text) => {
-                  if (isEmail){
-                    this.setState({email: text})
-                  } else {
-                    this.setState({phone: text})
-                  }
-                }}
-                value={isEmail ? this.state.email : this.state.phone}
+                placeholder= {isEmail ? "Enter email": "Enter phone number" }
+                value={isEmail ? item.email : item.phone}
               />
             </View>
           
@@ -128,7 +123,8 @@ const styles = StyleSheet.create({
     marginTop: 5, 
     borderColor: 'lightgray', 
     borderWidth: 1, 
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    backgroundColor:'lightgray'
   },
   textStyle: {
     color: 'black', 

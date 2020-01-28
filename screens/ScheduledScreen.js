@@ -17,7 +17,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import SchedulerView from '../components/Guests/SchedulerView';
 import ShareView from '../components/Guests/ShareView';
 import EditReservationView from '../components/Guests/EditReservationView';
-
+import Constant from '../constants/Constant';
 
 
 export default class ScheduledScreen extends React.Component {
@@ -32,18 +32,43 @@ export default class ScheduledScreen extends React.Component {
       viewSelect: 1,
       selectIndexTop: 0,
       selectIndexBot: 0,
-      emai: '',
-      phone: '',
       isDateTimePickerVisible: false,
       isPickingCheckIn: true,
       checkInDate: new Date(this.item.check_in),
       checkOutDate: new Date(this.item.check_out),
+      shareOption: [],
     };
 
   }
 
   componentDidMount(){
     this.getMessage()
+    this.getListAction()
+  }
+
+  getListAction = async () => {
+
+    try {
+      const url = Constant.severUrl + 'api/scheduler'
+      console.log(url)
+      let response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Cookie: global.cookies,
+        },
+      });
+      let responseJson = await response.json();
+
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        this.setState({shareOption: responseJson})
+      } else{
+        console.log('no action found');
+      }
+      
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   creatMessage = (res) => {
@@ -75,7 +100,7 @@ export default class ScheduledScreen extends React.Component {
     this.setState({isLoading:true})
 
     try {
-      let url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/thread/${this.item.thread_id}`
+      const url = Constant.severUrl + `api/messaging/thread/${this.item.thread_id}`
       console.log(url)
       let response = await fetch(url, {
         method: 'GET',
@@ -141,7 +166,8 @@ export default class ScheduledScreen extends React.Component {
       formdata.append('message', messages[0].text)
       formdata.append('thread_id', this.item.thread_id)
 
-      const url = `https://mobile-dot-ruebarue-curator.appspot.com/m/api/messaging/inbound/app`
+
+      const url = Constant.severUrl + 'api/messaging/inbound/app'
       console.log(url)
       console.log(formdata)
 
@@ -259,7 +285,10 @@ export default class ScheduledScreen extends React.Component {
     switch (viewSelect) {
       case 0:
         contentView = (
-          <SchedulerView/>
+          <SchedulerView
+            item={item} 
+            options={this.state.shareOption}
+          />
         )
         break;
       case 1:
@@ -278,8 +307,8 @@ export default class ScheduledScreen extends React.Component {
         contentView=(
           <KeyboardAwareScrollView enableOnAndroid={true}>
             <ShareView 
-              isEmail={true}
-              emai={this.state.email} 
+              item={item} 
+              options={this.state.shareOption}
               selectIndexTop={this.state.selectIndexTop} 
               onPress={(index)=> this.setState({selectIndexTop:index}) }
               cancelPress={()=>
