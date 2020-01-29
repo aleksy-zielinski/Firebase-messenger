@@ -14,6 +14,10 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
+    const matches = item.guest_name.match(/\b(\w)/g);
+    const acronym = matches.join(''); 
+    const userShort = acronym.substring(0,2)
+
     let last_msg_on = Moment(item.last_msg_on).format('MM/DD/YYYY hh:mm a')
     let check_in = Moment(item.check_in).format("MM/DD/YYYY");
     let check_out = Moment(item.check_out).format("MM/DD/YYYY");
@@ -24,10 +28,9 @@ export default class PostCell extends React.PureComponent {
           style={{flex: 1}}
           onPress={this.props.onPress}>
         <View style={styles.topContainer}>
-          <Image
-            style={styles.avatar}
-            source={{ uri: 'https://i.pravatar.cc/150?img=59' }}
-          />
+          <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{color: 'white', fontSize: 18}}>{userShort}</Text>
+          </View>
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>

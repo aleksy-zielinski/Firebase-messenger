@@ -19,6 +19,8 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
+    const userShort = item.first_name.substring(0,1) + item.last_name.substring(0,1);
+
     let start_time = this.formatTime(item.check_in);
     let end_time = this.formatTime(item.check_out);
 
@@ -29,10 +31,10 @@ export default class PostCell extends React.PureComponent {
           onPress={this.props.onPress}>
 
           <View style={styles.topContainer}>
-            <Image
-              style={styles.avatar}
-              source={{ uri: 'https://i.pravatar.cc/150?img=59' }}
-            />
+            
+            <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{color: 'white', fontSize: 20}}>{userShort}</Text>
+            </View>
             <View style={{marginLeft: 16, flex: 1}}>
 
 

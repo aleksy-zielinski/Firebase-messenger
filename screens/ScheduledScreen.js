@@ -43,6 +43,8 @@ export default class ScheduledScreen extends React.Component {
       isLoading: false,
     };
 
+    this.userShort = this.item.first_name.substring(0,1) + this.item.last_name.substring(0,1);
+
   }
 
   componentDidMount(){
@@ -85,8 +87,7 @@ export default class ScheduledScreen extends React.Component {
         createdAt: item.created_at,
         user: {
           _id: item.sender_type,
-          name: item.sender_type,
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Facebook_default_male_avatar.gif',
+          // name: 'Joel Weber',
         },
       }
       messages.push(m);
@@ -265,6 +266,14 @@ export default class ScheduledScreen extends React.Component {
     );
   }
 
+  renderAvatar= (props) => {
+    return (
+      <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+      </View>
+    );
+  }
+
   formatTime = (timeStr) => {
     let newDate = new Date(timeStr);
     return Moment(newDate).format("MM/DD/YYYY");
@@ -340,6 +349,7 @@ export default class ScheduledScreen extends React.Component {
         contentView = (
           <GiftedChat
             renderBubble={this.renderBubble}
+            renderAvatar={this.renderAvatar}
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
             user={{
@@ -415,10 +425,9 @@ export default class ScheduledScreen extends React.Component {
         <View style={styles.headContainer}> 
             <View style={styles.topContainer}>
 
-              <Image
-                style={styles.avatar}
-                source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
-              />
+              <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: 'white', fontSize: 20}}>{this.userShort}</Text>
+              </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>

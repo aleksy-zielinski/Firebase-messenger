@@ -33,6 +33,7 @@ export default class ChatScreen extends React.Component {
     this.pageData = this.props.navigation.getParam('page');
     this.isChange = false;
     this.isMount = false;
+    this.userShort = ''
   }
 
   componentDidMount(){
@@ -54,8 +55,7 @@ export default class ChatScreen extends React.Component {
         createdAt: item.created_at,
         user: {
           _id: item.sender_type,
-          name: item.sender_type,
-          avatar: 'https://placeimg.com/140/140/any',
+          name: this.userShort,
         },
       }
       messages.push(m);
@@ -81,6 +81,11 @@ export default class ChatScreen extends React.Component {
 
       if (responseJson && Object.keys(responseJson).length > 0){
         console.log(responseJson);
+
+        const matches = responseJson.guest.name.match(/\b(\w)/g); // ['J','S','O','N']
+        const acronym = matches.join(''); // JSON
+        this.userShort = acronym.substring(0,2)
+
         let mes = this.creatMessage(responseJson.messages)
         this.setState({isLoading:false, guest: responseJson.guest, messages: mes})
       } else{
@@ -241,6 +246,14 @@ export default class ChatScreen extends React.Component {
     );
   }
 
+  renderAvatar= (props) => {
+    return (
+      <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+      </View>
+    );
+  }
+
   formatTime = (timeStr) => {
     let newDate = new Date(timeStr);
     return Moment(newDate).format("MM/DD/YYYY");
@@ -311,10 +324,9 @@ export default class ChatScreen extends React.Component {
 
             <View style={styles.topContainer}>
 
-              <Image
-                style={styles.avatar}
-                source={{ uri: 'https://facebook.github.io/react-native/img/tiny_logo.png' }}
-              />
+            <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{color: 'white', fontSize: 20}}>{this.userShort}</Text>
+            </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{guest.name}</Text>
@@ -348,6 +360,7 @@ export default class ChatScreen extends React.Component {
             // renderUsernameOnMessage = {true}
             // isTyping={true}
             renderBubble={this.renderBubble}
+            renderAvatar={this.renderAvatar}
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
             user={{
