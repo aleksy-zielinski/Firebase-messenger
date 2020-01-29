@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser'
 import { Appbar } from 'react-native-paper';
@@ -37,6 +38,8 @@ export default class ScheduledScreen extends React.Component {
       checkInDate: new Date(this.item.check_in),
       checkOutDate: new Date(this.item.check_out),
       shareOption: [],
+      sent_scheduled_messages: this.item.sent_scheduled_messages,
+      isLoading: false,
     };
 
   }
@@ -153,6 +156,41 @@ export default class ScheduledScreen extends React.Component {
     this.setState({viewSelect:index})
   }
 
+  shareRequest = async (messageId)=>{
+
+    this.setState({isLoading:true})
+
+    try {
+
+      const url = Constant.severUrl + `api/scheduler/${messageId}/reservation/${this.item.id}/send`
+      console.log(url)
+
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        }
+      });
+      
+      let responseJson = await response.json();
+      
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        const newValue = this.state.sent_scheduled_messages + ` ${messageId}`
+        this.setState({sent_scheduled_messages: newValue, isLoading:false}) 
+      } else{
+        this.setState({isLoading:false})
+        Alert.alert('Error', 'no response from sever')
+      }
+      
+    } catch (error) {
+      this.setState({isLoading:false})
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
+
+  }
+
   onSend(messages = []) {
     console.log(messages[0].text);
     this.sendMessage(messages);
@@ -247,7 +285,7 @@ export default class ScheduledScreen extends React.Component {
 
   render(){
 
-    const item = this.props.navigation.getParam('item');
+    const item = this.item
     const start_time = this.formatTime(item.check_in);
     const end_time = this.formatTime(item.check_out);
     const {viewSelect} = this.state
@@ -286,8 +324,9 @@ export default class ScheduledScreen extends React.Component {
       case 0:
         contentView = (
           <SchedulerView
-            item={item} 
+            messagesIds={this.state.sent_scheduled_messages} 
             options={this.state.shareOption}
+            onPress={(messageId)=> this.shareRequest(messageId) }
           />
         )
         break;
@@ -405,6 +444,12 @@ export default class ScheduledScreen extends React.Component {
           
           {contentView}
 
+          {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator size='large' />
+              </View>
+            }
+
           
     </View>
     );
@@ -430,6 +475,17 @@ const styles = StyleSheet.create({
     borderColor: 'darkgray',
     margin: 0,
     paddingBottom: 20,
+  },
+  loadingStyle: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    opacity: 0.8,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   topContainer: {
     flexDirection: 'row',

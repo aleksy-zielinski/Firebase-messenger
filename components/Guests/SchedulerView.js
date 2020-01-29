@@ -12,16 +12,17 @@ export default class SchedulerView extends React.PureComponent {
 
   render(){
 
-    const { options, item} = this.props
+    const { options, messagesIds} = this.props
 
     const lines = options.map( (obj, index) =>
       <TouchableOpacity 
         style={styles.rowStyle}
         key={`index${index}`}
+        onPress={()=>this.props.onPress(obj.id)}
         >
         <Feather
           style={{marginRight: 10}}
-          color =  {item.sent_scheduled_messages.includes(`${obj.id}`) ? 'black' : 'transparent'}
+          color =  {messagesIds.includes(`${obj.id}`) ? 'black' : 'transparent'}
           name={'check'}
           size={18}
         />
