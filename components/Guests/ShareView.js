@@ -35,7 +35,27 @@ export default class ShareView extends React.PureComponent {
     super(props);
 
     this.state = {
+      text: ''
     };
+  }
+
+
+  componentDidMount(){
+
+    const {selectIndexTop, options, item} = this.props
+    const currentItem = options[selectIndexTop]
+    const isEmail = currentItem.email
+    const value = isEmail ? item.email : item.phone
+    this.setState({text: value})
+
+  }
+
+  didChangeOption(index){
+    const {options, item} = this.props
+    const currentItem = options[index]
+    const isEmail = currentItem.email
+    const value = isEmail ? item.email : item.phone
+    this.setState({text: value})
   }
 
 
@@ -58,7 +78,10 @@ export default class ShareView extends React.PureComponent {
           index={index}
           isSelected={index === selectIndexTop} 
           key={`index${index}`}
-          onPress={(index)=> this.props.onPress(index)}
+          onPress={(index)=> {
+            this.props.onPress(index);
+            this.didChangeOption(index)
+          }}
         />  
     )
 
@@ -76,10 +99,13 @@ export default class ShareView extends React.PureComponent {
               <View style={{height: 1, marginLeft: 10, marginTop: 20, backgroundColor: 'lightgray'}}/>
               <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
               <TextInput 
-                editable={false}
+                // editable={false}
                 style={styles.textInputStyle}
                 placeholder= {isEmail ? "Enter email": "Enter phone number" }
-                value={isEmail ? item.email : item.phone}
+                value={this.state.text}
+                onChangeText={(text) => {
+                  this.setState({text: text})
+              }}
               />
             </View>
           
@@ -124,7 +150,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray', 
     borderWidth: 1, 
     paddingHorizontal: 10,
-    backgroundColor:'lightgray'
+    // backgroundColor:'lightgray'
   },
   textStyle: {
     color: 'black', 
