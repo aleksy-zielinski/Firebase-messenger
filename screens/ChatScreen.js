@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator,
   Alert,
+  Keyboard
 } from 'react-native';
 import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
@@ -31,10 +32,16 @@ export default class ChatScreen extends React.Component {
     };
     this.pageData = this.props.navigation.getParam('page');
     this.isChange = false;
+    this.isMount = false;
   }
 
   componentDidMount(){
     this.getMessage()
+    this.isMount = true;
+  }
+
+  componentWillUnmount(){
+    this.isMount = false;
   }
 
   creatMessage = (res) => {
@@ -46,14 +53,14 @@ export default class ChatScreen extends React.Component {
         text: item.content,
         createdAt: item.created_at,
         user: {
-          _id: item.sender_id,
+          _id: item.sender_type,
           name: item.sender_type,
           avatar: 'https://placeimg.com/140/140/any',
         },
       }
       messages.push(m);
     })
-    return messages
+    return messages.reverse()
 
   }
 
@@ -167,6 +174,9 @@ export default class ChatScreen extends React.Component {
   
   sendMessage = async (messages)=>{
 
+    Keyboard.dismiss();
+    this.setState({isLoading:true})
+
     try {
       let formdata = new FormData();
 
@@ -186,16 +196,20 @@ export default class ChatScreen extends React.Component {
       });
       
       let responseJson = await response.json();
-      console.log(responseJson);
-      if (responseJson.status == 'ok'){
-        this.setState(previousState => ({
-          messages: GiftedChat.append(previousState.messages, messages),
-        }))
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        if (this.isMount){
+          this.setState(previousState => ({
+            messages: GiftedChat.append(previousState.messages, messages), isLoading:false
+          }))
+        }
       } else{
+        this.setState({isLoading:false})
         Alert.alert('Error', 'no response from sever')
       }
       
     } catch (error) {
+      this.setState({isLoading:false})
       Alert.alert('Error',error.message)
       console.error(error);
     }
@@ -235,7 +249,9 @@ export default class ChatScreen extends React.Component {
 
   render(){
 
-    const {guest} = this.state;
+    const test = [5187641168887808, 5685283057565696];
+    const arg = test[0] || test[1]
+     const {guest} = this.state;
     if (!guest ){
       return (
         <View style={styles.container}>
@@ -328,13 +344,21 @@ export default class ChatScreen extends React.Component {
             
         </View>
            <GiftedChat
+            // showUserAvatar = {true}
+            // renderUsernameOnMessage = {true}
+            // isTyping={true}
             renderBubble={this.renderBubble}
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
             user={{
-              _id: guest.id,
+              _id: 'recipient' || 'automated',
             }}
             />
+             {this.state.isLoading &&
+              <View style={styles.loadingStyle}>
+                <ActivityIndicator/>
+              </View>
+            }
     </View>
     );
   }

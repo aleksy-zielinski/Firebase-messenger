@@ -7,6 +7,7 @@ import {
   Text,
   Alert,
   ActivityIndicator,
+  Keyboard,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser'
 import { Appbar } from 'react-native-paper';
@@ -83,14 +84,14 @@ export default class ScheduledScreen extends React.Component {
         text: item.content,
         createdAt: item.created_at,
         user: {
-          _id: item.sender_id,
+          _id: item.sender_type,
           name: item.sender_type,
           avatar: 'https://upload.wikimedia.org/wikipedia/commons/f/f7/Facebook_default_male_avatar.gif',
         },
       }
       messages.push(m);
     })
-    return messages
+    return messages.reverse()
 
   }
 
@@ -198,6 +199,9 @@ export default class ScheduledScreen extends React.Component {
 
   sendMessage = async (messages)=>{
 
+    Keyboard.dismiss();
+    this.setState({isLoading:true})
+
     try {
       let formdata = new FormData();
 
@@ -219,15 +223,17 @@ export default class ScheduledScreen extends React.Component {
       
       let responseJson = await response.json();
       console.log(responseJson);
-      if (responseJson.status == 'ok'){
+      if (responseJson && Object.keys(responseJson).length > 0){
         this.setState(previousState => ({
-          messages: GiftedChat.append(previousState.messages, messages),
+          messages: GiftedChat.append(previousState.messages, messages), isLoading:false
         }))
       } else{
-        // Alert.alert('Error', responseJson.message)
+        this.setState({isLoading:false})
+        Alert.alert('Error', 'no data')
       }
       
     } catch (error) {
+      this.setState({isLoading:false})
       Alert.alert('Error',error.message)
       console.error(error);
     }
@@ -243,7 +249,7 @@ export default class ScheduledScreen extends React.Component {
             color: 'white',
           },
           right: {
-            color: 'white',
+            color: 'black',
           },
         }}
         wrapperStyle={{
@@ -251,7 +257,7 @@ export default class ScheduledScreen extends React.Component {
             backgroundColor: '#4d6b85',
           },
           right: {
-            backgroundColor: 'darkgray',
+            backgroundColor: 'white',
           },
         }}
         
@@ -337,7 +343,7 @@ export default class ScheduledScreen extends React.Component {
             messages={this.state.messages}
             onSend={messages => this.onSend(messages)}
             user={{
-              _id: 1,
+              _id: 'recipient' || 'automated',
             }}
           />
         )
