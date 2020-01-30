@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "685739402138",
+    "firebase_url": "https://xem-360.firebaseio.com",
+    "project_id": "xem-360",
+    "storage_bucket": "xem-360.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685739402138:android:e9ef307fad86b5f24cd023",
+        "android_client_info": {
+          "package_name": "com.instancea.Kata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685739402138-cf13105a8leqfq09os2ocfkcn9sbt50n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUZfZi2rQu-LuoiiG65bYOH1Hfe16MY4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685739402138-cf13105a8leqfq09os2ocfkcn9sbt50n.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "685739402138-8shne29at0micu639tp930flq2oppk2r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smj.giaitri",
+                "app_store_id": "1119227055"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

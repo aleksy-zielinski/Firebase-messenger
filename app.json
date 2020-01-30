@@ -31,7 +31,8 @@
       "bundleIdentifier": "com.instancea.Kata"
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
+      "googleServicesFile": "./google-services.json",
       "package": "com.instancea.Kata"
     }
   }

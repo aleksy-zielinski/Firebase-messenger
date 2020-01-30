@@ -78,6 +78,12 @@ export default class App extends React.Component {
   };
 
   registerForPushNotificationsAsync = async () => {
+
+    if(__DEV__){
+      global.expoToken = 'test'
+      return;
+    }
+
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
     // Stop here if the user did not grant permissions

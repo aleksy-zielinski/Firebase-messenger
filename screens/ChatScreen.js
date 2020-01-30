@@ -3,11 +3,12 @@ import {
   StyleSheet,
   View,
   StatusBar,
-  Image,
   Text,
   ActivityIndicator,
   Alert,
-  Keyboard
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import {  Entypo } from '@expo/vector-icons';
 import { Appbar } from 'react-native-paper';
@@ -215,8 +216,8 @@ export default class ChatScreen extends React.Component {
       
     } catch (error) {
       this.setState({isLoading:false})
-      Alert.alert('Error',error.message)
-      console.error(error);
+      Alert.alert('Error sending message')
+      // console.error(error);
     }
 
   }
@@ -367,6 +368,9 @@ export default class ChatScreen extends React.Component {
               _id: 'recipient' || 'automated',
             }}
             />
+             {Platform.OS === 'android' 
+              && <KeyboardAvoidingView behavior="padding" />
+              }
              {this.state.isLoading &&
               <View style={styles.loadingStyle}>
                 <ActivityIndicator/>

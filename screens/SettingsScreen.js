@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Alert, Clipboard, ToastAndroid, Text, Platform } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
 
 // export default function LogoutScreen() {
   export default class LogoutScreen extends React.Component {
   
-  componentDidMount(){
-    // this.props.navigation.navigate('LoginScreen');
 
+  showAlert(){
     Alert.alert('Logout', 'Are you sure?', 
         [{ text: 'OK', onPress: () => {  
           this.props.navigation.navigate('LoginScreen');
@@ -16,9 +15,14 @@ import { TextInput } from 'react-native-gesture-handler';
         { text: 'Cancel'}])
   }
 
+
+
   render(){
     return(
       <View style = {styles.container}>
+        <NavigationEvents
+          onDidFocus={payload => this.showAlert()}
+        />
         
         {global.expoToken && 
         <Text style={{fontSize:18}} onPress={() => {

@@ -79,14 +79,6 @@ export default class LoginScreen extends React.Component {
  
   loginRequest = async () => {
 
-    if (__DEV__){
-      console.log('current cookie: '+ global.cookies)
-      if (typeof global.cookies != "undefined") {
-        this.props.navigation.navigate('MainTabbar')
-        return
-      }
-    }
-
     Keyboard.dismiss();
     this.setState({isLoading:true})
     const {email, password} = this.state
@@ -109,9 +101,9 @@ export default class LoginScreen extends React.Component {
       this.setState({isLoading:false})
       let responseJson = await response.json();
       // console.log(responseJson);
-      this.saveCookies(response.headers)
 
       if (responseJson.status == 'OK'){
+        this.saveCookies(response.headers)
         // global.userToken = responseJson.token;
         this.props.navigation.navigate('MainTabbar')
       } else{
@@ -155,7 +147,7 @@ export default class LoginScreen extends React.Component {
               borderRadius: 2,
             }}
           >
-            <FormLabel>Name</FormLabel>
+            <FormLabel>Email</FormLabel>
             <TextInput
 
               style={{
@@ -173,7 +165,7 @@ export default class LoginScreen extends React.Component {
                 ...styles.textInput,
                 marginBottom: 20
               }}
-              placeholder="Enter email"
+              placeholder="Enter password"
               value={password}
               onChangeText={text => {this._handlePassTextChange(text)}}
             />

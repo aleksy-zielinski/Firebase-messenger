@@ -3,11 +3,12 @@ import {
   StyleSheet,
   View,
   StatusBar,
-  Image,
   Text,
   Alert,
   ActivityIndicator,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import * as WebBrowser from 'expo-web-browser'
 import { Appbar } from 'react-native-paper';
@@ -187,8 +188,8 @@ export default class ScheduledScreen extends React.Component {
       
     } catch (error) {
       this.setState({isLoading:false})
-      Alert.alert('Error',error.message)
-      console.error(error);
+      Alert.alert('Error sending message')
+      // console.error(error);
     }
 
   }
@@ -458,6 +459,9 @@ export default class ScheduledScreen extends React.Component {
         </View>
           
           {contentView}
+          {Platform.OS === 'android' && viewSelect === 1
+              && <KeyboardAvoidingView behavior="padding" />
+              }
 
           {this.state.isLoading &&
               <View style={styles.loadingStyle}>
