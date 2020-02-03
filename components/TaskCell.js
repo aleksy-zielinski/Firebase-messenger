@@ -15,8 +15,12 @@ export default class PostCell extends React.PureComponent {
     const item = this.props.item
 
     const matches = item.guest_name.match(/\b(\w)/g);
-    const acronym = matches.join(''); 
+    const acronym = (matches || []).join(''); 
     const userShort = acronym.substring(0,2)
+    const displayName = (item.guest_first_name + " " + item.guest_last_name).trim() || 
+                        item.guest_name || 
+                        item.guest_phone || 
+                        "";
 
     let last_msg_on = Moment(item.last_msg_on).format('MM/DD/YYYY hh:mm a')
     let check_in = Moment(item.check_in).format("MM/DD/YYYY");
@@ -34,7 +38,7 @@ export default class PostCell extends React.PureComponent {
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.nameText} numberOfLines={1}>{item.guest_name}</Text>
+              <Text style= {styles.nameText} numberOfLines={1}>{displayName}</Text>
               <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
