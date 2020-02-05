@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Alert, Clipboard, ToastAndroid, Text, Platform } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
+import Constants from 'expo-constants';
 
 // export default function LogoutScreen() {
   export default class LogoutScreen extends React.Component {
@@ -34,7 +35,9 @@ import { NavigationEvents } from 'react-navigation';
           {global.expoToken}
         </Text>}
         <Text>Tap on token to copy</Text>
-        
+        <Text style={styles.itemTextVersion} numberOfLines={2}>
+                Version {Constants.manifest.version}.{Platform.OS === 'android' ? Constants.manifest.android.versionCode : Constants.manifest.ios.buildNumber} 
+          </Text>
       </View>
     )
   };
@@ -56,5 +59,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  itemTextVersion: {
+    fontSize: 17,
+    color: 'gray'
   },
 });

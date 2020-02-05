@@ -34,7 +34,6 @@ export default class ScheduledScreen extends React.Component {
       messages: [],
       viewSelect: 1,
       selectIndexTop: 0,
-      selectIndexBot: 0,
       isDateTimePickerVisible: false,
       isPickingCheckIn: true,
       checkInDate: new Date(this.item.check_in),
@@ -242,6 +241,61 @@ export default class ScheduledScreen extends React.Component {
 
   }
 
+  saveGuestInfo = async (pms_id, first_name, last_name, email, phone, door_code) =>{
+
+    Keyboard.dismiss();
+    this.setState({isLoading:true})
+
+    let start_time = Moment(this.state.checkInDate).format("YYYY-MM-DD");
+    let end_time = Moment(this.props.checkOutDate).format("YYYY-MM-DD");
+
+    try {
+      let formdata = new FormData();
+
+      formdata.append('id', this.item.id)
+      formdata.append('reservation_id', this.item.reservation_id)
+
+      formdata.append('pms_id', pms_id.replace(' ',''))
+      formdata.append('first_name', first_name)
+      formdata.append('last_name', last_name)
+      formdata.append('check_in', start_time)
+      formdata.append('check_out', end_time)
+      formdata.append('email', email)
+      formdata.append('phone', phone)
+      formdata.append('door_code', door_code)
+
+      const url = Constant.severUrl + 'api/reservations/save'
+      console.log(url)
+      console.log(formdata)
+
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      console.log(responseJson);
+      if (responseJson && Object.keys(responseJson).length > 0){
+        this.item = responseJson
+        this.setState({isLoading:false})
+        Alert.alert('', 'Successfully saved the changes')
+      } else{
+        this.setState({isLoading:false})
+        Alert.alert('Error', 'no response from sever')
+        Alert.alert('Error', 'no data')
+      }
+      
+    } catch (error) {
+      this.setState({isLoading:false})
+      Alert.alert('Error',error.message)
+      console.error(error);
+    }
+
+  }
+
   renderBubble= (props) => {
     return (
       <Bubble
@@ -368,7 +422,6 @@ export default class ScheduledScreen extends React.Component {
               selectIndexTop={this.state.selectIndexTop} 
               onPress={(index)=> this.setState({selectIndexTop:index}) }
               cancelPress={()=>
-                // this.props.navigation.goBack()
                 this.setState({viewSelect:1})
               }
             />
@@ -387,8 +440,10 @@ export default class ScheduledScreen extends React.Component {
                   this.setState({isDateTimePickerVisible: true, isPickingCheckIn: value})} 
                 }
                 cancelPress={()=>
-                  // this.props.navigation.goBack()
                   this.setState({viewSelect:1})
+                }
+                onSave={(pms_id, first_name, last_name, email, phone, door_code)=>
+                  this.saveGuestInfo(pms_id, first_name, last_name, email, phone, door_code)
                 }
                 />
             </KeyboardAwareScrollView>
@@ -419,7 +474,7 @@ export default class ScheduledScreen extends React.Component {
           isVisible={this.state.isDateTimePickerVisible}
           onConfirm={this._handleDatePicked}
           onCancel={this._hideDateTimePicker}
-          // date={toDay}
+          date={this.state.isPickingCheckIn ? this.state.checkInDate : this.state.checkOutDate}
           // maximumDate = {toDay}
         />
 

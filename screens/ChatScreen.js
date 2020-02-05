@@ -28,7 +28,11 @@ export default class ChatScreen extends React.Component {
     this.pageData = this.props.navigation.getParam('page');
     this.isChange = false;
     this.isMount = false;
-    this.userShort = ''
+
+    const matches = this.pageData.guest_name.match(/\b(\w)/g);
+    const acronym = (matches || []).join(''); 
+    this.userShort= acronym.substring(0,2)
+
   }
 
   componentDidMount(){
@@ -173,10 +177,59 @@ export default class ChatScreen extends React.Component {
 
   onSend(messages = []) {
     console.log(messages[0].text);
-    this.sendMessage(messages);
+    if (this.state.messages.length == 0){
+      this.sendMessageNewThread(messages);
+    } else{
+      this.sendMessage(messages);
+    }
+    
   }
 
-  
+  sendMessageNewThread = async (messages)=>{
+
+    Keyboard.dismiss();
+    this.setState({isLoading:true})
+
+    try {
+      let formdata = new FormData();
+
+      formdata.append('first_name', this.pageData.guest_first_name)
+      formdata.append('last_name', this.pageData.guest_last_name)
+      formdata.append('message', messages[0].text)
+      formdata.append('phone', this.pageData.guest_phone)
+
+      const url = Constant.severUrl + 'api/messaging/inbound/create'
+      console.log(url)
+      console.log(formdata)
+
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      if (responseJson && Object.keys(responseJson).length > 0){
+        console.log(responseJson);
+        if (this.isMount){
+          this.setState(previousState => ({
+            messages: GiftedChat.append(previousState.messages, messages), isLoading:false
+          }))
+        }
+      } else{
+        this.setState({isLoading:false})
+        Alert.alert('Error', 'no response from sever')
+      }
+      
+    } catch (error) {
+      this.setState({isLoading:false})
+      Alert.alert('Error sending message')
+    }
+
+  }
+
   sendMessage = async (messages)=>{
 
     Keyboard.dismiss();
@@ -262,33 +315,9 @@ export default class ChatScreen extends React.Component {
 
   render(){
 
-    const test = [5187641168887808, 5685283057565696];
-    const arg = test[0] || test[1]
      const {guest} = this.state;
-    if (!guest ){
-      return (
-        <View style={styles.container}>
-          <StatusBar barStyle="light-content" />
-          <Appbar.Header style={{backgroundColor:'#455a69'}}>
-            <Appbar.BackAction
-              onPress={()=>this._goBack()}
-            />
-            
-          </Appbar.Header>
-          {this.state.isLoading ?
-              <View style={styles.loadingStyle}>
-                <ActivityIndicator size='small' />
-              </View>
-              : 
-              <View style={styles.loadingStyle}>
-               <Text> No data </Text>
-              </View>              
-            }
-        </View>
-      )
-    }
-    let start_time = this.formatTime(guest.created_at);
-    let end_time = this.formatTime(guest.updated_at);
+    let start_time = this.formatTime(this.pageData.check_in);
+    let end_time = this.formatTime(this.pageData.check_out);
     
 
     return (
@@ -329,7 +358,7 @@ export default class ChatScreen extends React.Component {
             </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
-                  <Text style= {styles.nameText}>{guest.name}</Text>
+                  <Text style= {styles.nameText}>{this.pageData.guest_name}</Text>
                   {/* <Text style={styles.locationText}>{guest.location}</Text> */}
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
@@ -339,20 +368,20 @@ export default class ChatScreen extends React.Component {
 
             <View style={{flexDirection:'row', marginTop: 4}}>
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText]}>{guest.email}</Text>
+              <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4, marginBottom: 20,}}>
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
-              <Text style={[styles.codeText]}>{guest.phone}</Text>
+              <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
             </View>
 
-            {guest.door_code && 
+            {/* {guest.door_code && 
               <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
                 <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
                 <Text style={styles.codeText}>{guest.door_code}</Text>
               </View>
-            }
+            } */}
             
         </View>
            <GiftedChat

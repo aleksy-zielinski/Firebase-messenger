@@ -2,7 +2,7 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator } from 'react-native';
 import { Notifications, Updates } from 'expo';
 import * as Permissions from 'expo-permissions';
-// import { NavigationActions } from 'react-navigation';
+import * as Device from 'expo-device';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -22,6 +22,9 @@ export default class App extends React.Component {
       this.registerForPushNotificationsAsync()
       Notifications.addListener(this.handleNotification);
       AppState.addEventListener('change', this.handleAppStateChange);
+      if (!__DEV__){
+        this.checkForUpdateAsync()
+      }
   }
 
   render() {
@@ -79,7 +82,7 @@ export default class App extends React.Component {
 
   registerForPushNotificationsAsync = async () => {
 
-    if(__DEV__){
+    if(Device.isDevice){
       global.expoToken = 'test'
       return;
     }
@@ -88,7 +91,7 @@ export default class App extends React.Component {
 
     // Stop here if the user did not grant permissions
     if (status !== 'granted') {
-      global.expoToken = 'test'
+      global.expoToken = 'Simulator'
       return;
     }
 

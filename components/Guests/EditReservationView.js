@@ -15,7 +15,7 @@ export default class EditReservationView extends React.PureComponent {
 
     this.state = {
       email: props.item.email,
-      property_id: props.item.property_id,
+      property_id: props.item.pms_id,
       fistName: props.item.first_name,
       lastName: props.item.last_name,
       phone: props.item.phone,
@@ -144,11 +144,15 @@ export default class EditReservationView extends React.PureComponent {
             </View>
 
             <View style={{flexDirection: 'row', marginHorizontal: 10}}>
+
               <TouchableOpacity style={styles.saveButton} 
-                // onPress={()=>this.props.onPress(true)}
+                onPress={()=>{
+                  this.props.onSave(this.state.property_id, this.state.fistName, this.state.lastName, this.state.email, this.state.phone, this.state.doorCode)
+                }}
                 >
                 <Text style={{color: 'white'}}>SAVE</Text>
               </TouchableOpacity>
+
               <TouchableOpacity style={styles.cancelButton}
                 onPress={()=>this.props.cancelPress()}
               >
