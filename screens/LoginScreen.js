@@ -90,7 +90,7 @@ export default class LoginScreen extends React.Component {
       formdata.append("email", email)
       formdata.append("password", password)
       formdata.append("device_id", Constants.installationId)
-      formdata.append("fcm_id", global.expoToken ? global.expoToken : '')
+      formdata.append("expo_id", global.expoToken ? global.expoToken : '')
 
       const url = Constant.severUrl + 'auth/login'
       console.log(url)

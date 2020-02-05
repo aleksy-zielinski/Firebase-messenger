@@ -17,6 +17,7 @@ const options = [
   'All messages',
   'Priority',
   'Unread',
+  'Archived'
 ];
 
 export default class MessagesScreen extends React.Component {
@@ -96,7 +97,7 @@ export default class MessagesScreen extends React.Component {
   _selectOption = (index) => {
 
     // const selectCate =  options[index]
-    let filter = ['', 'priority', 'unread'][index];
+    let filter = ['', 'priority', 'unread', 'archived'][index];
     console.log(filter)
     this.setState({
       selectedIndex: index,
@@ -141,7 +142,7 @@ export default class MessagesScreen extends React.Component {
             options={options}
             style={styles.buttonDropDown}
             textStyle={styles.dropDownButtonText}
-            dropdownStyle={{ left: 0, right: 10, height: 120 }}
+            dropdownStyle={{ left: 0, right: 10, height: 160 }}
             dropdownTextStyle={{ fontSize: 16, textAlign: 'center' }}
           />
           <FontAwesome

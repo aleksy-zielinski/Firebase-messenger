@@ -15,6 +15,7 @@ export default class EditReservationView extends React.PureComponent {
 
     this.state = {
       email: props.item.email,
+      property_id: props.item.property_id,
       fistName: props.item.first_name,
       lastName: props.item.last_name,
       phone: props.item.phone,
@@ -38,7 +39,7 @@ export default class EditReservationView extends React.PureComponent {
               <Text style={styles.textHeaderStyle}>RESERVATION ID</Text>
                 <TextInput
                   style={[styles.textInputStyle, {backgroundColor:'lightgray'}]}
-                  placeholder= { "Enter email"} 
+                  placeholder= { "Enter reservation id"} 
                   value={`${item.id}`}
                   editable={false}
                 />
@@ -46,11 +47,11 @@ export default class EditReservationView extends React.PureComponent {
                 <Text style={styles.textHeaderStyle}>PROPERTY ID</Text>
                 <TextInput
                   style={styles.textInputStyle}
-                  placeholder= { "Enter email"} 
+                  placeholder= { "Enter property id"} 
                   onChangeText={(text) => {
-                      this.setState({email: text})
+                      this.setState({property_id: text})
                   }}
-                  value={this.state.email}
+                  value={this.state.property_id}
                 />
 
                 <View style={{flexDirection: 'row'}}> 

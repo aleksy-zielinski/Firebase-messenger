@@ -50,7 +50,7 @@ export default class PostCell extends React.PureComponent {
               </View>
               <Entypo
                 style = {styles.box}
-                color =  {item.meta_values.includes('unread') ? 'salmon' : 'darkgray'}
+                color =  {item.meta_values.includes('archived') ? 'salmon' : 'darkgray'}
                 name={'box'}
                 size={25}
               />

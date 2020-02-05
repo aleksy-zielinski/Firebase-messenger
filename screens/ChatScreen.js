@@ -16,12 +16,6 @@ import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import Moment from 'moment';
 import Constant from '../constants/Constant';
 
-const options = [
-  'All messages',
-  'Priority',
-  'Unread',
-];
-
 export default class ChatScreen extends React.Component {
 
   constructor(props) {
@@ -40,6 +34,11 @@ export default class ChatScreen extends React.Component {
   componentDidMount(){
     this.getMessage()
     this.isMount = true;
+    
+    if (this.pageData.meta_values.includes('unread')){
+      this.setMetadata('unread'); //remove unread
+    }
+    
   }
 
   componentWillUnmount(){
@@ -110,7 +109,7 @@ export default class ChatScreen extends React.Component {
 
   _handleAchieve = () => {
 
-    this.setMetadata('unread')
+    this.setMetadata('archived')
 
   }
 
@@ -155,7 +154,7 @@ export default class ChatScreen extends React.Component {
         } else{
           const newMeta = this.pageData.meta_values.replace(type, '')
           this.pageData.meta_values = newMeta
-          if (type == 'unread'){
+          if (type == 'archived'){
             this._goBack()
           }
         }
@@ -305,7 +304,7 @@ export default class ChatScreen extends React.Component {
           />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {this.pageData.meta_values.includes('unread') ? 'salmon' : 'darkgray'}
+              color =  {this.pageData.meta_values.includes('archived') ? 'salmon' : 'darkgray'}
               name = {'box'}
               size={25}
             />

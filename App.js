@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator } from 'react-native';
 import { Notifications, Updates } from 'expo';
 import * as Permissions from 'expo-permissions';
