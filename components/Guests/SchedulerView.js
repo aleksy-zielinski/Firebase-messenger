@@ -32,7 +32,7 @@ export default class SchedulerView extends React.PureComponent {
 
     return (
       <View style={{marginTop: 20}}>
-            <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
+            <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
 
             <View style={styles.container}>
               {lines}

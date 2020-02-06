@@ -34,12 +34,14 @@ export default class PostCell extends React.PureComponent {
           onPress={this.props.onPress}>
         <View style={styles.topContainer}>
           <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'white', fontSize: 18}}>{userShort}</Text>
+              <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
           </View>
           <View style={{marginLeft: 10, flex: 1}}>
 
             <View style={{flexDirection: 'row'}}>
               <Text style= {styles.nameText} numberOfLines={1}>{displayName}</Text>
+            </View>
+            <View style={{flexDirection: 'row'}}>
               <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
@@ -61,14 +63,12 @@ export default class PostCell extends React.PureComponent {
                 name={'flag'}
                 size={25}
               />
-
-              
             </View>
 
           </View>
 
         </View>
-        <Text style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}> {item.last_msg} </Text>
+        <Text style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}>{item.last_msg}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     flex:1,
-    fontSize: 20,
+    fontSize: 18,
   },
   locationText: {
     color: 'dimgray',
@@ -113,15 +113,14 @@ const styles = StyleSheet.create({
   creatTimeText: {
     color: 'dimgray',
     fontSize: 13,
-    marginLeft:'auto',
-    marginRight: 0,
+    marginTop: 5,
   },
   box: {
     marginLeft: 10,
     marginRight: 0,
   },
   contentText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     marginHorizontal: 20,
     marginBottom: 20
   }

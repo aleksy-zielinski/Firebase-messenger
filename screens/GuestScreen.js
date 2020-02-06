@@ -40,7 +40,7 @@ export default class GuestsScreen extends React.Component {
       'Arriving Next Week (+14 Days)',
       'This month',
       'Show All',
-      'Huỷ'
+      'Cancel'
     ];
     this.sortActionSheet;
     this.timer;

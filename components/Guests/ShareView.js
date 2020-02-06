@@ -91,13 +91,13 @@ export default class ShareView extends React.PureComponent {
     return (
       <View style={{marginVertical: 20}}>
 
-          <Text style={{fontSize: 22, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
 
             <View style={styles.container}>
               {lines}
 
               <View style={{height: 1, marginLeft: 10, marginTop: 20, backgroundColor: 'lightgray'}}/>
-              <Text style={{fontSize: 20, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
+              <Text style={{fontSize: 14, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
               <TextInput 
                 // editable={false}
                 style={styles.textInputStyle}

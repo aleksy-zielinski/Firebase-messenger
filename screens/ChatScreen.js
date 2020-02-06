@@ -283,18 +283,20 @@ export default class ChatScreen extends React.Component {
         {...props}
         textStyle={{
           left: {
-            color: 'white',
+            color: 'black',
+            fontWeight: '300'
           },
           right: {
             color: 'white',
+            fontWeight: '300'
           },
         }}
         wrapperStyle={{
           left: {
-            backgroundColor: '#4d6b85',
+            backgroundColor: '#fff',
           },
           right: {
-            backgroundColor: 'darkgray',
+            backgroundColor: '#78AD6B',
           },
         }}
         
@@ -305,7 +307,7 @@ export default class ChatScreen extends React.Component {
   renderAvatar= (props) => {
     return (
       <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+        <Text style={{color: 'white', fontSize: 12}}>{this.userShort}</Text>
       </View>
     );
   }
@@ -357,7 +359,7 @@ export default class ChatScreen extends React.Component {
             <View style={styles.topContainer}>
 
             <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'white', fontSize: 20}}>{this.userShort}</Text>
+              <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
             </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
@@ -375,7 +377,7 @@ export default class ChatScreen extends React.Component {
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4, marginBottom: 20,}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
               <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
             </View>
 
@@ -450,7 +452,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 18,
   },
   durationText: {
     color: 'dimgray',
@@ -462,14 +464,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   contentText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18,
     marginHorizontal: 20
   },
   codeText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
-    fontSize: 15
+    fontSize: 15,
+    lineHeight: 18
   }
 });

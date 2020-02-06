@@ -45,7 +45,7 @@ export default class PostCell extends React.PureComponent {
           <View style={styles.topContainer}>
             
             <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'white', fontSize: 20}}>{userShort}</Text>
+              <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
             </View>
             <View style={{marginLeft: 16, flex: 1}}>
 
@@ -77,12 +77,12 @@ export default class PostCell extends React.PureComponent {
 
           <View style={{flexDirection:'row', marginTop: 4}}>
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.email}</Text>
+              <Text style={[styles.codeText]}>{item.email} </Text>
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
-              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
+              <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
             {doorCodeView}
 
@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 18,
+    lineHeight: 20
   },
   durationText: {
     color: 'dimgray',
@@ -123,7 +124,8 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: 'dimgray',
-    fontSize: 15,
+    fontSize: 14,
+    lineHeight: 18
   },
   creatTimeText: {
     color: 'dimgray',
@@ -137,14 +139,16 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   contentText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18,
     marginHorizontal: 20
   },
   codeText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18
   }
 })

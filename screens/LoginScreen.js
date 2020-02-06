@@ -261,13 +261,13 @@ const styles = StyleSheet.create({
   },
   googleIcon:{
     color: '#e66656',
-    fontSize: 20,
+    fontSize: 18,
     textAlign: 'center',
     marginTop: 12,
   },
   loginButtonText:{
     color: 'dimgray',
-    fontSize: 16,
+    fontSize: 14,
     textAlign: 'center',
     margin: 12,
   },

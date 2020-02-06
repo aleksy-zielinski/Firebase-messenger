@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 18,
   },
   durationText: {
     color: 'dimgray',
@@ -98,14 +98,16 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   contentText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18,
     marginHorizontal: 20
   },
   codeText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18
   }
 })

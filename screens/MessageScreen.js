@@ -142,7 +142,7 @@ export default class MessagesScreen extends React.Component {
             options={options}
             style={styles.buttonDropDown}
             textStyle={styles.dropDownButtonText}
-            dropdownStyle={{ left: 0, right: 10, height: 160 }}
+            dropdownStyle={{ left: 0, right: 10, height: 240 }}
             dropdownTextStyle={{ fontSize: 16, textAlign: 'center' }}
           />
           <FontAwesome

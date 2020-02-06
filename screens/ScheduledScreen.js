@@ -302,18 +302,20 @@ export default class ScheduledScreen extends React.Component {
         {...props}
         textStyle={{
           left: {
-            color: 'white',
+            color: 'black',
+            fontWeight: '300'
           },
           right: {
-            color: 'black',
+            color: 'white',
+            fontWeight: '300'
           },
         }}
         wrapperStyle={{
           left: {
-            backgroundColor: '#4d6b85',
+            backgroundColor: '#fff',
           },
           right: {
-            backgroundColor: 'white',
+            backgroundColor: '#78AD6B',
           },
         }}
         
@@ -324,7 +326,7 @@ export default class ScheduledScreen extends React.Component {
   renderAvatar= (props) => {
     return (
       <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+        <Text style={{color: 'white', fontSize: 14}}>{this.userShort}</Text>
       </View>
     );
   }
@@ -493,7 +495,7 @@ export default class ScheduledScreen extends React.Component {
             <View style={styles.topContainer}>
 
               <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 20}}>{this.userShort}</Text>
+                <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
               </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
@@ -506,13 +508,13 @@ export default class ScheduledScreen extends React.Component {
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.email}</Text>
+              <Text style={[styles.codeText, {color: 'gray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText]}>{item.email}</Text>
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
-              <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
+              <Text style={[styles.codeText, {color: 'gray', marginLeft: 20}]}>Phone: </Text>
+              <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
 
             {doorCodeView}
@@ -577,7 +579,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 20,
+    fontSize: 18,
   },
   durationText: {
     color: 'dimgray',
@@ -588,14 +590,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   contentText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
+    lineHeight: 18,
     marginHorizontal: 20
   },
   codeText: {
-    textAlign: 'justify',
+    textAlign: 'left',
     fontWeight: '300',
-    fontSize: 15
+    fontSize: 15,
+    lineHeight: 18
   }
 });
