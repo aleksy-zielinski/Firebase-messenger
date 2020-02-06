@@ -26,12 +26,12 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "1",
+      "buildNumber": "4",
       "supportsTablet": true,
       "bundleIdentifier": "com.instancea.Kata"
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "googleServicesFile": "./google-services.json",
       "package": "com.instancea.Kata"
     }

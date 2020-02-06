@@ -74,7 +74,7 @@ export default class LoginScreen extends React.Component {
         }
     }
     console.log(cookieStr);
-    global.cookies = 'token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1NjczMzA4OTczOTU3MTIwLCJleHAiOjE1ODEwMTU3OTR9.CpYa3vA5-_S09858s7Ow2U4WdRMM6BiO_AHI7Wq27cg; path=/; domain=.mobile-dot-ruebarue-curator.appspot.com; Expires=Thu, 06 Feb 2020 19:03:14 GMT;'//cookieStr;
+    global.cookies = cookieStr;
   }
  
   loginRequest = async () => {
