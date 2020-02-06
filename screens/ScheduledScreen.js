@@ -138,7 +138,7 @@ export default class ScheduledScreen extends React.Component {
   appBarSetect = (index) => {
     console.log('Index:', index);
     if (index == 4){
-      if (this.item.rental_id){
+      if (this.item.guestlink_id){
         WebBrowser.openBrowserAsync(`https://www.ruebarue.com/guestbook/${this.item.guestlink_id}`)
       } else if (this.item.rental_id){
         WebBrowser.openBrowserAsync(`https://www.ruebarue.com/rental/${this.item.rental_id}`)
