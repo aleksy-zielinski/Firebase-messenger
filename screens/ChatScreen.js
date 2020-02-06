@@ -29,7 +29,8 @@ export default class ChatScreen extends React.Component {
     this.isChange = false;
     this.isMount = false;
 
-    const matches = this.pageData.guest_name.match(/\b(\w)/g);
+    this.displayName = (this.pageData.guest_first_name + " " + this.pageData.guest_last_name).trim() || this.pageData.guest_name || this.pageData.guest_phone || "";
+    const matches = this.displayName.match(/\b(\w)/g);
     const acronym = (matches || []).join(''); 
     this.userShort= acronym.substring(0,2)
 
@@ -86,9 +87,11 @@ export default class ChatScreen extends React.Component {
       if (responseJson && Object.keys(responseJson).length > 0){
         console.log(responseJson);
 
-        const matches = responseJson.guest.name.match(/\b(\w)/g); // ['J','S','O','N']
-        const acronym = matches.join(''); // JSON
-        this.userShort = acronym.substring(0,2)
+        // let guest = responseJson.guest;
+        // this.displayName = (guest.guest_first_name + " " + guest.guest_last_name).trim() || guest.guest_name || guest.guest_phone || "";
+        // const matches = this.displayName.match(/\b(\w)/g);
+        // const acronym = (matches || []).join(''); 
+        // this.userShort= acronym.substring(0,2)
 
         let mes = this.creatMessage(responseJson.messages)
         this.setState({isLoading:false, guest: responseJson.guest, messages: mes})
@@ -358,7 +361,7 @@ export default class ChatScreen extends React.Component {
             </View>
               <View style={{marginLeft: 10, flex: 1}}>
               
-                  <Text style= {styles.nameText}>{this.pageData.guest_name}</Text>
+                  <Text style= {styles.nameText}>{this.displayName}</Text>
                   {/* <Text style={styles.locationText}>{guest.location}</Text> */}
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 

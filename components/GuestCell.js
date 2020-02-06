@@ -24,6 +24,18 @@ export default class PostCell extends React.PureComponent {
     let start_time = this.formatTime(item.check_in);
     let end_time = this.formatTime(item.check_out);
 
+    let doorCodeView;
+    if (item.door_code!== undefined){
+      if (item.door_code){
+        doorCodeView = (
+          <View style={{flexDirection:'row', marginTop: 4}}>
+            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+            <Text style={styles.codeText}>{item.door_code}</Text>
+          </View>
+        )
+      }
+    }  
+
     return (
       <View style={styles.container}> 
         <TouchableOpacity 
@@ -72,13 +84,7 @@ export default class PostCell extends React.PureComponent {
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone:</Text>
               <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
             </View>
-
-        {item.door_code && 
-          <View style={{flexDirection:'row', marginTop: 4}}>
-            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
-            <Text style={styles.codeText}>{item.door_code}</Text>
-          </View>
-        }
+            {doorCodeView}
 
         </TouchableOpacity>
       </View>

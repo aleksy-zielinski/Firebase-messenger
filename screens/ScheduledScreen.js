@@ -379,6 +379,17 @@ export default class ScheduledScreen extends React.Component {
       ]
     }
     
+    let doorCodeView;
+    if (item.door_code!== undefined){
+      if (item.door_code){
+        doorCodeView = (
+          <View style={{flexDirection:'row', marginTop: 4}}>
+            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+            <Text style={styles.codeText}>{item.door_code}</Text>
+          </View>
+        )
+      }
+    }  
 
     const appBar = appBarIcon.map( (icon, index) =>
       <Appbar.Action 
@@ -504,12 +515,7 @@ export default class ScheduledScreen extends React.Component {
               <Text style={[styles.codeText, {color: '#0074D9'}]}>{item.phone}</Text>
             </View>
 
-            {item.door_code && 
-              <View style={{flexDirection:'row', marginTop: 4}}>
-                <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
-                <Text style={styles.codeText}>{item.door_code}</Text>
-              </View>
-            }
+            {doorCodeView}
 
         </View>
           

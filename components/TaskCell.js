@@ -14,13 +14,14 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
-    const matches = item.guest_name.match(/\b(\w)/g);
-    const acronym = (matches || []).join(''); 
-    const userShort = acronym.substring(0,2)
     const displayName = (item.guest_first_name + " " + item.guest_last_name).trim() || 
                         item.guest_name || 
                         item.guest_phone || 
                         "";
+    const matches = displayName.match(/\b(\w)/g);
+    const acronym = (matches || []).join(''); 
+    const userShort = acronym.substring(0,2)
+    
 
     let last_msg_on = Moment(item.last_msg_on).format('MM/DD/YYYY hh:mm a')
     let check_in = Moment(item.check_in).format("MM/DD/YYYY");
