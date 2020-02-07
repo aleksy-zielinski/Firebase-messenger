@@ -28,8 +28,8 @@ export default class PostCell extends React.PureComponent {
     if (item.door_code!== undefined){
       if (item.door_code){
         doorCodeView = (
-          <View style={{flexDirection:'row', marginTop: 4}}>
-            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
+          <View style={{flexDirection:'row', marginTop: 8}}>
+            <Image source={require('../assets/images/door-code.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
             <Text style={styles.codeText}>{item.door_code}</Text>
           </View>
         )
@@ -76,12 +76,12 @@ export default class PostCell extends React.PureComponent {
           </View>
 
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
+              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
               <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
             
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
               <Text style={[styles.codeText]}>{item.email} </Text>
             </View>
 
@@ -97,12 +97,9 @@ export default class PostCell extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginHorizontal: 10, 
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
     marginTop: 0, 
-    marginBottom: 10,
     paddingBottom: 20,
   },
   topContainer: {

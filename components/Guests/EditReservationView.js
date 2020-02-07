@@ -33,7 +33,7 @@ export default class EditReservationView extends React.PureComponent {
 
     return (
       <View style={{marginVertical: 20}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Edit </Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 10}}> Edit </Text>
 
             <View style={styles.container}>
               <Text style={styles.textHeaderStyle}>RESERVATION ID</Text>
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'lightgray',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 3,
     margin: 10,
     paddingBottom: 20,
   },

@@ -2,6 +2,7 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFeedback, ActivityIndicator, Alert, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import Constant from '../constants/Constant';
+import FormLabel from '../components/FormLabel';
 
 export default class ResetPassScreen extends React.Component {
 
@@ -94,12 +95,12 @@ export default class ResetPassScreen extends React.Component {
           </View>
 
           <View style={styles.fillBox}>
+            <FormLabel>Email</FormLabel>
             <TextInput
               error = {!isValidEmai}
               dense = {true}
               mode = 'outlined'
               style={styles.textInput1}
-              label='Email'
               value={this.state.email}
               onChangeText={text => this._handleTextChange(text) }
               
@@ -108,7 +109,7 @@ export default class ResetPassScreen extends React.Component {
               <Button 
                 mode="contained" 
                 color = '#e66656'
-                labelStyle = {{color: 'white', fontSize: 16}}
+                labelStyle = {{color: 'white', fontSize: 14, fontWeight: '300', lineHeight: 24}}
                 style = {styles.buttonLogin}
                 disabled = {!enableBtLogin}
                 onPress={() => this._resetAction()}>
@@ -157,6 +158,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonLogin:{
+    borderRadius: 0,
+    borderColor: 'white',
+    height: 48,
     flex: 1,
   },
   buttonContainer: {
@@ -172,9 +176,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#3a5161',
   },
   fillBox: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 7,
-    marginHorizontal: 20,
+    margin: 8,
+    paddingTop: 24,
+    paddingRight: 20,
+    paddingBottom: 24,
+    paddingLeft: 20,
+    backgroundColor: '#ffffff',
+    opacity: 0.9,
+    borderRadius: 2,
     marginBottom: 250
   },
   loginButtonContainer:{
@@ -192,10 +201,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald-Light',
   },
   textInput1: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
-    marginBottom: 20,
-    borderColor: 'black'
+    paddingTop: 16,
+    paddingRight: 12,
+    paddingBottom: 16,
+    paddingLeft: 16,
+    backgroundColor: '#ffffff',
+    height: 48,
+    borderRadius: 3
   },
 });

@@ -21,7 +21,7 @@ export default class SchedulerView extends React.PureComponent {
         onPress={()=>this.props.onPress(obj.id)}
         >
         <Feather
-          style={{marginRight: 10}}
+          style={{marginRight: 10, marginTop: 3}}
           color =  {messagesIds.includes(`${obj.id}`) ? 'black' : 'transparent'}
           name={'check'}
           size={18}
@@ -32,13 +32,13 @@ export default class SchedulerView extends React.PureComponent {
 
     return (
       <View style={{marginTop: 20}}>
-            <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
+          <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
 
-            <View style={styles.container}>
+          <View style={styles.container}>
               {lines}
-            </View>
-            
           </View>
+            
+      </View>
     );
   }
  
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'lightgray',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 3,
     margin: 10,
     paddingTop: 15,
     paddingBottom: 20,
@@ -60,8 +60,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   textStyle: {
-    color: '#0074D9', 
+    color: '#455A69', 
     fontSize: 15, 
+    lineHeight: 19,
     fontWeight: '300',
   }
 })

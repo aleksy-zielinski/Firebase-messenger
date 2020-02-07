@@ -14,7 +14,7 @@ import TaskCell from '../components/TaskCell';
 import Constant from '../constants/Constant';
 
 const options = [
-  'All messages',
+  'All Messages',
   'Priority',
   'Unread',
   'Archived'
@@ -142,8 +142,8 @@ export default class MessagesScreen extends React.Component {
             options={options}
             style={styles.buttonDropDown}
             textStyle={styles.dropDownButtonText}
-            dropdownStyle={{ left: 0, right: 10, height: 160 }}
-            dropdownTextStyle={{ fontSize: 16, textAlign: 'center' }}
+            dropdownStyle={{ left: 0, right: 10, height: 170 }}
+            dropdownTextStyle={{ fontSize: 14, textAlign: 'center' }}
           />
           <FontAwesome
             disabled={true}
@@ -215,12 +215,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'lightgray',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 3,
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
     marginBottom: 10,
-    height: 40,
+    height: 46,
     flexDirection: 'row',
   },
   arrow: {
@@ -231,10 +231,10 @@ const styles = StyleSheet.create({
   },
   buttonDropDown: {
     flex: 1,
-
+    height: 46
   },
   dropDownButtonText: {
-    fontSize: 16,
+    fontSize: 14,
     marginTop: 10,
     marginLeft: 10,
     marginBottom: 10

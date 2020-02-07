@@ -157,7 +157,7 @@ export default class GuestsScreen extends React.Component {
             <Ionicons
               style = {styles.arrow}
               name={'ios-options'}
-              size={30}
+              size={36}
             />
           </TouchableOpacity>
          
@@ -241,21 +241,22 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 10, 
     marginBottom: 10,
-    height: 40,
+    height: 48,
     flexDirection: 'row',
   },
   arrow: {
     color: 'gray',
     marginLeft: 10,
     marginRight: 10,
-    marginTop: 5
+    marginTop: 10
   },
   buttonDropDown:{
     flex: 1,
-    
+    fontWeight: '300',
+    fontSize: 14
   },
   dropDownButtonText:{
-    fontSize:16, 
+    fontSize:14, 
     marginTop:10, 
     marginLeft: 10,
     marginBottom: 10

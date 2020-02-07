@@ -58,11 +58,8 @@ export default class ChatCell extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginHorizontal: 10, 
-    marginTop: 10, 
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
     marginBottom: 0,
   },
   topContainer: {

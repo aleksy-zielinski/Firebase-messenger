@@ -143,14 +143,14 @@ export default class ScheduledScreen extends React.Component {
       } else if (this.item.rental_id){
         WebBrowser.openBrowserAsync(`https://www.ruebarue.com/rental/${this.item.rental_id}`)
       } else{
-        Alert.alert('Delete guest', 'Are you sure?', 
+        Alert.alert('Delete Guest', 'Are you sure?', 
         [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
         { text: 'Cancel'}])
         return
       }
       
     } else if (index == 5){
-      Alert.alert('Delete guest', 'Are you sure?', 
+      Alert.alert('Delete Guest', 'Are you sure?', 
         [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
         { text: 'Cancel'}])
         return
@@ -326,7 +326,7 @@ export default class ScheduledScreen extends React.Component {
   renderAvatar= (props) => {
     return (
       <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 14}}>{this.userShort}</Text>
+        <Text style={{color: 'white', fontSize: 12}}>{this.userShort}</Text>
       </View>
     );
   }
@@ -530,7 +530,8 @@ const styles = StyleSheet.create({
   },
   headContainer: {
     backgroundColor: 'white',
-    borderColor: 'lightgray'
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
   },
   loadingStyle: {
     position: 'absolute',

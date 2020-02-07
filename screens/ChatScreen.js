@@ -6,6 +6,7 @@ import {
   Text,
   ActivityIndicator,
   Alert,
+  Image,  
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -361,23 +362,24 @@ export default class ChatScreen extends React.Component {
             <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
               <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
             </View>
-              <View style={{marginLeft: 10, flex: 1}}>
+
+            <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{this.displayName}</Text>
-                  {/* <Text style={styles.locationText}>{guest.location}</Text> */}
+                  <Text style={styles.locationText}>{this.pageData.location}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
-
-              </View>
 
             </View>
 
-            <View style={{flexDirection:'row', marginTop: 4, marginBottom: 20,}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
-              <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
             </View>
 
             <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
+              <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
+            </View>
+
+            <View style={{flexDirection:'row', marginTop: 8, marginBottom: 15}}>
+              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
               <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
             </View>
 
@@ -439,7 +441,8 @@ const styles = StyleSheet.create({
   },
   headContainer: {
     backgroundColor: 'white',
-    borderColor: 'darkgray',
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
     margin: 0,
   },
   topContainer: {

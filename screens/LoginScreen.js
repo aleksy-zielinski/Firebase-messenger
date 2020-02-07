@@ -185,10 +185,12 @@ export default class LoginScreen extends React.Component {
                   backgroundColor: '#E66656',
                   color: '#ffffff',
                   height: 48,
-                  lineHeight: 48,
+                  lineHeight: 36,
                   paddingHorizontal: 48,
                   textTransform: 'uppercase',
                   textAlign: 'center',
+                  justifyContent:'center', 
+                  alignItems: 'center',
                   borderRadius: 3
                 }}
               >Log in</Text>

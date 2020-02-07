@@ -91,7 +91,7 @@ export default class ShareView extends React.PureComponent {
     return (
       <View style={{marginVertical: 20}}>
 
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
+          <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
 
             <View style={styles.container}>
               {lines}
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'lightgray',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 3,
     margin: 10,
     paddingTop: 15,
     paddingBottom: 20,

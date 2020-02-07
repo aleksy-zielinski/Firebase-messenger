@@ -42,9 +42,6 @@ export default class PostCell extends React.PureComponent {
               <Text style= {styles.nameText} numberOfLines={1}>{displayName}</Text>
             </View>
             <View style={{flexDirection: 'row'}}>
-              <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
               <View style={{flex:1}}>
                 <Text style={styles.locationText}>{item.location}</Text>
                 {item.check_in !== '0001-01-01T00:00:00Z' &&
@@ -64,9 +61,10 @@ export default class PostCell extends React.PureComponent {
                 size={25}
               />
             </View>
-
           </View>
-
+        </View>
+        <View style={{flexDirection: 'row'}}>
+            <Text style= {styles.creatTimeText}>{last_msg_on}</Text>
         </View>
         <Text style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}>{item.last_msg}</Text>
         </TouchableOpacity>
@@ -79,12 +77,9 @@ export default class PostCell extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginHorizontal: 10, 
-    marginTop: 0, 
-    marginBottom: 10,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
+    marginTop: 0
   },
   topContainer: {
     flex: 1,
@@ -113,8 +108,10 @@ const styles = StyleSheet.create({
   },
   creatTimeText: {
     color: 'dimgray',
-    fontSize: 13,
+    fontSize: 11,
     marginTop: 5,
+    marginBottom: 5,
+    marginHorizontal: 20,
   },
   box: {
     marginLeft: 10,
@@ -122,6 +119,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     textAlign: 'left',
+    lineHeight: 19,
     marginHorizontal: 20,
     marginBottom: 20
   }
