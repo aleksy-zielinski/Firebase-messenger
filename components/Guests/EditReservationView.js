@@ -130,7 +130,6 @@ export default class EditReservationView extends React.PureComponent {
                     <Text style={styles.textHeaderStyle}>DOOR CODE</Text>
                     <TextInput
                       style={styles.textInputStyle}
-                      keyboardType = 'number-pad'
                       placeholder= { "Door code"} 
                       onChangeText={(text) => {
                           this.setState({doorCode: text})

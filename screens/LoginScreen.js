@@ -119,20 +119,20 @@ export default class LoginScreen extends React.Component {
 
   render() {
 
-    const {isValidEmai, isValidPass, email, password} = this.state
-    const enableBtLogin = this.checkValidateEmail(email) && email.length > 0 && password.length > 3;
+    const {email, password} = this.state
+    // const enableBtLogin = this.checkValidateEmail(email) && email.length > 0 && password.length > 3;
 
     return (
 
       <View style={{backgroundColor: '#3a5161', flex: 1}}>
+        <Image source={require('../assets/images/background.png')} style={styles.background} />
         <KeyboardAwareScrollView enableOnAndroid={true}>
         <View style={{
           justifyContent: 'center',
-          // backgroundColor: 'gray'
         }}>
           <StatusBar barStyle="light-content" />
           <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
-            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20, marginTop: 100}}  />
+            <Image source={require('../assets/images/small_logo.png')} style={{width: 200, height: 100, resizeMode: 'contain', marginBottom: 20, marginTop: 100}}  />
             <Text style={styles.loginText}>Login</Text>
           </View>
           <View
@@ -228,6 +228,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    resizeMode: 'cover',
+    width: null,
+    height: null,
+  },
   buttonLogin:{
     flex: 1,
   },
@@ -279,8 +289,9 @@ const styles = StyleSheet.create({
   },
   loginText:{
     color: 'white',
-    fontSize: 30,
+    fontSize: 24,
     textAlign: 'center',
+    fontFamily: 'Oswald-Light'
   },
   textInput: {
     paddingTop: 16,

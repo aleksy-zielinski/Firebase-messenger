@@ -85,10 +85,11 @@ export default class ResetPassScreen extends React.Component {
 
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        
         <View style={styles.container}>
-
+          <Image source={require('../assets/images/background.png')} style={styles.background} />
           <View style={{marginBottom: 20, marginTop: 20, marginHorizontal: 20, alignItems: 'center'}}>
-            <Image source={require('../assets/images/logo.png')} style={{width: 200, height: 140, resizeMode: 'contain', marginBottom: 20}}  />
+            <Image source={require('../assets/images/small_logo.png')} style={{width: 200, height: 140, resizeMode: 'contain', marginBottom: 20}}  />
             <Text style={styles.loginText}>Reset Password</Text>
           </View>
 
@@ -134,6 +135,16 @@ export default class ResetPassScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
+  background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    resizeMode: 'cover',
+    width: null,
+    height: null,
+  },
   loadingStyle: {
     position: 'absolute',
     left: 0,
@@ -176,8 +187,9 @@ const styles = StyleSheet.create({
   },
   loginText:{
     color: 'white',
-    fontSize: 30,
+    fontSize: 24,
     textAlign: 'center',
+    fontFamily: 'Oswald-Light',
   },
   textInput1: {
     marginLeft: 20,
