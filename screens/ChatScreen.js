@@ -371,14 +371,14 @@ export default class ChatScreen extends React.Component {
 
             </View>
 
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
-            </View>
-
             <View style={{flexDirection:'row', marginTop: 4, marginBottom: 20,}}>
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
               <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
+            </View>
+
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
             </View>
 
             {/* {guest.door_code && 

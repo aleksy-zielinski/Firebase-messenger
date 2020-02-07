@@ -32,7 +32,7 @@ export default class ScheduledScreen extends React.Component {
 
     this.state = {
       messages: [],
-      viewSelect: 1,
+      viewSelect: 0,
       selectIndexTop: 0,
       isDateTimePickerVisible: false,
       isPickingCheckIn: true,
@@ -381,18 +381,6 @@ export default class ScheduledScreen extends React.Component {
       ]
     }
     
-    let doorCodeView;
-    if (item.door_code!== undefined){
-      if (item.door_code){
-        doorCodeView = (
-          <View style={{flexDirection:'row', marginTop: 4}}>
-            <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
-            <Text style={styles.codeText}>{item.door_code}</Text>
-          </View>
-        )
-      }
-    }  
-
     const appBar = appBarIcon.map( (icon, index) =>
       <Appbar.Action 
         key = {icon}
@@ -507,18 +495,6 @@ export default class ScheduledScreen extends React.Component {
 
             </View>
 
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'gray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText]}>{item.email}</Text>
-            </View>
-
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'gray', marginLeft: 20}]}>Phone: </Text>
-              <Text style={[styles.codeText]}>{item.phone}</Text>
-            </View>
-
-            {doorCodeView}
-
         </View>
           
           {contentView}
@@ -554,9 +530,7 @@ const styles = StyleSheet.create({
   },
   headContainer: {
     backgroundColor: 'white',
-    borderColor: 'darkgray',
-    margin: 0,
-    paddingBottom: 20,
+    borderColor: 'lightgray'
   },
   loadingStyle: {
     position: 'absolute',
@@ -571,7 +545,7 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     flexDirection: 'row',
-    margin: 20,
+    margin: 20
   },
   avatar: {
     width: 50, 
@@ -584,6 +558,7 @@ const styles = StyleSheet.create({
   durationText: {
     color: 'dimgray',
     fontSize: 13,
+    marginTop: 4
   },
   locationText: {
     color: 'dimgray',

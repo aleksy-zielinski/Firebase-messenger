@@ -97,7 +97,7 @@ export default class ShareView extends React.PureComponent {
               {lines}
 
               <View style={{height: 1, marginLeft: 10, marginTop: 20, backgroundColor: 'lightgray'}}/>
-              <Text style={{fontSize: 14, fontWeight: '300', marginLeft: 10, marginTop: 10}}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
+              <Text style={styles.textHeaderStyle}> {isEmail ? 'EMAIL' : 'PHONE'}</Text>
               <TextInput 
                 // editable={false}
                 style={styles.textInputStyle}
@@ -174,5 +174,12 @@ const styles = StyleSheet.create({
     width: 100, 
     justifyContent:'center', 
     alignItems: 'center'
+  },
+  textHeaderStyle: {
+    color: 'gray',
+    fontSize: 12, 
+    fontWeight: '300', 
+    marginLeft: 10, 
+    marginTop: 20
   }
 })

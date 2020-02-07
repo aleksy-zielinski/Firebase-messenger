@@ -75,15 +75,16 @@ export default class PostCell extends React.PureComponent {
 
           </View>
 
-          <View style={{flexDirection:'row', marginTop: 4}}>
-              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
-              <Text style={[styles.codeText]}>{item.email} </Text>
-            </View>
-
             <View style={{flexDirection:'row', marginTop: 4}}>
               <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Phone: </Text>
               <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
+            
+            <View style={{flexDirection:'row', marginTop: 4}}>
+              <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Email: </Text>
+              <Text style={[styles.codeText]}>{item.email} </Text>
+            </View>
+
             {doorCodeView}
 
         </TouchableOpacity>
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
   durationText: {
     color: 'dimgray',
     fontSize: 13,
+    marginTop: 4
   },
   locationText: {
     color: 'dimgray',

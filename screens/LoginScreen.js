@@ -23,8 +23,8 @@ export default class LoginScreen extends React.Component {
 
     if (__DEV__){
       this.state = {
-        email: 'pathum@ruebarue.com',
-        password: 'o1@8P7Az3v',
+        email: 'nars@ruebarue.com',
+        password: 'P@ssw0rd1!',
         isValidEmai: true,
         isValidPass: true,
         isLoading: false,
