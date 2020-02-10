@@ -112,10 +112,10 @@ export default class App extends React.Component {
 
   registerForPushNotificationsAsync = async () => {
 
-    if(Device.isDevice){
-      global.expoToken = 'test'
-      return;
-    }
+    // if(Device.isDevice){
+    //   global.expoToken = 'test'
+    //   return;
+    // }
 
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
