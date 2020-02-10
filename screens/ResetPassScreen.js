@@ -99,28 +99,41 @@ export default class ResetPassScreen extends React.Component {
             <TextInput
               error = {!isValidEmai}
               dense = {true}
-              mode = 'outlined'
               style={styles.textInput1}
               value={this.state.email}
               onChangeText={text => this._handleTextChange(text) }
               
             />
-            <View style={styles.buttonContainer}>
-              <Button 
-                mode="contained" 
-                color = '#e66656'
-                labelStyle = {{color: 'white', fontSize: 14, fontWeight: '300', lineHeight: 24}}
-                style = {styles.buttonLogin}
-                disabled = {!enableBtLogin}
-                onPress={() => this._resetAction()}>
-                RESET
-              </Button>
+            <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',    
+              marginTop: 20,          
+            }}
+            >
               <TouchableOpacity
-                  style={styles.loginButtonContainer}
-                  onPress={() => this.props.navigation.goBack()}
-                  underlayColor='#fff'>
-                  <Text style={styles.loginButtonText}>Login</Text>
-                </TouchableOpacity>
+                onPress={() => this.loginRequest()}
+              >
+                <Text
+                  style={{                 
+                    backgroundColor: '#E66656',
+                    color: '#ffffff',
+                    height: 48,
+                    lineHeight: 48,
+                    paddingHorizontal: 48,
+                    textTransform: 'uppercase',
+                    textAlign: 'center',
+                    justifyContent:'center', 
+                    alignItems: 'center',
+                    borderRadius: 3
+                  }}
+                >Reset</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <Text style={{color: '#4D6B85'}}>Login</Text>
+              </TouchableOpacity>
             </View>
           </View>
           {this.state.isLoading &&
@@ -201,12 +214,13 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald-Light',
   },
   textInput1: {
-    paddingTop: 16,
+    paddingTop: 0,
     paddingRight: 12,
-    paddingBottom: 16,
+    paddingBottom: 0,
     paddingLeft: 16,
     backgroundColor: '#ffffff',
     height: 48,
-    borderRadius: 3
+    borderRadius: 3,
+    fontSize: 16,
   },
 });

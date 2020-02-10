@@ -185,7 +185,7 @@ export default class LoginScreen extends React.Component {
                   backgroundColor: '#E66656',
                   color: '#ffffff',
                   height: 48,
-                  lineHeight: 36,
+                  lineHeight: 48,
                   paddingHorizontal: 48,
                   textTransform: 'uppercase',
                   textAlign: 'center',
@@ -296,14 +296,15 @@ const styles = StyleSheet.create({
     fontFamily: 'Oswald-Light'
   },
   textInput: {
-    paddingTop: 16,
+    paddingTop: 0,
     paddingRight: 12,
-    paddingBottom: 16,
+    paddingBottom: 0,
     paddingLeft: 16,
     backgroundColor: '#ffffff',
     height: 48,
     borderRadius: 3,
     borderWidth: 1,
     borderColor: '#cccccc',
+    fontSize: 16,
   }  
 });

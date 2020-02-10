@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert
  } from 'react-native';
  import {  MaterialIcons } from '@expo/vector-icons';
 
@@ -35,29 +36,49 @@ export default class ShareView extends React.PureComponent {
     super(props);
 
     this.state = {
+      selected: this.props.options[0] || null,
       text: ''
     };
   }
 
 
   componentDidMount(){
-
-    const {selectIndexTop, options, item} = this.props
-    const currentItem = options[selectIndexTop]
-    const isEmail = currentItem.email
-    const value = isEmail ? item.email : item.phone
-    this.setState({text: value})
+    // const {selectIndexTop, options, item} = this.props
+    // const currentItem = options[selectIndexTop]
+    // const isEmail = currentItem.email
+    // const value = isEmail ? item.email : item.phone
+    // this.setState({text: ""})
 
   }
 
   didChangeOption(index){
-    const {options, item} = this.props
-    const currentItem = options[index]
-    const isEmail = currentItem.email
-    const value = isEmail ? item.email : item.phone
-    this.setState({text: value})
+    this.setState({selected: this.props.options[index] || null})
+    // const {options, item} = this.props
+    // const currentItem = options[index]
+    // const isEmail = currentItem.email
+    // const value = isEmail ? item.email : item.phone
+    // this.setState({text: value})
   }
 
+  share() {
+    if (this.state.selected === null) {
+      Alert.alert('Error', "You must select a message to share")
+      return
+    }
+
+    if (this.state.text.trim() === "") {
+      if (this.state.selected.sms){
+        Alert.alert('Error', "You must enter a valid SMS number")
+      } else {
+        Alert.alert('Error', "You must enter a valid Email")
+      }
+
+      return
+    }
+
+    this.props.onPress(this.state.selected.id, this.state.text);
+    this.setState({text: ""})
+  }
 
   render(){
 
@@ -76,16 +97,15 @@ export default class ShareView extends React.PureComponent {
         <SelectView 
           title={item.name}
           index={index}
-          isSelected={index === selectIndexTop} 
+          isSelected={item.id === (this.state.selected || {}).id} 
           key={`index${index}`}
           onPress={(index)=> {
-            this.props.onPress(index);
             this.didChangeOption(index)
           }}
         />  
     )
 
-    const currentItem = options[selectIndexTop]
+    const currentItem = this.state.selected || {}
     const isEmail = currentItem.email
 
     return (
@@ -110,8 +130,9 @@ export default class ShareView extends React.PureComponent {
             </View>
           
           <View style={{flexDirection: 'row', marginHorizontal: 10}}>
-            <TouchableOpacity style={styles.sendButton}>
-              <Text style={{color: 'white'}}>SEND</Text>
+            <TouchableOpacity style={styles.sendButton}
+              onPress={ this.share.bind(this) }>
+              <Text style={{color: 'white'}}>{this.props.pending ? "SENDING..." : "SEND" }</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.cancelButton}
               onPress={()=>this.props.cancelPress()}

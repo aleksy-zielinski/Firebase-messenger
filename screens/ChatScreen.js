@@ -31,10 +31,11 @@ export default class ChatScreen extends React.Component {
     this.isMount = false;
 
     this.displayName = (this.pageData.guest_first_name + " " + this.pageData.guest_last_name).trim() || this.pageData.guest_name || this.pageData.guest_phone || "";
-    const matches = this.displayName.match(/\b(\w)/g);
-    const acronym = (matches || []).join(''); 
-    this.userShort= acronym.substring(0,2)
-
+    const matches = this.displayName.match(/\b(\w)/g) || [];
+    const acronym = matches.length > 1 ? matches.join('') : ""; 
+    this.userShort = acronym.substring(0,2)
+    this.propCode = this.pageData.unit_code || ""
+    
   }
 
   componentDidMount(){
@@ -364,15 +365,14 @@ export default class ChatScreen extends React.Component {
             </View>
 
             <View style={{marginLeft: 10, flex: 1}}>
-              
-                  <Text style= {styles.nameText}>{this.displayName}</Text>
-                  <Text style={styles.locationText}>{this.pageData.location}</Text>
-                  <Text style={styles.durationText}>{start_time} - {end_time}</Text>
-
+              { !!this.displayName ? <Text style= {styles.nameText}>{this.displayName}</Text> : null }
+              { !!this.propCode ? <Text style={styles.locationText}>{this.propCode}</Text> : null }
+              { !!start_time && !!end_time ? <Text style={styles.durationText}>{start_time} - {end_time}</Text> : null }
             </View>
 
             </View>
 
+            {/*
             <View style={{flexDirection:'row', marginTop: 4}}>
               <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
               <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
@@ -382,7 +382,7 @@ export default class ChatScreen extends React.Component {
               <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
               <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
             </View>
-
+            */}
             {/* {guest.door_code && 
               <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
                 <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>

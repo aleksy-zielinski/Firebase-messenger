@@ -158,13 +158,14 @@ export default class ScheduledScreen extends React.Component {
     this.setState({viewSelect:index})
   }
 
-  shareRequest = async (messageId)=>{
+  shareRequest = async (messageId, altContact)=>{
 
+    console.log(messageId, altContact)
     this.setState({isLoading:true})
 
     try {
 
-      const url = Constant.severUrl + `api/scheduler/${messageId}/reservation/${this.item.id}/send`
+      const url = Constant.severUrl + `api/scheduler/${messageId}/reservation/${this.item.id}/send?contact=${altContact || ""}`
       console.log(url)
 
       let response = await fetch(url, {
@@ -249,13 +250,13 @@ export default class ScheduledScreen extends React.Component {
     let start_time = Moment(this.state.checkInDate).format("YYYY-MM-DD");
     let end_time = Moment(this.props.checkOutDate).format("YYYY-MM-DD");
 
-    try {
+    // try {
       let formdata = new FormData();
 
       formdata.append('id', this.item.id)
       formdata.append('reservation_id', this.item.reservation_id)
 
-      formdata.append('pms_id', pms_id.replace(' ',''))
+      formdata.append('pms_id', pms_id)
       formdata.append('first_name', first_name)
       formdata.append('last_name', last_name)
       formdata.append('check_in', start_time)
@@ -274,7 +275,10 @@ export default class ScheduledScreen extends React.Component {
           Cookie: global.cookies,
         },
         body: formdata,
-      });
+      }).catch((resp) => {
+        console.log("Failed")
+        console.log(response)
+      })
       
       let responseJson = await response.json();
       console.log(responseJson);
@@ -288,11 +292,11 @@ export default class ScheduledScreen extends React.Component {
         Alert.alert('Error', 'no data')
       }
       
-    } catch (error) {
-      this.setState({isLoading:false})
-      Alert.alert('Error',error.message)
-      console.error(error);
-    }
+    // } catch (error) {
+    //   this.setState({isLoading:false})
+    //   Alert.alert('Error',error.message)
+    //   console.error(error);
+    // }
 
   }
 
@@ -420,8 +424,8 @@ export default class ScheduledScreen extends React.Component {
             <ShareView 
               item={item} 
               options={this.state.shareOption}
-              selectIndexTop={this.state.selectIndexTop} 
-              onPress={(index)=> this.setState({selectIndexTop:index}) }
+              pending={this.state.pending}
+              onPress={(messageId, contact)=> this.shareRequest(messageId, contact) }
               cancelPress={()=>
                 this.setState({viewSelect:1})
               }

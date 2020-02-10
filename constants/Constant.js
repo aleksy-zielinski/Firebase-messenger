@@ -1,8 +1,8 @@
 
 
 export default {
-  // severUrl: 'https://www.ruebarue.com/m/',
-  severUrl: 'https://mobile-dot-ruebarue-curator.appspot.com/m/'
+  severUrl: 'https://www.ruebarue.com/m/'
+  // severUrl: 'https://mobile-dot-ruebarue-curator.appspot.com/m/'
 };
 
 /*

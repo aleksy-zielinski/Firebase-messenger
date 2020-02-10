@@ -30,6 +30,7 @@ export default class GuestsScreen extends React.Component {
       seletedIndex: 7,
       reservations: [],
       isLoading: false,
+      account: {}
     };
     this.sortTitle = [
       'Checked Out', 
@@ -69,9 +70,7 @@ export default class GuestsScreen extends React.Component {
     this.setState({isLoading:true})
     
     try {
-
       const url = Constant.severUrl + `api/reservations/0?f=${selectOption}&q=${this.state.firstQuery}`
-      console.log(url);
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -80,7 +79,6 @@ export default class GuestsScreen extends React.Component {
       });
       let responseJson = await response.json();
       if (responseJson.reservations !== null){
-        console.log(responseJson.reservations);
         this.setState({isLoading:false, reservations: responseJson.reservations})
       } else{
         console.log('no data');
@@ -96,7 +94,6 @@ export default class GuestsScreen extends React.Component {
   _selectOption = (index) =>{
 
     const selectCate =  options[index]
-    console.log(selectCate)
     this.setState({ selectedIndex: index });  
 
   }

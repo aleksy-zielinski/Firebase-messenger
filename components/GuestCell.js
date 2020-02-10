@@ -24,18 +24,6 @@ export default class PostCell extends React.PureComponent {
     let start_time = this.formatTime(item.check_in);
     let end_time = this.formatTime(item.check_out);
 
-    let doorCodeView;
-    if (item.door_code!== undefined){
-      if (item.door_code){
-        doorCodeView = (
-          <View style={{flexDirection:'row', marginTop: 8}}>
-            <Image source={require('../assets/images/door-code.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
-            <Text style={styles.codeText}>{item.door_code}</Text>
-          </View>
-        )
-      }
-    }  
-
     return (
       <View style={styles.container}> 
         <TouchableOpacity 
@@ -75,17 +63,34 @@ export default class PostCell extends React.PureComponent {
 
           </View>
 
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
+            <View style={{flexDirection:'row', marginTop: 0, height: 28 }}>
+              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
               <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
             
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
+            <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
+              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
               <Text style={[styles.codeText]}>{item.email} </Text>
             </View>
 
-            {doorCodeView}
+            { 
+              !!item.door_code ? (
+                <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
+                  <Image source={require('../assets/images/door-code.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+                  <Text style={styles.codeText}>{item.door_code}</Text>
+                </View>
+              ) : null
+
+            }
+
+            { 
+              !item.rental_id ? (
+                <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
+                  <Image source={require('../assets/images/warning.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+                  <Text style={[styles.warningText]}>Property Guide Missing</Text>
+                </View>
+              ) : null
+            }
 
         </TouchableOpacity>
       </View>
@@ -149,5 +154,12 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 15,
     lineHeight: 18
+  },
+  warningText: {
+    textAlign: 'left',
+    fontWeight: '300',
+    fontSize: 15,
+    lineHeight: 18,
+    color: 'salmon'
   }
 })
