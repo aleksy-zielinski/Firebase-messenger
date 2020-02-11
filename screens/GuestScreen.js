@@ -148,8 +148,13 @@ export default class GuestsScreen extends React.Component {
 
   _onPressCell = (item) => {
 
-    this.props.navigation.navigate('Scheduler',{item: item});
+    this.props.navigation.navigate('Scheduler',{item: item, callBack:this.callBack});
 
+  }
+
+  callBack = () => {
+    //reload data
+    this.actionRefresh()
   }
 
   searchBarTextChange = (text) => {

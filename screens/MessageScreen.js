@@ -154,7 +154,7 @@ export default class MessagesScreen extends React.Component {
 
   callBack = () => {
     //reload data
-    this.getThread()
+    this.actionRefresh()
   }
 
   renderFooter = () => {

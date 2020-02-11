@@ -303,6 +303,7 @@ export default class ScheduledScreen extends React.Component {
       
       let responseJson = await response.json();
       if (responseJson.status === "OK") {
+        this.props.navigation.state.params.callBack();
         this._goBack()
       } else {
         Alert.alert('Error', 'Could not delete guest')
