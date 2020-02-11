@@ -29,7 +29,11 @@ export default class GuestsScreen extends React.Component {
       firstQuery: '',
       seletedIndex: 7,
       reservations: [],
+      isRefresh: false,
+      isFull: false,
       isLoading: false,
+      isLoadingMore: false,
+      page: 0,
       account: {}
     };
     this.sortTitle = [
@@ -53,6 +57,11 @@ export default class GuestsScreen extends React.Component {
 
   }
 
+  isRealValue = (obj) =>
+  {
+    return obj && obj !== 'null' && obj !== 'undefined';
+  }
+
   getInboxRequest = async () => {
 
     const realOption = [
@@ -70,7 +79,8 @@ export default class GuestsScreen extends React.Component {
     this.setState({isLoading:true})
     
     try {
-      const url = Constant.severUrl + `api/reservations/0?f=${selectOption}&q=${this.state.firstQuery}`
+      const url = Constant.severUrl + `api/reservations/${this.state.page}?f=${selectOption}&q=${this.state.firstQuery}`
+      console.log(url)
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -78,24 +88,38 @@ export default class GuestsScreen extends React.Component {
         },
       });
       let responseJson = await response.json();
-      if (responseJson.reservations !== null){
-        this.setState({isLoading:false, reservations: responseJson.reservations})
+
+      if (responseJson && Object.keys(responseJson).length > 0){
+
+        const pageFull = !this.isRealValue(responseJson.reservations)
+        const newData = pageFull ? [] : responseJson.reservations
+
+        this.setState(({ isRefresh, reservations }) => ({
+          isLoading: false, 
+          isLoadingMore: false,
+          reservations: isRefresh ? newData : [...reservations, ...newData], 
+          isFull: pageFull,
+          isRefresh: false,
+        }));
       } else{
         console.log('no data');
-        this.setState({isLoading:false, reservations: []})
+        this.setState({
+          isLoadingMore: false, 
+          isLoading: false,
+          isRefresh: false,
+          isFull: true 
+        })
       }
       
     } catch (error) {
       console.error(error);
-      this.setState({isLoading:false})
+      this.setState({
+        isLoadingMore: false, 
+        isLoading: false,
+        isRefresh: false,
+        isFull: true 
+      })
     }
-  }
-
-  _selectOption = (index) =>{
-
-    const selectCate =  options[index]
-    this.setState({ selectedIndex: index });  
-
   }
 
   _onbtFilterPress = () => {
@@ -107,7 +131,11 @@ export default class GuestsScreen extends React.Component {
   _sortActionSheetDidSelect = (index) =>{
 
     if (index != this.sortTitle.length - 1){
-      this.setState({seletedIndex: index});
+      this.setState({
+        page: 0,
+        isRefresh: true,
+        seletedIndex: index
+      });
     }
 
     setTimeout( () => {
@@ -135,8 +163,54 @@ export default class GuestsScreen extends React.Component {
 
   }
 
+
+  renderFooter = () => {
+    if (this.state.isFull) {
+      console.log('hidden indicator')
+      return null;
+    }
+    return (
+      <View style={styles.loadingMore}>
+        <ActivityIndicator animating size="small" />
+      </View>
+    );
+  };
+
+  actionRefresh = () => {
+    this.setState(
+      {
+        isFull: false,
+        isRefresh: true,
+        page: 0,
+      },
+      () => {
+        this.getInboxRequest();
+      },
+    );
+  };
+
+  actionLoadMore = () => {
+    const { isLoading, isLoadingMore, isFull } = this.state;
+    if (isLoading || isLoadingMore || isFull) {
+      return;
+    }
+
+    console.log('load more');
+
+    this.setState(
+      {
+        isLoadingMore: true,
+        page: this.state.page + 1,
+      },
+      () => {
+        this.getInboxRequest();
+      },
+    );
+  };
+
+
   render(){
-    const { firstQuery, reservations } = this.state;
+    const { firstQuery, reservations, isRefresh } = this.state;
 
     return (
       <View style={styles.container}>
@@ -178,24 +252,24 @@ export default class GuestsScreen extends React.Component {
               // key={keyGrid}
               // numColumns={2}
               keyExtractor={item =>`${item.id}`}
-              // refreshing={isRefresh}
-              // onRefresh={this.actionRefresh}
-              // ListFooterComponent={this.renderFooter}
+              refreshing={isRefresh}
+              onRefresh={this.actionRefresh}
+              ListFooterComponent={this.renderFooter}
               renderItem={({ item }) => (
                 <GuestCell
                   item={item}
                   onPress={()=> this._onPressCell(item) }
                 />
               )}
-              // onEndReached={this.actionLoadMore}
-              // onEndReachedThreshold={0.01}
+              onEndReached={this.actionLoadMore}
+              onEndReachedThreshold={0.01}
               removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
             />
-           {this.state.isLoading &&
+           {/* {this.state.isLoading &&
               <View style={styles.loadingStyle}>
                 <ActivityIndicator size='small' />
               </View>
-            }
+            } */}
             {!this.state.isLoading && reservations.length == 0 &&
               <View style={styles.loadingStyle} pointerEvents="none" disabled= {true}>
                   <Text> No data </Text>
@@ -217,6 +291,11 @@ GuestsScreen.navigationOptions = {
 
 
 const styles = StyleSheet.create({
+  loadingMore: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
   loadingStyle: {
     position: 'absolute',
     left: 0,

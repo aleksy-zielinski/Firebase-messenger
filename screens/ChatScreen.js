@@ -91,6 +91,7 @@ export default class ChatScreen extends React.Component {
 
     try {
       const url = Constant.severUrl + `api/messaging/thread/${this.pageData.id}`
+      console.log(url)
       let response = await fetch(url, {
         method: 'GET',
         headers: {

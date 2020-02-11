@@ -27,9 +27,13 @@ export default class MessagesScreen extends React.Component {
     this.state = {
       selectedIndex: 0,
       recipients: [],
-      page: [],
+      pageData: [],
       filter: '',
+      isRefresh: false,
+      isFull: false,
       isLoading: false,
+      isLoadingMore: false,
+      page: 0,
     };
     this.notificationSubscription;
   }
@@ -64,12 +68,17 @@ export default class MessagesScreen extends React.Component {
 
   };
 
+   isRealValue = (obj) =>
+  {
+    return obj && obj !== 'null' && obj !== 'undefined';
+  }
+
   getThread = async () => {
 
     this.setState({ isLoading: true })
 
     try {
-      const url = Constant.severUrl + `api/messaging/inbox/0/meta?page=0&filter=${this.state.filter}`
+      const url = Constant.severUrl + `api/messaging/inbox/0/meta?page=${this.state.page}&filter=${this.state.filter}`
       console.log(url)
       let response = await fetch(url, {
         method: 'GET',
@@ -82,16 +91,35 @@ export default class MessagesScreen extends React.Component {
 
       if (responseJson && Object.keys(responseJson).length > 0) {
         // console.log(responseJson);
-        this.setState({ isLoading: false, page: responseJson.page, recipients: responseJson.recipients })
+        const pageFull = !this.isRealValue(responseJson.page)
+        const newData = pageFull ? [] : responseJson.page
+        this.setState(({ isRefresh, pageData }) => ({
+          isLoading: false, 
+          isLoadingMore: false,
+          pageData: isRefresh ? newData : [...pageData, ...newData], 
+          recipients: responseJson.recipients,
+          isFull: pageFull,
+          isRefresh: false,
+        }));
       } else {
         console.log('no data');
-        this.setState({ isLoading: false })
+        this.setState({ 
+          isLoadingMore: false,
+          isLoading: false, 
+          isRefresh: false,
+          isFull: true 
+        })
       }
 
 
     } catch (error) {
       console.error(error);
-      this.setState({ isLoading: false })
+      this.setState({
+        isLoadingMore: false, 
+        isLoading: false,
+        isRefresh: false,
+        isFull: true 
+      })
     }
   }
 
@@ -102,7 +130,9 @@ export default class MessagesScreen extends React.Component {
     console.log(filter)
     this.setState({
       selectedIndex: index,
-      filter: filter
+      filter: filter,
+      page: 0,
+      isRefresh: true
     },
       () => {
         this.getThread();
@@ -127,9 +157,53 @@ export default class MessagesScreen extends React.Component {
     this.getThread()
   }
 
+  renderFooter = () => {
+    if (this.state.isFull) {
+      console.log('hidden indicator')
+      return null;
+    }
+    return (
+      <View style={styles.loadingMore}>
+        <ActivityIndicator animating size="small" />
+      </View>
+    );
+  };
+
+  actionRefresh = () => {
+    this.setState(
+      {
+        isFull: false,
+        isRefresh: true,
+        page: 0,
+      },
+      () => {
+        this.getThread();
+      },
+    );
+  };
+
+  actionLoadMore = () => {
+    const { isLoading, isLoadingMore, isFull } = this.state;
+    if (isLoading || isLoadingMore || isFull) {
+      return;
+    }
+
+    console.log('load more');
+
+    this.setState(
+      {
+        isLoadingMore: true,
+        page: this.state.page + 1,
+      },
+      () => {
+        this.getThread();
+      },
+    );
+  };
+
   render() {
 
-    const { page } = this.state;
+    const { pageData, isRefresh } = this.state;
 
     return (
       <View style={styles.container}>
@@ -159,28 +233,28 @@ export default class MessagesScreen extends React.Component {
 
         <FlatList
           ref={notiRef => this.listView = notiRef}
-          data={page}
+          data={pageData}
           // key={keyGrid}
           // numColumns={2}
           keyExtractor={item => `${item.id}`}
-          // refreshing={isRefresh}
-          // onRefresh={this.actionRefresh}
-          // ListFooterComponent={this.renderFooter}
+          refreshing={isRefresh}
+          onRefresh={this.actionRefresh}
+          ListFooterComponent={this.renderFooter}
           renderItem={({ item }) => (
             <TaskCell
               item={item}
               onPress={() => this._onPressCell(item)}
             />
           )}
-          // onEndReached={this.actionLoadMore}
-          // onEndReachedThreshold={0.01}
+          onEndReached={this.actionLoadMore}
+          onEndReachedThreshold={0.01}
           removeClippedSubviews={Platform.OS !== 'ios'} // improve scroll performance for large lists bug will bug disappear on ios
         />
-        {this.state.isLoading &&
+        {/* {this.state.isLoading &&
           <View style={styles.loadingStyle}>
             <ActivityIndicator size='small' />
           </View>
-        }
+        } */}
       </View>
     );
   }
@@ -196,6 +270,11 @@ MessagesScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
+  loadingMore: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+  },
   loadingStyle: {
     position: 'absolute',
     left: 0,

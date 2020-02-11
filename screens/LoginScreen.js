@@ -15,6 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import FormLabel from '../components/FormLabel';
 import Constants from 'expo-constants';
 import Constant from '../constants/Constant';
+import {  MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default class LoginScreen extends React.Component {
 
@@ -28,6 +29,7 @@ export default class LoginScreen extends React.Component {
         isValidEmai: true,
         isValidPass: true,
         isLoading: false,
+        isShowPass: false,
       };
     } else {
       this.state = {
@@ -36,6 +38,7 @@ export default class LoginScreen extends React.Component {
         password: '',
         isValidPass: true,
         isLoading: false,
+        isShowPass: false,
       };
     }
    
@@ -117,6 +120,10 @@ export default class LoginScreen extends React.Component {
     }
   }
 
+  showHiddenPass = () => {
+    this.setState({isShowPass: !this.state.isShowPass})
+  }
+
   render() {
 
     const {email, password} = this.state
@@ -158,15 +165,28 @@ export default class LoginScreen extends React.Component {
               onChangeText={text => {this._handleEmailTextChange(text)}}
             />
             <FormLabel>Password</FormLabel>
-            <TextInput
-              secureTextEntry
-              style={{
-                ...styles.textInput,
-                marginBottom: 20
-              }}
-              value={password}
-              onChangeText={text => {this._handlePassTextChange(text)}}
-            />
+            <View>
+              <TextInput
+                secureTextEntry = {!this.state.isShowPass}
+                style={{
+                  ...styles.textInput,
+                  marginBottom: 20
+                }}
+                value={password}
+                onChangeText={text => {this._handlePassTextChange(text)}}
+              />
+              <TouchableOpacity
+                onPress={() => this.showHiddenPass()}
+                style={styles.showPassBt}>
+                   <MaterialCommunityIcons
+                    style = {styles.eyeIcon}
+                    color =  {'darkgray'}
+                    name={this.state.isShowPass ? 'eye' : 'eye-off'}
+                    size={25}
+                  />
+                </TouchableOpacity>
+            </View>
+            
             <View
             style={{
               display: 'flex',
@@ -218,6 +238,18 @@ export default class LoginScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  showPassBt:{
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    width: 40,
+    height: 48,
+    // backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  eyeIcon:{
+  },
   loadingStyle: {
     position: 'absolute',
     left: 0,
