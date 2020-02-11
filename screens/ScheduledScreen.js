@@ -32,6 +32,7 @@ export default class ScheduledScreen extends React.Component {
 
     this.state = {
       messages: [],
+      recipients: [],
       viewSelect: 0,
       selectIndexTop: 0,
       isDateTimePickerVisible: false,
@@ -56,7 +57,6 @@ export default class ScheduledScreen extends React.Component {
 
     try {
       const url = Constant.severUrl + 'api/scheduler'
-      console.log(url)
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -66,7 +66,6 @@ export default class ScheduledScreen extends React.Component {
       let responseJson = await response.json();
 
       if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
         this.setState({shareOption: responseJson})
       } else{
         console.log('no action found');
@@ -77,17 +76,37 @@ export default class ScheduledScreen extends React.Component {
     }
   }
 
-  creatMessage = (res) => {
+  createMessage = (res, recipients) => {
+    recipients = recipients || this.state.recipients;
 
-    let messages = [];
-    res.forEach( item =>{
+    let messages = [];    
+    let primary = recipients.filter((r) => {
+      return r.primary;
+    })[0] || {};
+    res.forEach( item => {
+      var initals = ""
+
+      if (item.sender_type === "recipient"){
+        recipient = recipients.filter((r) => {
+          return r.id.toString() === item.sender_id.toString();
+        })[0];
+
+        if (!!recipient){
+          initials = `${ recipient.first_name[0] || "" }${ recipient.last_name[0] || "" }`
+        } 
+      } else if (item.sender_type === "guest") {
+        initials = this.userShort;
+      } else {
+        initials = `${ primary.first_name[0] || "" }${ primary.last_name[0] || "" }`
+      }
+
       const m = {
         _id: item.id,
         text: item.content,
         createdAt: item.created_at,
         user: {
           _id: item.sender_type,
-          // name: 'Joel Weber',
+          name: initials
         },
       }
       messages.push(m);
@@ -97,6 +116,7 @@ export default class ScheduledScreen extends React.Component {
   }
 
   getMessage = async () => {
+    console.log(this.item.thread_id)
 
     if (!this.item.thread_id){
       return
@@ -104,31 +124,65 @@ export default class ScheduledScreen extends React.Component {
     
     this.setState({isLoading:true})
 
-    try {
-      const url = Constant.severUrl + `api/messaging/thread/${this.item.thread_id}`
-      console.log(url)
-      let response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          Cookie: global.cookies,
-        },
-      });
-      let responseJson = await response.json();
+    var guest = {},
+        messages = [],
+        recipients = [];
 
-      if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
-        let mes = this.creatMessage(responseJson.messages)
-        this.setState({isLoading:false, guest: responseJson.guest, messages: mes})
-      } else{
-        console.log('no data');
-        this.setState({isLoading:false})
-      }
-       
-      
-    } catch (error) {
-      console.error(error);
-      this.setState({isLoading:false})
-    }
+    Promise.all([
+      new Promise( async (res, rej) => {
+        const url = Constant.severUrl + `api/messaging/thread/${this.item.thread_id}`
+        
+        try {
+          let response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              Cookie: global.cookies,
+            },
+          });
+          let responseJson = await response.json();
+
+          if (responseJson && Object.keys(responseJson).length > 0){
+            
+            guest = responseJson.guest;
+            messages = responseJson.messages;
+            console.log("success")
+            res();
+          } else{
+            console.log('no data');
+            res();
+          }
+        } catch (error) {
+          res();
+        }
+      }),
+
+      new Promise( async (res, rej) => {
+        try {
+          const url = Constant.severUrl + `/api/messaging/inbox/current`
+          let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              Cookie: global.cookies,
+            },
+          });
+          let responseJson = await response.json();
+          if (responseJson && Object.keys(responseJson).length > 0){
+            recipients = responseJson.recipients
+            res()
+          } else{
+            console.log('no data for inbox');
+            res()
+          }
+        } catch (error) {
+          console.error("error", error);
+          res()
+        }
+      })
+    ]).then(() => {
+      let msgs = this.createMessage(messages, recipients)
+
+      this.setState({isLoading:false, guest: guest, messages: msgs, recipients: recipients})
+    })
   }
 
 
@@ -136,7 +190,6 @@ export default class ScheduledScreen extends React.Component {
 
 
   appBarSetect = (index) => {
-    console.log('Index:', index);
     if (index == 4){
       if (this.item.guestlink_id){
         WebBrowser.openBrowserAsync(`https://www.ruebarue.com/guestbook/${this.item.guestlink_id}`)
@@ -151,7 +204,7 @@ export default class ScheduledScreen extends React.Component {
       
     } else if (index == 5){
       Alert.alert('Delete Guest', 'Are you sure?', 
-        [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
+        [{ text: 'OK', onPress: () => { this.deleteGuest() } },
         { text: 'Cancel'}])
         return
     } 
@@ -160,13 +213,11 @@ export default class ScheduledScreen extends React.Component {
 
   shareRequest = async (messageId, altContact)=>{
 
-    console.log(messageId, altContact)
     this.setState({isLoading:true})
 
     try {
 
       const url = Constant.severUrl + `api/scheduler/${messageId}/reservation/${this.item.id}/send?contact=${altContact || ""}`
-      console.log(url)
 
       let response = await fetch(url, {
         method: 'POST',
@@ -178,7 +229,6 @@ export default class ScheduledScreen extends React.Component {
       let responseJson = await response.json();
       
       if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
         const newValue = this.state.sent_scheduled_messages + ` ${messageId}`
         this.setState({sent_scheduled_messages: newValue, isLoading:false}) 
       } else{
@@ -195,7 +245,6 @@ export default class ScheduledScreen extends React.Component {
   }
 
   onSend(messages = []) {
-    console.log(messages[0].text);
     this.sendMessage(messages);
   }
 
@@ -212,9 +261,7 @@ export default class ScheduledScreen extends React.Component {
 
 
       const url = Constant.severUrl + 'api/messaging/inbound/app'
-      console.log(url)
-      console.log(formdata)
-
+      
       let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -224,7 +271,6 @@ export default class ScheduledScreen extends React.Component {
       });
       
       let responseJson = await response.json();
-      console.log(responseJson);
       if (responseJson && Object.keys(responseJson).length > 0){
         this.setState(previousState => ({
           messages: GiftedChat.append(previousState.messages, messages), isLoading:false
@@ -240,6 +286,31 @@ export default class ScheduledScreen extends React.Component {
       console.error(error);
     }
 
+  }
+
+  deleteGuest = async () => {
+    try {
+
+      const url = Constant.severUrl + `api/reservations/delete`
+
+      let response = await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({ids: [this.item.id]}),
+        headers: {
+          Cookie: global.cookies,
+        }
+      });
+      
+      let responseJson = await response.json();
+      if (responseJson.status === "OK") {
+        this._goBack()
+      } else {
+        Alert.alert('Error', 'Could not delete guest')
+      }    
+    } catch (error) {
+      console.log("Error deleting guest: ", error)
+      Alert.alert('Error deleting guest')
+    }
   }
 
   saveGuestInfo = async (pms_id, first_name, last_name, email, phone, door_code) =>{
@@ -266,9 +337,7 @@ export default class ScheduledScreen extends React.Component {
       formdata.append('door_code', door_code)
 
       const url = Constant.severUrl + 'api/reservations/save'
-      console.log(url)
-      console.log(formdata)
-
+     
       let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -281,7 +350,6 @@ export default class ScheduledScreen extends React.Component {
       })
       
       let responseJson = await response.json();
-      console.log(responseJson);
       if (responseJson && Object.keys(responseJson).length > 0){
         this.item = responseJson
         this.setState({isLoading:false})
@@ -330,7 +398,7 @@ export default class ScheduledScreen extends React.Component {
   renderAvatar= (props) => {
     return (
       <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 12}}>{this.userShort}</Text>
+        <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
   }
@@ -349,7 +417,6 @@ export default class ScheduledScreen extends React.Component {
   }
 
   _handleDatePicked = (date) => {
-    console.log('A date has been picked: ', date);
     if (this.state.isPickingCheckIn){
       this.setState({  isDateTimePickerVisible: false, checkInDate: date }); 
     } else{
@@ -408,6 +475,7 @@ export default class ScheduledScreen extends React.Component {
       case 1:
         contentView = (
           <GiftedChat
+            showUserAvatar={true}
             renderBubble={this.renderBubble}
             renderAvatar={this.renderAvatar}
             messages={this.state.messages}
@@ -492,7 +560,7 @@ export default class ScheduledScreen extends React.Component {
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  <Text style={styles.locationText}>{item.rental_name}</Text>
+                  <Text style={styles.locationText}>{item.rental_code}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>

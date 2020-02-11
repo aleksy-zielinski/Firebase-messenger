@@ -42,14 +42,12 @@ export default class App extends React.Component {
   }
     
   componentDidMount() {
-      this.registerForPushNotificationsAsync()
-      Notifications.addListener(this.handleNotification);
-      AppState.addEventListener('change', this.handleAppStateChange);
-      if (!__DEV__){
-        this.checkForUpdateAsync()
-      }
-
-      
+    this.registerForPushNotificationsAsync()
+    Notifications.addListener(this.handleNotification);
+    AppState.addEventListener('change', this.handleAppStateChange);
+    if (!__DEV__){
+      this.checkForUpdateAsync()
+    }   
   }
 
   render() {
@@ -73,8 +71,6 @@ export default class App extends React.Component {
   }
 
   handleAppStateChange = ( nextAppState) => {
-
-    console.log(nextAppState)
     if (nextAppState === 'active') {
       if (!__DEV__){
         this.checkForUpdateAsync()
@@ -100,14 +96,8 @@ export default class App extends React.Component {
   }
 
   handleNotification = (notification) => {
-    // this.setState({notification: notification});
-    // console.log(JSON.stringify(notification.data))
-    const data =  JSON.stringify(notification.data)
-      // console.log(notification.data.thread_id)
-      console.log(data)
-    // this.props.navigation.nextAppState('Noti')
-    // dispatch( navigate('Noti') )
-    // NavigationActions.navigate({ routeName: 'MainTabbar' })
+    const data = JSON.stringify(notification.data)
+    console.log(data)
   };
 
   registerForPushNotificationsAsync = async () => {

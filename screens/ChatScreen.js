@@ -25,8 +25,10 @@ export default class ChatScreen extends React.Component {
       selectedIndex: 0,
       guest: null,
       messages: [],
+      recipients: []
     };
     this.pageData = this.props.navigation.getParam('page');
+    this.recipients = this.props.navigation.getParam('recipients') || [];
     this.isChange = false;
     this.isMount = false;
 
@@ -34,8 +36,7 @@ export default class ChatScreen extends React.Component {
     const matches = this.displayName.match(/\b(\w)/g) || [];
     const acronym = matches.length > 1 ? matches.join('') : ""; 
     this.userShort = acronym.substring(0,2)
-    this.propCode = this.pageData.unit_code || ""
-    
+    this.propCode = this.pageData.unit_code || ""    
   }
 
   componentDidMount(){
@@ -53,16 +54,29 @@ export default class ChatScreen extends React.Component {
   }
 
   creatMessage = (res) => {
-
     let messages = [];
     res.forEach( item =>{
+      var initals = "??"
+
+      if (item.sender_type !== "recipient"){
+        recipient = this.recipients.filter((r) => {
+          return r.id.toString() === item.sender_id.toString();
+        })[0];
+
+        if (!!recipient){
+          initials = `${ recipient.first_name[0] || "" }${ recipient.last_name[0] || "" }`
+        }
+      } else {
+        initials = this.userShort;
+      }
+
       const m = {
         _id: item.id,
         text: item.content,
         createdAt: item.created_at,
         user: {
           _id: item.sender_type,
-          name: this.userShort,
+          name: initials,
         },
       }
       messages.push(m);
@@ -77,7 +91,6 @@ export default class ChatScreen extends React.Component {
 
     try {
       const url = Constant.severUrl + `api/messaging/thread/${this.pageData.id}`
-      console.log(url)
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -87,7 +100,6 @@ export default class ChatScreen extends React.Component {
       let responseJson = await response.json();
 
       if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
 
         // let guest = responseJson.guest;
         // this.displayName = (guest.guest_first_name + " " + guest.guest_last_name).trim() || guest.guest_name || guest.guest_phone || "";
@@ -141,8 +153,6 @@ export default class ChatScreen extends React.Component {
       formdata.append('token', type)
 
       const url = Constant.severUrl + `api/messaging/thread/${this.pageData.id}/meta`
-      console.log(url)
-      console.log('method: ', isAdd ? 'POST' : 'DELETE', type)
 
       let response = await fetch(url, {
         method: isAdd ? 'POST' : 'DELETE',
@@ -153,7 +163,6 @@ export default class ChatScreen extends React.Component {
       });
       
       let responseJson = await response.json();
-      console.log(responseJson);
       this.setState({isLoading:false})
 
       if (responseJson.status == 'ok'){
@@ -181,7 +190,6 @@ export default class ChatScreen extends React.Component {
   }
 
   onSend(messages = []) {
-    console.log(messages[0].text);
     if (this.state.messages.length == 0){
       this.sendMessageNewThread(messages);
     } else{
@@ -204,9 +212,7 @@ export default class ChatScreen extends React.Component {
       formdata.append('phone', this.pageData.guest_phone)
 
       const url = Constant.severUrl + 'api/messaging/inbound/create'
-      console.log(url)
-      console.log(formdata)
-
+      
       let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -217,7 +223,6 @@ export default class ChatScreen extends React.Component {
       
       let responseJson = await response.json();
       if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
         if (this.isMount){
           this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages), isLoading:false
@@ -247,9 +252,7 @@ export default class ChatScreen extends React.Component {
       formdata.append('thread_id', this.pageData.id)
 
       const url = Constant.severUrl + 'api/messaging/inbound/app'
-      console.log(url)
-      console.log(formdata)
-
+      
       let response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -260,7 +263,6 @@ export default class ChatScreen extends React.Component {
       
       let responseJson = await response.json();
       if (responseJson && Object.keys(responseJson).length > 0){
-        console.log(responseJson);
         if (this.isMount){
           this.setState(previousState => ({
             messages: GiftedChat.append(previousState.messages, messages), isLoading:false
@@ -279,7 +281,7 @@ export default class ChatScreen extends React.Component {
 
   }
 
-  renderBubble= (props) => {
+  renderBubble = (props) => {
     return (
       <Bubble
         {...props}
@@ -309,7 +311,7 @@ export default class ChatScreen extends React.Component {
   renderAvatar= (props) => {
     return (
       <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
-        <Text style={{color: 'white', fontSize: 12}}>{this.userShort}</Text>
+        <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
   }
@@ -322,11 +324,10 @@ export default class ChatScreen extends React.Component {
 
   render(){
 
-     const {guest} = this.state;
-    let start_time = this.formatTime(this.pageData.check_in);
-    let end_time = this.formatTime(this.pageData.check_out);
+    const {guest} = this.state;
+    let start_time = this.pageData.check_in === "0001-01-01T00:00:00Z" ? "" : this.formatTime(this.pageData.check_in);
+    let end_time = this.pageData.check_out === "0001-01-01T00:00:00Z" ? "" : this.formatTime(this.pageData.check_out);
     
-
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -361,7 +362,10 @@ export default class ChatScreen extends React.Component {
             <View style={styles.topContainer}>
 
             <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+              { this.userShort === "" ? 
+                <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 30, height: 30, resizeMode: 'contain', marginTop: 3, marginLeft: 0}} /> :
+                <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+              }
             </View>
 
             <View style={{marginLeft: 10, flex: 1}}>

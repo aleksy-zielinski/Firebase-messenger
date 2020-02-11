@@ -134,11 +134,13 @@ export default class ShareView extends React.PureComponent {
               onPress={ this.share.bind(this) }>
               <Text style={{color: 'white'}}>{this.props.pending ? "SENDING..." : "SEND" }</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.cancelButton}
-              onPress={()=>this.props.cancelPress()}
-            >
-              <Text style={{color: '#519f4f'}}>CANCEL</Text>
-            </TouchableOpacity>
+            {/*
+              <TouchableOpacity style={styles.cancelButton}
+                onPress={()=>this.props.cancelPress()}
+              >
+                <Text style={{color: '#519f4f'}}>CANCEL</Text>
+              </TouchableOpacity>
+            */}
           </View>
           
 

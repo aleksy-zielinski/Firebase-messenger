@@ -179,18 +179,19 @@ export default class LoginScreen extends React.Component {
             >
             <TouchableOpacity
               onPress={() => this.loginRequest()}
+              style={{    
+                paddingHorizontal: 48,
+                height: 48,
+                backgroundColor: '#E66656',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 0.3
+              }}
             >
               <Text
                 style={{                 
-                  backgroundColor: '#E66656',
                   color: '#ffffff',
-                  height: 48,
-                  lineHeight: 48,
-                  paddingHorizontal: 48,
                   textTransform: 'uppercase',
-                  textAlign: 'center',
-                  justifyContent:'center', 
-                  alignItems: 'center',
                   borderRadius: 3
                 }}
               >Log in</Text>

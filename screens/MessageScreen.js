@@ -54,6 +54,7 @@ export default class MessagesScreen extends React.Component {
       console.log('item', item.id, notification.data.thread_id)
       if (item.id == notification.data.thread_id){
         this.props.navigation.navigate('Chat', {
+          recipients: this.state.recipients,
           page: item,
           onSelect:this.callBack
         });
@@ -80,8 +81,8 @@ export default class MessagesScreen extends React.Component {
       // console.log(response)
 
       if (responseJson && Object.keys(responseJson).length > 0) {
-        console.log(responseJson);
-        this.setState({ isLoading: false, page: responseJson.page })
+        // console.log(responseJson);
+        this.setState({ isLoading: false, page: responseJson.page, recipients: responseJson.recipients })
       } else {
         console.log('no data');
         this.setState({ isLoading: false })
@@ -115,6 +116,7 @@ export default class MessagesScreen extends React.Component {
 
     this.props.navigation.navigate('Chat', {
       page: item,
+      recipients: this.state.recipients,
       onSelect:this.callBack
     });
 

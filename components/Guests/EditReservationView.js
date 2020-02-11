@@ -40,7 +40,7 @@ export default class EditReservationView extends React.PureComponent {
                 <TextInput
                   style={[styles.textInputStyle, {backgroundColor:'lightgray'}]}
                   placeholder= { "Enter reservation id"} 
-                  value={`${item.id}`}
+                  value={`${item.reservation_id}`}
                   editable={false}
                 />
 
@@ -152,11 +152,13 @@ export default class EditReservationView extends React.PureComponent {
                 <Text style={{color: 'white'}}>SAVE</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.cancelButton}
-                onPress={()=>this.props.cancelPress()}
-              >
-                <Text style={{color: '#e66656'}}>CANCEL</Text>
-              </TouchableOpacity>
+              {/*
+                <TouchableOpacity style={styles.cancelButton}
+                  onPress={()=>this.props.cancelPress()}
+                >
+                  <Text style={{color: '#e66656'}}>CANCEL</Text>
+                </TouchableOpacity>
+              */}
             </View>
             
           </View>
