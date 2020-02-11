@@ -19,6 +19,7 @@ export default class PostCell extends React.PureComponent {
   render(){
     const item = this.props.item
 
+    const propCode = item.unit_code || ""
     const userShort = item.first_name.substring(0,1) + item.last_name.substring(0,1);
 
     let start_time = this.formatTime(item.check_in);
@@ -55,7 +56,6 @@ export default class PostCell extends React.PureComponent {
                   name={'chevron-thin-right'}
                   size={20}
                 />
-
                 
               </View>
 
@@ -64,19 +64,19 @@ export default class PostCell extends React.PureComponent {
           </View>
 
             <View style={{flexDirection:'row', marginTop: 0, height: 28 }}>
-              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 2}}  />
               <Text style={[styles.codeText]}>{item.phone}</Text>
             </View>
             
             <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
-              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 2}}  />
               <Text style={[styles.codeText]}>{item.email} </Text>
             </View>
 
             { 
               !!item.door_code ? (
                 <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
-                  <Image source={require('../assets/images/door-code.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+                  <Image source={require('../assets/images/door-code.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 2}}  />
                   <Text style={styles.codeText}>{item.door_code}</Text>
                 </View>
               ) : null
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 17,
     lineHeight: 20
   },
   durationText: {
@@ -128,8 +128,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: 'dimgray',
-    fontSize: 14,
-    lineHeight: 18
+    fontSize: 13
   },
   creatTimeText: {
     color: 'dimgray',

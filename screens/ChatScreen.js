@@ -459,7 +459,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    fontSize: 18,
+    fontSize: 17,
+    lineHeight: 20    
   },
   durationText: {
     color: 'dimgray',
@@ -468,7 +469,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: 'dimgray',
-    fontSize: 15,
+    fontSize: 13
   },
   contentText: {
     textAlign: 'left',

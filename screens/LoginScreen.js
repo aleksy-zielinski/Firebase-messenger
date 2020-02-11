@@ -154,7 +154,6 @@ export default class LoginScreen extends React.Component {
                 ...styles.textInput,
                 marginBottom: 12,
               }}
-              placeholder="Enter email"
               value={email}
               onChangeText={text => {this._handleEmailTextChange(text)}}
             />
@@ -165,7 +164,6 @@ export default class LoginScreen extends React.Component {
                 ...styles.textInput,
                 marginBottom: 20
               }}
-              placeholder="Enter password"
               value={password}
               onChangeText={text => {this._handlePassTextChange(text)}}
             />
