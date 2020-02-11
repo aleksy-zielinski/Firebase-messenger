@@ -36,7 +36,7 @@ export default class PostCell extends React.PureComponent {
           <View style={styles.topContainer}>
             <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
                 { userShort === "" ? 
-                  <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 30, height: 30, resizeMode: 'contain', marginTop: 3, marginLeft: 0}} /> :
+                  <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 42, height: 42, resizeMode: 'contain', marginTop: 0  , marginLeft: 0}} /> :
                   <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
                 }
             </View>
@@ -113,16 +113,17 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   nameText: {
-    flex:1,
-    fontSize: 18,
+    fontSize: 17,
+    lineHeight: 20    
   },
   codeText: {
     flex:1,
+    color: 'dimgray',
     fontSize: 13,
   },
   locationText: {
     color: 'dimgray',
-    fontSize: 13,
+    fontSize: 13
   },
   durationText: {
     color: 'dimgray',

@@ -39,7 +39,6 @@ export default class EditReservationView extends React.PureComponent {
               <Text style={styles.textHeaderStyle}>RESERVATION ID</Text>
                 <TextInput
                   style={[styles.textInputStyle, {backgroundColor:'lightgray'}]}
-                  placeholder= { "Enter reservation id"} 
                   value={`${item.id}`}
                   editable={false}
                 />
@@ -47,7 +46,6 @@ export default class EditReservationView extends React.PureComponent {
                 <Text style={styles.textHeaderStyle}>PROPERTY ID</Text>
                 <TextInput
                   style={styles.textInputStyle}
-                  placeholder= { "Enter property id"} 
                   onChangeText={(text) => {
                       this.setState({property_id: text})
                   }}
@@ -59,7 +57,6 @@ export default class EditReservationView extends React.PureComponent {
                     <Text style={styles.textHeaderStyle}>FIRST NAME</Text>
                     <TextInput
                       style={styles.textInputStyle}
-                      placeholder= { "Enter firstname"} 
                       onChangeText={(text) => {
                           this.setState({fistName: text})
                       }}
@@ -71,7 +68,6 @@ export default class EditReservationView extends React.PureComponent {
                     <Text style={styles.textHeaderStyle}>LAST NAME</Text>
                     <TextInput
                       style={styles.textInputStyle}
-                      placeholder= { "Enter lastname"} 
                       onChangeText={(text) => {
                           this.setState({lastName: text})
                       }}
@@ -105,7 +101,6 @@ export default class EditReservationView extends React.PureComponent {
                 <Text style={styles.textHeaderStyle}>EMAIL</Text>
                 <TextInput
                   style={styles.textInputStyle}
-                  placeholder= { "Enter email"} 
                   onChangeText={(text) => {
                       this.setState({email: text})
                   }}
@@ -118,7 +113,6 @@ export default class EditReservationView extends React.PureComponent {
                     <TextInput
                       style={styles.textInputStyle}
                       keyboardType = 'phone-pad'
-                      placeholder= { "Phone number"} 
                       onChangeText={(text) => {
                           this.setState({phone: text})
                       }}
@@ -130,7 +124,6 @@ export default class EditReservationView extends React.PureComponent {
                     <Text style={styles.textHeaderStyle}>DOOR CODE</Text>
                     <TextInput
                       style={styles.textInputStyle}
-                      placeholder= { "Door code"} 
                       onChangeText={(text) => {
                           this.setState({doorCode: text})
                       }}

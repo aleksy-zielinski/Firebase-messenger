@@ -121,7 +121,6 @@ export default class ShareView extends React.PureComponent {
               <TextInput 
                 // editable={false}
                 style={styles.textInputStyle}
-                placeholder= {isEmail ? "Enter email": "Enter phone number" }
                 value={this.state.text}
                 onChangeText={(text) => {
                   this.setState({text: text})

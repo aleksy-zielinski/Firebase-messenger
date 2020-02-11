@@ -193,7 +193,6 @@ MessagesScreen.navigationOptions = {
   }
 };
 
-
 const styles = StyleSheet.create({
   loadingStyle: {
     position: 'absolute',

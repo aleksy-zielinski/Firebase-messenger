@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   buttonDropDown:{
     flex: 1,
     fontWeight: '300',
-    fontSize: 14
+    fontSize: 13
   },
   dropDownButtonText:{
     fontSize:14, 
