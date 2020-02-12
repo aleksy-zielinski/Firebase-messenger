@@ -86,7 +86,7 @@ export default class PostCell extends React.PureComponent {
             { 
               !item.rental_id ? (
                 <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
-                  <Image source={require('../assets/images/warning.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 0}}  />
+                  <Image source={require('../assets/images/warning.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
                   <Text style={[styles.warningText]}>Property Guide Missing</Text>
                 </View>
               ) : null
@@ -155,10 +155,11 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   warningText: {
+    marginTop: 3,
     textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
     lineHeight: 18,
-    color: 'salmon'
+    color: '#E66656'
   }
 })
