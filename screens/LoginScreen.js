@@ -203,16 +203,14 @@ export default class LoginScreen extends React.Component {
                 backgroundColor: '#E66656',
                 justifyContent: 'center',
                 alignItems: 'center',
-                flex: 0.3
+                flex: 0.3,
+                borderRadius: 3,
               }}
             >
               <Text
                 style={{                 
                   color: '#ffffff',
                   textTransform: 'uppercase',
-                  borderRadius: 3,
-                  flex: 0.5,
-                  width: 60
                 }}
               >Log in</Text>
             </TouchableOpacity>
