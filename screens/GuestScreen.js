@@ -163,7 +163,7 @@ export default class GuestsScreen extends React.Component {
 
     clearTimeout(this.timer);
     this.timer = setTimeout( () => {
-      this.getInboxRequest()
+      this.actionRefresh()
     },1000);
 
   }
