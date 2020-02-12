@@ -291,6 +291,8 @@ export default class ScheduledScreen extends React.Component {
   deleteGuest = async () => {
     try {
 
+      this.setState({isLoading:true})
+
       const url = Constant.severUrl + `api/reservations/delete`
 
       let response = await fetch(url, {
@@ -303,12 +305,15 @@ export default class ScheduledScreen extends React.Component {
       
       let responseJson = await response.json();
       if (responseJson.status === "OK") {
+        this.setState({isLoading:false})
         this.props.navigation.state.params.callBack();
         this._goBack()
       } else {
+        this.setState({isLoading:false})
         Alert.alert('Error', 'Could not delete guest')
       }    
     } catch (error) {
+      this.setState({isLoading:false})
       console.log("Error deleting guest: ", error)
       Alert.alert('Error deleting guest')
     }
