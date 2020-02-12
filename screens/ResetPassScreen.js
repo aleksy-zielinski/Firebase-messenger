@@ -121,7 +121,6 @@ export default class ResetPassScreen extends React.Component {
                   backgroundColor: '#E66656',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  flex: 0.3,
                   borderRadius: 3
                 }}
               >
