@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Alert, Clipboard, ToastAndroid, Text, Platform } from 'react-native';
+import { View, StyleSheet, Alert, Clipboard, ToastAndroid, Text, Platform, AsyncStorage } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Constants from 'expo-constants';
 
@@ -10,8 +10,12 @@ import Constants from 'expo-constants';
   showAlert(){
     Alert.alert('Logout', 'Are you sure?', 
         [{ text: 'OK', onPress: () => {  
-          this.props.navigation.navigate('LoginScreen');
           global.cookies = ''
+          AsyncStorage.removeItem('token')
+          // AsyncStorage.setItem('token', JSON.stringify(''), () => {
+            this.props.navigation.navigate('LoginScreen');
+          // });
+          
           } },
         { text: 'Cancel'}])
   }

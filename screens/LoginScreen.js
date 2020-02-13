@@ -9,7 +9,8 @@ import {
   ActivityIndicator, 
   Alert,
   Image,
-  TextInput
+  TextInput,
+  AsyncStorage,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import FormLabel from '../components/FormLabel';
@@ -42,6 +43,11 @@ export default class LoginScreen extends React.Component {
         isLoading: false,
         isShowPass: false,
       };
+    }
+
+    if ( global.cookies !== null && global.cookies.length !== 0){
+      console.log('not null', global.cookies)
+      this.props.navigation.navigate('MainTabbar')
     }
    
   }
@@ -80,6 +86,13 @@ export default class LoginScreen extends React.Component {
     }
     console.log(cookieStr);
     global.cookies = cookieStr;
+    this.saveToken(cookieStr)
+  }
+
+  saveToken(token){
+    AsyncStorage.setItem('token', JSON.stringify(token), () => {
+      console.log('token saved');
+    });
   }
  
   loginRequest = async () => {
