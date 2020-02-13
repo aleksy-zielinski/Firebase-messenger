@@ -93,14 +93,28 @@ export default class MessagesScreen extends React.Component {
         // console.log(responseJson);
         const pageFull = !this.isRealValue(responseJson.page)
         const newData = pageFull ? [] : responseJson.page
-        this.setState(({ isRefresh, pageData }) => ({
-          isLoading: false, 
-          isLoadingMore: false,
-          pageData: isRefresh ? newData : [...pageData, ...newData], 
-          recipients: responseJson.recipients,
-          isFull: pageFull,
-          isRefresh: false,
-        }));
+        
+        this.setState(({ isRefresh, pageData }) => {
+          var data = isRefresh ? newData : pageData
+
+          if (!isRefresh) {
+            let filteredData = newData.filter((m) => {
+               return !pageData.some(o => o.id === m.id);
+            });
+
+            data = [...data, ...filteredData]
+          }
+
+          console.log(data.length)
+          return {  
+            isLoading: false, 
+            isLoadingMore: false,
+            pageData: data, 
+            recipients: responseJson.recipients,
+            isFull: pageFull,
+            isRefresh: false
+          }
+        });
       } else {
         console.log('no data');
         this.setState({ 

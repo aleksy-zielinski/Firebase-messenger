@@ -94,15 +94,26 @@ export default class GuestsScreen extends React.Component {
         const pageFull = !this.isRealValue(responseJson.reservations)
         const newData = pageFull ? [] : responseJson.reservations
 
-        this.setState(({ isRefresh, reservations }) => ({
-          isLoading: false, 
-          isLoadingMore: false,
-          reservations: isRefresh ? newData : [...reservations, ...newData], 
-          isFull: pageFull,
-          isRefresh: false,
-        }));
+        this.setState(({ isRefresh, reservations }) => {
+          var data = isRefresh ? newData : reservations
+
+          if (!isRefresh) {
+            let filteredData = newData.filter((r) => {
+               return !reservations.some(o => o.id === r.id);
+            });
+
+            data = [...data, ...filteredData]
+          }
+
+          return {
+            isLoading: false, 
+            isLoadingMore: false,
+            reservations: data, 
+            isFull: pageFull,
+            isRefresh: false,
+          }
+        });
       } else{
-        console.log('no data');
         this.setState({
           isLoadingMore: false, 
           isLoading: false,
