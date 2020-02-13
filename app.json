@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.5",
+    "version": "1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "splash": {
@@ -26,9 +26,9 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "4",
+      "buildNumber": "5",
       "supportsTablet": true,
-      "bundleIdentifier": "com.instancea.Kata"
+      "bundleIdentifier": "com.ruebarue.message"
     },
     "android": {
       "versionCode": 4,
