@@ -42,8 +42,8 @@ export default class PostCell extends React.PureComponent {
               <View style={{flexDirection: 'row'}}>
                 <View style={{flex:1}}>
                 <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  {item.rental_code &&
-                    <Text style={styles.locationText}>{item.rental_code}</Text>
+                  {item.pms_id &&
+                    <Text style={styles.locationText}>{item.pms_id}</Text>
                   }
                   {item.check_in !== '0001-01-01T00:00:00Z' &&
                    <Text style={styles.durationText}>{start_time} - {end_time}</Text>

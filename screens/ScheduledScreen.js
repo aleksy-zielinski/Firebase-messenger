@@ -566,7 +566,7 @@ export default class ScheduledScreen extends React.Component {
               <View style={{marginLeft: 10, flex: 1}}>
               
                   <Text style= {styles.nameText}>{`${item.first_name} ${item.last_name}`}</Text>
-                  <Text style={styles.locationText}>{item.rental_code}</Text>
+                  <Text style={styles.locationText}>{item.pms_id}</Text>
                   <Text style={styles.durationText}>{start_time} - {end_time}</Text>
 
               </View>
