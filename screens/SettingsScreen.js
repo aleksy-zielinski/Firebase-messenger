@@ -2,22 +2,52 @@ import React from 'react';
 import { View, StyleSheet, Alert, Clipboard, ToastAndroid, Text, Platform, AsyncStorage } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Constants from 'expo-constants';
+import Constant from '../constants/Constant'
 
 // export default function LogoutScreen() {
   export default class LogoutScreen extends React.Component {
-  
+  constructor(props) {
+    super(props);
+  }
 
-  showAlert(){
+  showAlert =  async () => {
     Alert.alert('Logout', 'Are you sure?', 
-        [{ text: 'OK', onPress: () => {  
-          global.cookies = ''
-          AsyncStorage.removeItem('token')
-          // AsyncStorage.setItem('token', JSON.stringify(''), () => {
-            this.props.navigation.navigate('LoginScreen');
-          // });
-          
-          } },
-        { text: 'Cancel'}])
+      [
+        { text: 'OK', onPress: async () => {  
+          console.log("logging out")
+          try {
+            const url = Constant.severUrl + `auth/logout`
+            
+            console.log(url)
+            let formdata = new FormData();
+                formdata.append("device_id", Constants.installationId)
+
+            let response = await fetch(url, {
+              method: 'POST',
+              body: formdata,
+              headers: {
+                Cookie: global.cookies,
+              },
+            });
+            
+            let responseJson = await response.json();
+            if (responseJson && responseJson.status === "OK"){
+              global.cookies = ''
+              AsyncStorage.removeItem('token')
+              this.props.navigation.navigate('LoginScreen');
+            } else{
+              console.log("logout error")
+              Alert.alert('Error logging out', responseJson.error)
+            }
+            
+          } catch (error) {
+            console.log("err", error)
+            Alert.alert('Error logging out')
+          }
+        }},
+        { text: 'Cancel', onPress: () => { this.props.navigation.navigate('LoginScreen') } }
+      ]
+    )
   }
 
 
@@ -29,6 +59,7 @@ import Constants from 'expo-constants';
           onDidFocus={payload => this.showAlert()}
         />
         
+        {/*}
         {global.expoToken && 
         <Text style={{fontSize:18}} onPress={() => {
           Clipboard.setString(global.expoToken);
@@ -42,6 +73,7 @@ import Constants from 'expo-constants';
         <Text style={styles.itemTextVersion} numberOfLines={2}>
                 Version {Constants.manifest.version}.{Platform.OS === 'android' ? Constants.manifest.android.versionCode : Constants.manifest.ios.buildNumber} 
           </Text>
+        */}
       </View>
     )
   };

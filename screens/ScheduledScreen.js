@@ -197,7 +197,7 @@ export default class ScheduledScreen extends React.Component {
         WebBrowser.openBrowserAsync(`https://www.ruebarue.com/rental/${this.item.rental_id}`)
       } else{
         Alert.alert('Delete Guest', 'Are you sure?', 
-        [{ text: 'OK', onPress: () => {  this.props.navigation.goBack();} },
+        [{ text: 'OK', onPress: () => { this.deleteGuest() } },
         { text: 'Cancel'}])
         return
       }
