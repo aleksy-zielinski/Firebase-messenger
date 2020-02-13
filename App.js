@@ -23,9 +23,14 @@ export default class App extends React.Component {
   }
 
   getToken(){
+
     AsyncStorage.getItem('token', (err, result) => {
-      global.cookies = JSON.parse(result);
-      console.log(global.cookies);
+      if (err){
+        console.log(err);
+      } else{
+        global.cookies = JSON.parse(result);
+        console.log(global.cookies);
+      }
     });
   }
 

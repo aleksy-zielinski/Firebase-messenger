@@ -45,7 +45,8 @@ export default class LoginScreen extends React.Component {
       };
     }
 
-    if (global.cookies.length > 0){
+    if ( global.cookies !== null && global.cookies.length !== 0){
+      console.log('not null', global.cookies)
       this.props.navigation.navigate('MainTabbar')
     }
    

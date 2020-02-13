@@ -11,9 +11,10 @@ import Constants from 'expo-constants';
     Alert.alert('Logout', 'Are you sure?', 
         [{ text: 'OK', onPress: () => {  
           global.cookies = ''
-          AsyncStorage.setItem('token', JSON.stringify(''), () => {
+          AsyncStorage.removeItem('token')
+          // AsyncStorage.setItem('token', JSON.stringify(''), () => {
             this.props.navigation.navigate('LoginScreen');
-          });
+          // });
           
           } },
         { text: 'Cancel'}])
