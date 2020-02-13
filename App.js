@@ -1,9 +1,10 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator, AsyncStorage } from 'react-native';
 import { Notifications, Updates, AppLoading } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import * as Font from 'expo-font';
+import * as Sentry from 'sentry-expo';
 
 import AppNavigator from './navigation/AppNavigator';
 
@@ -21,7 +22,15 @@ export default class App extends React.Component {
 
   }
 
+  getToken(){
+    AsyncStorage.getItem('token', (err, result) => {
+      global.cookies = JSON.parse(result);
+      console.log(global.cookies);
+    });
+  }
+
   componentWillMount(){
+    this.getToken()
     this._loadAssetsAsync();
   }
 
@@ -48,6 +57,13 @@ export default class App extends React.Component {
     if (!__DEV__){
       this.checkForUpdateAsync()
     }   
+
+    Sentry.init({
+      dsn: 'https://d3ac2ec37e054097bc493a354c93999d@sentry.io/2476461',
+      enableInExpoDevelopment: true,
+      debug: __DEV__ ? true : false
+    });
+
   }
 
   render() {
@@ -102,16 +118,16 @@ export default class App extends React.Component {
 
   registerForPushNotificationsAsync = async () => {
 
-    // if(Device.isDevice){
-    //   global.expoToken = 'test'
-    //   return;
-    // }
+    if(!Device.isDevice){
+      global.expoToken = 'Simuator'
+      return;
+    }
 
     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
 
     // Stop here if the user did not grant permissions
     if (status !== 'granted') {
-      global.expoToken = 'Simulator'
+      global.expoToken = 'Permissions not grandted'
       return;
     }
 

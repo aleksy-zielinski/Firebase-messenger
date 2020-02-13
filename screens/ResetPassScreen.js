@@ -3,6 +3,7 @@ import { TouchableOpacity, StyleSheet, View, Text, Keyboard, TouchableWithoutFee
 import { TextInput, Button } from 'react-native-paper';
 import Constant from '../constants/Constant';
 import FormLabel from '../components/FormLabel';
+import * as Sentry from 'sentry-expo';
 
 export default class ResetPassScreen extends React.Component {
 
@@ -21,6 +22,13 @@ export default class ResetPassScreen extends React.Component {
         isValidEmai: true,
         isLoading: false,
       };
+    }
+  }
+
+  componentDidMount(){
+    if (__DEV__){
+      throw new Error("My first Sentry error!");
+      // Sentry.nativeCrash();
     }
   }
 

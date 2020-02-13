@@ -113,6 +113,9 @@ const loginStack = createStackNavigator({
 const rootStack = createSwitchNavigator({
   LoginScreen: loginStack,
   MainTabbar: messageStack
+},
+{
+  // initialRouteName: 'MainTabbar',
 })
 
 
