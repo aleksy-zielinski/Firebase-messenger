@@ -32,16 +32,15 @@ export default class SchedulerView extends React.PureComponent {
 
     return (
       <View style={{marginTop: 20}}>
-          <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 10}}> Re/Send Messages</Text>
+          <Text style={styles.pageTitle}>Share with Guests</Text>
+          <Text style={styles.introText}>Send or resend a message to a guest by clicking on an option below.</Text>
 
           <View style={styles.container}>
               {lines}
-          </View>
-            
+          </View>            
       </View>
     );
   }
- 
 }
 
 const styles = StyleSheet.create({
@@ -58,6 +57,21 @@ const styles = StyleSheet.create({
     flexDirection:'row', 
     marginTop: 5, 
     marginHorizontal: 10,
+  },
+  pageTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginLeft: 12
+  },
+  introText: {
+    color: 'dimgray',
+    fontSize: 13,
+    lineHeight: 15,
+    fontWeight: '300',
+    marginTop: 3,
+    marginBottom: 3,
+    marginLeft: 13,
+    marginRight: 13    
   },
   textStyle: {
     color: '#455A69', 

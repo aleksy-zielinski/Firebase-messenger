@@ -403,7 +403,7 @@ export default class ScheduledScreen extends React.Component {
 
   renderAvatar= (props) => {
     return (
-      <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{width: 36, height: 36, backgroundColor: '#3178AC', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
@@ -560,7 +560,7 @@ export default class ScheduledScreen extends React.Component {
         <View style={styles.headContainer}> 
             <View style={styles.topContainer}>
 
-              <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
               </View>
               <View style={{marginLeft: 10, flex: 1}}>
@@ -641,6 +641,7 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   locationText: {
+    marginTop: 2,
     color: 'dimgray',
     fontSize: 13
   },

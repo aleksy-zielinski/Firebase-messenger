@@ -111,7 +111,8 @@ export default class ShareView extends React.PureComponent {
     return (
       <View style={{marginVertical: 20}}>
 
-          <Text style={{fontSize: 18, fontWeight: 'bold', marginLeft: 10}}> Share</Text>
+          <Text style={styles.pageTitle}>Share with Others</Text>
+          <Text style={styles.introText}>Send a message to a relative or friend of the guest.</Text>
 
             <View style={styles.container}>
               {lines}
@@ -146,7 +147,6 @@ export default class ShareView extends React.PureComponent {
       </View>
     );
   }
- 
 }
 
 const styles = StyleSheet.create({
@@ -155,7 +155,10 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
     borderWidth: 1,
     borderRadius: 3,
-    margin: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    marginRight: 15,
+    marginLeft: 15,
     paddingTop: 15,
     paddingBottom: 20,
   },
@@ -174,9 +177,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     // backgroundColor:'lightgray'
   },
+  pageTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginLeft: 12
+  },
+  introText: {
+    color: 'dimgray',
+    fontSize: 13,
+    lineHeight: 15,
+    fontWeight: '300',
+    marginTop: 3,
+    marginLeft: 13,
+    marginRight: 13    
+  },
   textStyle: {
-    color: 'black', 
+    color: '#455A69', 
     fontSize: 15, 
+    lineHeight: 15,
     fontWeight: '300',
   },
   cancelButton: {

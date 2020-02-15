@@ -289,10 +289,14 @@ export default class ChatScreen extends React.Component {
         textStyle={{
           left: {
             color: 'black',
+            fontSize: 15,
+            lineHeight: 19,
             fontWeight: '300'
           },
           right: {
             color: 'white',
+            fontSize: 15,
+            lineHeight: 19,
             fontWeight: '300'
           },
         }}
@@ -311,7 +315,7 @@ export default class ChatScreen extends React.Component {
 
   renderAvatar= (props) => {
     return (
-      <View style={{width: 36, height: 36, backgroundColor: '#4d6b85', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{width: 36, height: 36, backgroundColor: '#3178AC', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
@@ -342,27 +346,27 @@ export default class ChatScreen extends React.Component {
           />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {this.pageData.meta_values.includes('archived') ? 'salmon' : 'darkgray'}
-              name = {'box'}
-              size={25}
-            />
-          )} 
-          onPress={this._handleAchieve} />
-          <Appbar.Action icon={({ size, color }) => (
-            <Entypo
-              color =  {this.pageData.meta_values.includes('priority') ? 'salmon' : 'darkgray'}
+              color =  {this.pageData.meta_values.includes('priority') ? '#FF3C2F' : '#FFFFFF'}
               name={'flag'}
               size={25}
             />
           )} 
           onPress={this._handleFlag} />
+          <Appbar.Action icon={({ size, color }) => (
+            <Entypo
+              color =  {this.pageData.meta_values.includes('archived') ? '#FF3C2F' : '#FFFFFF'}
+              name = {'box'}
+              size={25}
+            />
+          )} 
+          onPress={this._handleAchieve} />
         </Appbar.Header>
 
         <View style={styles.headContainer}> 
 
             <View style={styles.topContainer}>
 
-            <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
               { this.userShort === "" ? 
                 <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 30, height: 30, resizeMode: 'contain', marginTop: 3, marginLeft: 0}} /> :
                 <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
@@ -377,23 +381,6 @@ export default class ChatScreen extends React.Component {
 
             </View>
 
-            {/*
-            <View style={{flexDirection:'row', marginTop: 4}}>
-              <Image source={require('../assets/images/phone.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
-              <Text style={[styles.codeText]}>{this.pageData.guest_phone}</Text>
-            </View>
-
-            <View style={{flexDirection:'row', marginTop: 8, marginBottom: 15}}>
-              <Image source={require('../assets/images/email.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
-              <Text style={[styles.codeText]}>{this.pageData.guest_email}</Text>
-            </View>
-            */}
-            {/* {guest.door_code && 
-              <View style={{flexDirection:'row', marginBottom: 20, marginTop: 4}}>
-                <Text style={[styles.codeText, {color: 'dimgray', marginLeft: 20}]}>Door Code: </Text>
-                <Text style={styles.codeText}>{guest.door_code}</Text>
-              </View>
-            } */}
             
         </View>
            <GiftedChat
@@ -469,20 +456,15 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   locationText: {
+    marginTop: 2,
     color: 'dimgray',
     fontSize: 13
   },
   contentText: {
     textAlign: 'left',
     fontWeight: '300',
-    fontSize: 15,
-    lineHeight: 18,
+    fontSize: 13,
+    lineHeight: 15,
     marginHorizontal: 20
-  },
-  codeText: {
-    textAlign: 'left',
-    fontWeight: '300',
-    fontSize: 15,
-    lineHeight: 18
   }
 });

@@ -33,7 +33,7 @@ export default class PostCell extends React.PureComponent {
 
           <View style={styles.topContainer}>
             
-            <View style={{width: 48, height: 48, backgroundColor: '#4d6b85', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
               <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
             </View>
             <View style={{marginLeft: 16, flex: 1}}>
@@ -85,7 +85,7 @@ export default class PostCell extends React.PureComponent {
 
             { 
               !item.rental_id ? (
-                <View style={{flexDirection:'row', marginTop: 0, height: 28}}>
+                <View style={{flexDirection:'row', marginTop: 15, height: 28}}>
                   <Image source={require('../assets/images/warning.png')} style={{width: 20, height: 20, resizeMode: 'contain', marginRight: 15, marginLeft: 82, marginTop: 3}}  />
                   <Text style={[styles.warningText]}>Property Guide Missing</Text>
                 </View>
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   locationText: {
+    marginTop: 2,
     color: 'dimgray',
     fontSize: 13
   },
@@ -155,11 +156,11 @@ const styles = StyleSheet.create({
     lineHeight: 18
   },
   warningText: {
-    marginTop: 3,
+    marginTop: 5,
     textAlign: 'left',
     fontWeight: '300',
     fontSize: 15,
-    lineHeight: 18,
-    color: '#E66656'
+    lineHeight: 15,
+    color: '#FF3B30'
   }
 })

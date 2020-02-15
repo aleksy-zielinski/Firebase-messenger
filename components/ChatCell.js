@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     marginTop: 4
   },
   locationText: {
+    marginTop: 2,
     color: 'dimgray',
     fontSize: 13
   },

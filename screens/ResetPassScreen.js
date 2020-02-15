@@ -140,7 +140,7 @@ export default class ResetPassScreen extends React.Component {
                 >Reset</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                <Text style={{color: '#4D6B85'}}>Login</Text>
+                <Text style={{color: '#3178AC'}}>Login</Text>
               </TouchableOpacity>
             </View>
           </View>
