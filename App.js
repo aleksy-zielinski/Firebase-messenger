@@ -29,27 +29,45 @@ export default class App extends React.Component {
     AsyncStorage.getItem('token', (err, result) => {
       if (err){
         console.log(err);
+        // Alert.alert('Error', err)
+        if (!this.state.isFinishCheckToken){
+          this.setState({isFinishCheckToken: true})
+        }
       } else{
-        global.cookies = JSON.parse(result);
-        Clipboard.setString(global.cookies);
-        console.log(global.cookies);
-        let arr = global.cookies.split(';');
-        // console.log(arr)
-        arr.forEach(item=>{
-          if (item.includes('Expires')){
-            let a2 = item.split('=');
-            console.log(a2[1])
-            var a = new Date(a2[1]);
-            var toDay = new Date();
-            if (toDay - a > 0){
-              console.log('cookie Expires')
-              this.refreshToken()
-            } else{
-              console.log('cookie still valid')
-              this.setState({isFinishCheckToken: true})
+        if (result === null){
+          AsyncStorage.removeItem('token')
+          global.cookies = null;
+          this.setState({isFinishCheckToken: true})
+        } else{
+
+          global.cookies = JSON.parse(result);
+          console.log(global.cookies);
+          let arr = global.cookies.split(';');
+          // console.log(arr)
+          arr.forEach(item=>{
+            if (item.includes('Expires')){
+              let a2 = item.split('=');
+              console.log(a2[1])
+              var a = new Date(a2[1]);
+              var toDay = new Date();
+              if (toDay - a > 0){
+                console.log('cookie Expires')
+                // this.refreshToken()
+                AsyncStorage.removeItem('token')
+                global.cookies = null;
+                if (this.state.isFinishCheckToken){
+                  Updates.reloadFromCache();
+                } else{
+                  this.setState({isFinishCheckToken: true})
+                }
+              } else{
+                console.log('cookie still valid')
+                this.setState({isFinishCheckToken: true})
+              }
             }
-          }
-        })
+          })
+
+        }
         
       }
     });
@@ -72,12 +90,12 @@ export default class App extends React.Component {
       // let responseJson = await response.json();
       console.log(response);
 
-      // if (responseJson.status == 'OK'){
-      //   this.saveCookies(response.headers)
-      //   this.setState({isFinishCheckToken: true})
-      // } else{
-      //   Alert.alert('Error', responseJson.message)
-      // }
+      if (responseJson.status == 'OK'){
+        this.saveCookies(response.headers)
+        this.setState({isFinishCheckToken: true})
+      } else{
+        Alert.alert('Error', responseJson.message)
+      }
       
     } catch (error) {
       console.error(error);
