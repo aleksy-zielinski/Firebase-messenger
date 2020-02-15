@@ -59,8 +59,8 @@ import Constant from '../constants/Constant'
           onDidFocus={payload => this.showAlert()}
         />
         
-        {/*}
-        {global.expoToken && 
+        
+        {/* {global.expoToken && 
         <Text style={{fontSize:18}} onPress={() => {
           Clipboard.setString(global.expoToken);
           if (Platform.OS === 'android'){
@@ -69,11 +69,11 @@ import Constant from '../constants/Constant'
         }}>
           {global.expoToken}
         </Text>}
-        <Text>Tap on token to copy</Text>
+        <Text>Tap on token to copy</Text> */}
         <Text style={styles.itemTextVersion} numberOfLines={2}>
                 Version {Constants.manifest.version}.{Platform.OS === 'android' ? Constants.manifest.android.versionCode : Constants.manifest.ios.buildNumber} 
           </Text>
-        */}
+       
       </View>
     )
   };

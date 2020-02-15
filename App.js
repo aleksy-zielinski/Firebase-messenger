@@ -1,11 +1,12 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator, AsyncStorage } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, AppState, Text, ActivityIndicator, AsyncStorage, Clipboard } from 'react-native';
 import { Notifications, Updates, AppLoading } from 'expo';
 import * as Permissions from 'expo-permissions';
 import * as Device from 'expo-device';
 import * as Font from 'expo-font';
 import * as Sentry from 'sentry-expo';
 
+import Constant from './constants/Constant';
 import AppNavigator from './navigation/AppNavigator';
 
 
@@ -17,6 +18,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
+      isFinishCheckToken: false,
       appIsReady: false,
     };
 
@@ -29,10 +31,72 @@ export default class App extends React.Component {
         console.log(err);
       } else{
         global.cookies = JSON.parse(result);
+        Clipboard.setString(global.cookies);
         console.log(global.cookies);
+        let arr = global.cookies.split(';');
+        // console.log(arr)
+        arr.forEach(item=>{
+          if (item.includes('Expires')){
+            let a2 = item.split('=');
+            console.log(a2[1])
+            var a = new Date(a2[1]);
+            var toDay = new Date();
+            if (toDay - a > 0){
+              console.log('cookie Expires')
+              this.refreshToken()
+            } else{
+              console.log('cookie still valid')
+              this.setState({isFinishCheckToken: true})
+            }
+          }
+        })
+        
       }
     });
   }
+
+
+  refreshToken = async () => {
+
+    try {
+
+      const url = Constant.severUrl + 'auth/refresh'
+      console.log(url)
+      let response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Cookie: global.cookies
+        },
+      });
+
+      // let responseJson = await response.json();
+      console.log(response);
+
+      // if (responseJson.status == 'OK'){
+      //   this.saveCookies(response.headers)
+      //   this.setState({isFinishCheckToken: true})
+      // } else{
+      //   Alert.alert('Error', responseJson.message)
+      // }
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  saveCookies = (headers) => {
+    let cookieStr = '';
+    for (const [name, value] of headers) {
+        if (name === "set-cookie") {
+            cookieStr = value
+            break;
+        }
+    }
+    console.log(cookieStr);
+    global.cookies = cookieStr;
+   
+  }
+
 
   componentWillMount(){
     this.getToken()
@@ -65,14 +129,14 @@ export default class App extends React.Component {
 
     Sentry.init({
       dsn: 'https://d3ac2ec37e054097bc493a354c93999d@sentry.io/2476461',
-      enableInExpoDevelopment: true,
+      enableInExpoDevelopment: __DEV__ ? true : false,
       debug: __DEV__ ? true : false
     });
 
   }
 
   render() {
-    if (this.state.appIsReady) {
+    if (this.state.appIsReady && this.state.isFinishCheckToken) {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
@@ -95,6 +159,7 @@ export default class App extends React.Component {
     if (nextAppState === 'active') {
       if (!__DEV__){
         this.checkForUpdateAsync()
+        this.getToken()
       }
     }
 
