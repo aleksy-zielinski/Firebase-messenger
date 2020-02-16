@@ -381,10 +381,14 @@ export default class ScheduledScreen extends React.Component {
         textStyle={{
           left: {
             color: 'black',
+            fontSize: 15,
+            lineHeight: 19,
             fontWeight: '300'
           },
           right: {
-            color: 'white',
+            color: '#fff',
+            fontSize: 15,
+            lineHeight: 19,
             fontWeight: '300'
           },
         }}
@@ -393,7 +397,7 @@ export default class ScheduledScreen extends React.Component {
             backgroundColor: '#fff',
           },
           right: {
-            backgroundColor: '#78AD6B',
+            backgroundColor: '#3178AC',
           },
         }}
         
@@ -403,7 +407,7 @@ export default class ScheduledScreen extends React.Component {
 
   renderAvatar= (props) => {
     return (
-      <View style={{width: 36, height: 36, backgroundColor: '#3178AC', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{width: 32, height: 32, backgroundColor: '#E66656', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
@@ -560,7 +564,7 @@ export default class ScheduledScreen extends React.Component {
         <View style={styles.headContainer}> 
             <View style={styles.topContainer}>
 
-              <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
                 <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
               </View>
               <View style={{marginLeft: 10, flex: 1}}>

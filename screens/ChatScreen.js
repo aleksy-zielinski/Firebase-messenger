@@ -305,7 +305,7 @@ export default class ChatScreen extends React.Component {
             backgroundColor: '#fff',
           },
           right: {
-            backgroundColor: '#78AD6B',
+            backgroundColor: '#3178AC',
           },
         }}
         
@@ -315,7 +315,7 @@ export default class ChatScreen extends React.Component {
 
   renderAvatar= (props) => {
     return (
-      <View style={{width: 36, height: 36, backgroundColor: '#3178AC', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{width: 32, height: 32, backgroundColor: '#E66656', borderRadius: 18, justifyContent: 'center', alignItems: 'center'}}>
         <Text style={{color: 'white', fontSize: 12}}>{(((props.currentMessage || {}).user || {}).name || "??")}</Text>
       </View>
     );
@@ -346,7 +346,7 @@ export default class ChatScreen extends React.Component {
           />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {this.pageData.meta_values.includes('priority') ? '#FF3C2F' : '#FFFFFF'}
+              color =  {this.pageData.meta_values.includes('priority') ? '#F38A00' : '#FFFFFF'}
               name={'flag'}
               size={25}
             />
@@ -354,7 +354,7 @@ export default class ChatScreen extends React.Component {
           onPress={this._handleFlag} />
           <Appbar.Action icon={({ size, color }) => (
             <Entypo
-              color =  {this.pageData.meta_values.includes('archived') ? '#FF3C2F' : '#FFFFFF'}
+              color =  {this.pageData.meta_values.includes('archived') ? '#F38A00' : '#FFFFFF'}
               name = {'box'}
               size={25}
             />
@@ -366,10 +366,10 @@ export default class ChatScreen extends React.Component {
 
             <View style={styles.topContainer}>
 
-            <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
               { this.userShort === "" ? 
-                <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 30, height: 30, resizeMode: 'contain', marginTop: 3, marginLeft: 0}} /> :
-                <Text style={{color: 'white', fontSize: 16}}>{this.userShort}</Text>
+                <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 42, height: 42, resizeMode: 'contain', marginTop: 3, marginLeft: 0}} /> :
+                <Text style={{color: 'white', fontSize: 15}}>{this.userShort}</Text>
               }
             </View>
 
@@ -442,8 +442,8 @@ const styles = StyleSheet.create({
     margin: 20
   },
   avatar: {
-    width: 50, 
-    height: 50,
+    width: 40, 
+    height: 40,
     borderRadius: 25,
   },
   nameText: {

@@ -33,8 +33,8 @@ export default class PostCell extends React.PureComponent {
 
           <View style={styles.topContainer}>
             
-            <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-              <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
+            <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+              <Text style={{color: 'white', fontSize: 15}}>{userShort}</Text>
             </View>
             <View style={{marginLeft: 16, flex: 1}}>
 
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   avatar: {
-    width: 50, 
-    height: 50,
+    width: 40, 
+    height: 40,
     borderRadius: 25,
   },
   nameText: {

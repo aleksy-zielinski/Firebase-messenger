@@ -234,7 +234,7 @@ export default class LoginScreen extends React.Component {
             >
               <Text
               style={{
-                color: '#3178AC'
+                color: '#E66656'
               }}
             >Reset password</Text>
             </TouchableOpacity>

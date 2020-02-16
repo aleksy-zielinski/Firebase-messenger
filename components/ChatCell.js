@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   avatar: {
-    width: 50, 
-    height: 50,
+    width: 40, 
+    height: 40,
     borderRadius: 25,
   },
   nameText: {

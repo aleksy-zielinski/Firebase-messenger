@@ -34,10 +34,10 @@ export default class PostCell extends React.PureComponent {
           onPress={this.props.onPress}>
         <View style={{flexDirection: 'row'}}>
           <View style={styles.topContainer}>
-            <View style={{width: 48, height: 48, backgroundColor: '#3178AC', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+            <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
                 { userShort === "" ? 
                   <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 42, height: 42, resizeMode: 'contain', marginTop: 0  , marginLeft: 0}} /> :
-                  <Text style={{color: 'white', fontSize: 16}}>{userShort}</Text>
+                  <Text style={{color: 'white', fontSize: 15}}>{userShort}</Text>
                 }
             </View>
             <View style={{marginLeft: 10, flex: 1}}>
@@ -61,17 +61,16 @@ export default class PostCell extends React.PureComponent {
           <View style={styles.iconContainer}>
             <Entypo
               style = {styles.box}
-              color =  {item.meta_values.includes('priority') ? '#FF3B30' : 'darkgray'}
+              color =  {item.meta_values.includes('priority') ? '#F38A00' : 'darkgray'}
               name={'flag'}
               size={25}
             />
             <Entypo
               style = {styles.box}
-              color =  {item.meta_values.includes('archived') ? '#FF3B30' : 'darkgray'}
+              color =  {item.meta_values.includes('archived') ? '#F38A00' : 'darkgray'}
               name={'box'}
               size={25}
             />
-
           </View>
         </View>
         <Text numberOfLines={3} style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}>{item.last_msg}</Text>
@@ -107,10 +106,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 10
   },
-
   avatar: {
-    width: 50, 
-    height: 50,
+    width: 40, 
+    height: 40,
     borderRadius: 25,
   },
   nameText: {
