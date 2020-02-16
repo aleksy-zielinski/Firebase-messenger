@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   durationText: {
     color: 'dimgray',
-    fontSize: 13,
+    fontSize: 12,
     marginTop: 4
   },
   createTimeText: {

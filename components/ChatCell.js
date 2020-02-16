@@ -27,7 +27,7 @@ export default class ChatCell extends React.PureComponent {
               <View style={{flex:1}}>
                <Text style= {styles.nameText}>{item.user_name}</Text>
                 <Text style={styles.locationText}>{item.location}</Text>
-                <Text style={styles.durationText}>{item.start_time} - {item.end_time}x</Text>
+                <Text style={styles.durationText}>{item.start_time} - {item.end_time}</Text>
               </View>
 
               <Entypo
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   durationText: {
     color: 'dimgray',
-    fontSize: 13,
+    fontSize: 12,
     marginTop: 4
   },
   locationText: {
