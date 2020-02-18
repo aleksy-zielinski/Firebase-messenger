@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:685739402138:android:e9ef307fad86b5f24cd023",
+        "mobilesdk_app_id": "1:685739402138:android:760ee326ec250ad74cd023",
         "android_client_info": {
-          "package_name": "com.instancea.Kata"
+          "package_name": "com.ruebarue.message"
         }
       },
       "oauth_client": [

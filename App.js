@@ -162,7 +162,7 @@ export default class App extends React.Component {
           {this.state.isLoading &&
                 <View style={styles.loadingStyle}>
                   <ActivityIndicator size='large' />
-                  <Text style={{color:'white', margin: 10}}>Updating app to late version</Text>              
+                  {/* <Text style={{color:'white', margin: 10}}>Updating data</Text>*/}
                 </View>
               }
         </View>

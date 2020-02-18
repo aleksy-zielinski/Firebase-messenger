@@ -26,14 +26,14 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "buildNumber": "5",
+      "buildNumber": "9",
       "supportsTablet": true,
       "bundleIdentifier": "com.ruebarue.message"
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 1,
       "googleServicesFile": "./google-services.json",
-      "package": "com.instancea.Kata"
+      "package": "com.ruebarue.message"
     }
   }
 }

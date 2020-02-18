@@ -53,9 +53,9 @@ export default class MessagesScreen extends React.Component {
     
     console.log(JSON.stringify(notification.data))
 
-    this.state.page.forEach( item =>{
+    this.state.pageData.forEach( item =>{
 
-      console.log('item', item.id, notification.data.thread_id)
+      // console.log('item', item.id, notification.data.thread_id)
       if (item.id == notification.data.thread_id){
         this.props.navigation.navigate('Chat', {
           recipients: this.state.recipients,
