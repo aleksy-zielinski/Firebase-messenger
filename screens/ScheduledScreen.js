@@ -105,7 +105,7 @@ export default class ScheduledScreen extends React.Component {
         text: item.content,
         createdAt: item.created_at,
         user: {
-          _id: item.sender_type,
+          _id: item.sender_type === "guest" ? "guest" : "recipient",
           name: initials
         },
       }

@@ -36,7 +36,7 @@ export default class ChatScreen extends React.Component {
     const matches = this.displayName.match(/\b(\w)/g) || [];
     const acronym = matches.length > 1 ? matches.join('') : ""; 
     this.userShort = acronym.substring(0,2)
-    this.propCode = this.pageData.unit_code || ""    
+    this.propCode = this.pageData.unit_code || ""
   }
 
   componentDidMount(){
@@ -56,11 +56,19 @@ export default class ChatScreen extends React.Component {
   creatMessage = (res) => {
     let messages = [];
     res.forEach( item =>{
-      var initals = "??"
+      var initials = "??"
 
-      if (item.sender_type !== "recipient"){
+      if (item.sender_type === "recipient"){
         recipient = this.recipients.filter((r) => {
           return r.id.toString() === item.sender_id.toString();
+        })[0];
+
+        if (!!recipient){
+          initials = `${ recipient.first_name[0] || "" }${ recipient.last_name[0] || "" }`
+        }
+      } else if (item.sender_type === "automated") {
+        recipient = this.recipients.filter((r) => {
+          return r.primary
         })[0];
 
         if (!!recipient){
@@ -70,17 +78,20 @@ export default class ChatScreen extends React.Component {
         initials = this.userShort;
       }
 
-      const m = {
+      var m = {
         _id: item.id,
         text: item.content,
         createdAt: item.created_at,
         user: {
-          _id: item.sender_type,
+          _id: item.sender_type === "guest" ? "guest" : "recipient",
           name: initials,
         },
       }
+
+      console.log(m.user._id, item.sender_type, initials)
       messages.push(m);
     })
+
     return messages.reverse()
 
   }
@@ -101,7 +112,6 @@ export default class ChatScreen extends React.Component {
       let responseJson = await response.json();
 
       if (responseJson && Object.keys(responseJson).length > 0){
-
         // let guest = responseJson.guest;
         // this.displayName = (guest.guest_first_name + " " + guest.guest_last_name).trim() || guest.guest_name || guest.guest_phone || "";
         // const matches = this.displayName.match(/\b(\w)/g);
@@ -384,9 +394,9 @@ export default class ChatScreen extends React.Component {
             
         </View>
            <GiftedChat
-            // showUserAvatar = {true}
             // renderUsernameOnMessage = {true}
             // isTyping={true}
+            showUserAvatar = {true}
             renderBubble={this.renderBubble}
             renderAvatar={this.renderAvatar}
             messages={this.state.messages}
