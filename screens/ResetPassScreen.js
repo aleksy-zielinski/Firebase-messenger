@@ -27,7 +27,7 @@ export default class ResetPassScreen extends React.Component {
 
   componentDidMount(){
     if (__DEV__){
-      throw new Error("My first Sentry error!");
+      // throw new Error("My first Sentry error!");
       // Sentry.nativeCrash();
     }
   }
@@ -105,12 +105,12 @@ export default class ResetPassScreen extends React.Component {
           <View style={styles.fillBox}>
             <FormLabel>Email</FormLabel>
             <TextInput
+              autoCapitalize = 'none'
               error = {!isValidEmai}
               dense = {true}
               style={styles.textInput1}
               value={this.state.email}
               onChangeText={text => this._handleTextChange(text) }
-              
             />
             <View
             style={{
@@ -225,10 +225,12 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingRight: 12,
     paddingBottom: 0,
-    paddingLeft: 16,
+    paddingLeft: 8,
     backgroundColor: '#ffffff',
     height: 48,
     borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#cccccc',
     fontSize: 16,
   },
 });

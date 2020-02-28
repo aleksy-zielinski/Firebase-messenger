@@ -34,6 +34,7 @@ export default class MessagesScreen extends React.Component {
       isLoading: false,
       isLoadingMore: false,
       page: 0,
+      pendingMeta: []
     };
     this.notificationSubscription;
   }
@@ -49,27 +50,7 @@ export default class MessagesScreen extends React.Component {
     this.notificationSubscription.remove()
   }
 
-  _handleNotification = (notification) => {
-    
-    console.log(JSON.stringify(notification.data))
-
-    this.state.pageData.forEach( item =>{
-
-      // console.log('item', item.id, notification.data.thread_id)
-      if (item.id == notification.data.thread_id){
-        this.props.navigation.navigate('Chat', {
-          recipients: this.state.recipients,
-          page: item,
-          onSelect:this.callBack
-        });
-      }
-      
-    })
-
-  };
-
-   isRealValue = (obj) =>
-  {
+  isRealValue = (obj) => {
     return obj && obj !== 'null' && obj !== 'undefined';
   }
 
@@ -79,7 +60,7 @@ export default class MessagesScreen extends React.Component {
 
     try {
       const url = Constant.severUrl + `api/messaging/inbox/0/meta?page=${this.state.page}&filter=${this.state.filter}`
-      console.log(url)
+      
       let response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -105,7 +86,6 @@ export default class MessagesScreen extends React.Component {
             data = [...data, ...filteredData]
           }
 
-          console.log(data.length)
           return {  
             isLoading: false, 
             isLoadingMore: false,
@@ -166,6 +146,77 @@ export default class MessagesScreen extends React.Component {
 
   }
 
+  _onMetaToggle = async (item, meta) => {
+    let pageData = this.state.pageData,
+        pageItem = pageData.filter(i => i.id === item.id)[0],
+        pendingMeta = this.state.pendingMeta
+    
+    if (!pageItem) return
+    if (pendingMeta.indexOf(item.id) !== -1) return
+
+    const isAdd = pageItem.meta_values.split(",").indexOf(meta) === -1
+
+    this.toggleItemMeta(pageItem, meta)
+    this.setState({pendingMeta: [item.id, ...pendingMeta]});
+    
+    try {
+      let formdata = new FormData();
+          formdata.append('token', meta)
+
+      const url = Constant.severUrl + `api/messaging/thread/${pageItem.id}/meta`
+      
+      let response = await fetch(url, {
+        method:  isAdd ? 'POST' : 'DELETE',
+        headers: {
+          Cookie: global.cookies,
+        },
+        body: formdata,
+      });
+      
+      let responseJson = await response.json();
+      this.setState({isLoading:false})
+
+      if (responseJson.status == 'ok'){
+        this.state.pendingMeta.splice(pendingMeta.indexOf(meta), 1)
+        this.setState({pendingMeta: [...pendingMeta]})
+
+        if (meta === "archived") {
+          let idx = pageData.indexOf(pageItem);
+          if (idx !== -1) {
+            pageData.splice(idx, 1)
+
+            if (pageData.length === 0) pageData = [];
+            this.setState({pageData: pageData})
+          }
+        }
+
+      } else{
+        this.toggleItemMeta(pageItem, meta)
+        console.error(responseJson);
+        Alert.alert('Error', responseJson.message)
+      }
+    } catch (error) {
+      this.toggleItemMeta(pageItem, meta)
+      console.error(error);
+      Alert.alert('Error',error.message) 
+    }
+  }
+
+  toggleItemMeta = (item, meta) => {
+    let current = item.meta_values.split(",").filter(v => v !== ""),
+        idx = current.indexOf(meta),
+        isAdd = idx === -1;
+
+    if (isAdd) {
+      current.push(meta)
+    } else {
+      current.splice(idx, 1)
+    }
+
+    item.meta_values = current.join(",")
+    this.setState({pageData: this.state.pageData})
+  }
+
   callBack = () => {
     //reload data
     this.actionRefresh()
@@ -173,7 +224,6 @@ export default class MessagesScreen extends React.Component {
 
   renderFooter = () => {
     if (this.state.isFull) {
-      console.log('hidden indicator')
       return null;
     }
     return (
@@ -202,8 +252,6 @@ export default class MessagesScreen extends React.Component {
       return;
     }
 
-    console.log('load more');
-
     this.setState(
       {
         isLoadingMore: true,
@@ -217,7 +265,7 @@ export default class MessagesScreen extends React.Component {
 
   render() {
 
-    const { pageData, isRefresh } = this.state;
+    const { pageData, pendingMeta, isRefresh } = this.state;
 
     return (
       <View style={styles.container}>
@@ -244,10 +292,10 @@ export default class MessagesScreen extends React.Component {
           />
 
         </View>
-
         <FlatList
           ref={notiRef => this.listView = notiRef}
           data={pageData}
+          pendingMeta={pendingMeta}
           // key={keyGrid}
           // numColumns={2}
           keyExtractor={item => `${item.id}`}
@@ -257,7 +305,9 @@ export default class MessagesScreen extends React.Component {
           renderItem={({ item }) => (
             <TaskCell
               item={item}
-              onPress={() => this._onPressCell(item)}
+              pending={pendingMeta.indexOf(item.id) !== -1}
+              onPress={ () => this._onPressCell(item) }
+              onMetaToggle={ this._onMetaToggle.bind(this) }
             />
           )}
           onEndReached={this.actionLoadMore}

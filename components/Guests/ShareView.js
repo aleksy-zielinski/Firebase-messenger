@@ -93,7 +93,7 @@ export default class ShareView extends React.PureComponent {
     //   'Send Social Media Campain by SMS'
     // ]
 
-    const lines = options.map( (item, index) =>
+    const lines = options.filter(m => m.active).map( (item, index) =>
         <SelectView 
           title={item.name}
           index={index}

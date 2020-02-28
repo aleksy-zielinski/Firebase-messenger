@@ -14,7 +14,7 @@ export default class SchedulerView extends React.PureComponent {
 
     const { options, messagesIds} = this.props
 
-    const lines = options.map( (obj, index) =>
+    const lines = options.filter(m => m.active).map( (obj, index) =>
       <TouchableOpacity 
         style={styles.rowStyle}
         key={`index${index}`}

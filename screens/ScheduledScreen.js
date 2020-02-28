@@ -435,7 +435,6 @@ export default class ScheduledScreen extends React.Component {
     
   };
 
-
   render(){
 
     const item = this.item
@@ -445,8 +444,8 @@ export default class ScheduledScreen extends React.Component {
 
     let appBarIcon = [
       'calendar-text',
-      'chart-bubble',
       'share',
+      'chart-bubble',
       'square-edit-outline',
       'delete-forever'
     ]
@@ -454,10 +453,10 @@ export default class ScheduledScreen extends React.Component {
     if (this.item.rental_id || this.item.guestlink_id){
       appBarIcon = [
         'calendar-text',
-        'chart-bubble',
         'share',
-        'square-edit-outline',
+        'chart-bubble',
         'link-variant',
+        'square-edit-outline',
         'delete-forever'
       ]
     }
@@ -482,7 +481,7 @@ export default class ScheduledScreen extends React.Component {
           />
         )
         break;
-      case 1:
+      case 2:
         contentView = (
           <GiftedChat
             showUserAvatar={true}
@@ -496,7 +495,7 @@ export default class ScheduledScreen extends React.Component {
           />
         )
         break;
-      case 2:
+      case 1:
         contentView=(
           <KeyboardAwareScrollView enableOnAndroid={true}>
             <ShareView 

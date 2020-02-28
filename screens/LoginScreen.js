@@ -178,6 +178,7 @@ export default class LoginScreen extends React.Component {
                 marginBottom: 12,
               }}
               value={email}
+              autoCapitalize = 'none'
               onChangeText={text => {this._handleEmailTextChange(text)}}
             />
             <FormLabel>Password</FormLabel>

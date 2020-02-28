@@ -11,9 +11,12 @@ import {
 
 export default class PostCell extends React.PureComponent {
 
+  toggleMeta(meta) {
+    this.props.onMetaToggle(this.props.item, meta)
+  }
+
   render(){
     const item = this.props.item
-
     const displayName = (item.guest_first_name + " " + item.guest_last_name).trim() || 
                         item.guest_name || 
                         item.guest_phone || 
@@ -29,55 +32,58 @@ export default class PostCell extends React.PureComponent {
 
     return (
       <View style={styles.container}> 
-         <TouchableOpacity 
+        <TouchableOpacity 
           style={{flex: 1}}
           onPress={this.props.onPress}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={styles.topContainer}>
-            <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
-                { userShort === "" ? 
-                  <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 42, height: 42, resizeMode: 'contain', marginTop: 0  , marginLeft: 0}} /> :
-                  <Text style={{color: 'white', fontSize: 15}}>{userShort}</Text>
-                }
-            </View>
-            <View style={{marginLeft: 10, flex: 1}}>
-
-              <View style={{flexDirection: 'row'}}>
-                <Text style= {styles.nameText} numberOfLines={1}>{displayName}</Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <Text style= {styles.codeText} numberOfLines={1}>{propCode}</Text>
-              </View>
-              <View style={{flexDirection: 'row'}}>
-                <View style={{flex:1}}>
-                  { item.check_in !== '0001-01-01T00:00:00Z' ? 
-                    <Text style={styles.durationText}>{check_in} - {check_out}</Text> : 
-                    <Text style={styles.durationText}></Text> 
+          <View style={{flexDirection: 'row'}}>
+            <View style={styles.topContainer}>
+              <View style={{width: 48, height: 48, backgroundColor: '#E66656', borderRadius: 24, justifyContent: 'center', alignItems: 'center'}}>
+                  { userShort === "" ? 
+                    <Image source={require('../assets/images/guest-unknown-white.png')} style={{width: 42, height: 42, resizeMode: 'contain', marginTop: 0  , marginLeft: 0}} /> :
+                    <Text style={{color: 'white', fontSize: 15}}>{userShort}</Text>
                   }
+              </View>
+              <View style={{marginLeft: 10, flex: 1}}>
+
+                <View style={{flexDirection: 'row'}}>
+                  <Text style= {styles.nameText} numberOfLines={1}>{displayName}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <Text style= {styles.codeText} numberOfLines={1}>{propCode}</Text>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex:1}}>
+                    { item.check_in !== '0001-01-01T00:00:00Z' ? 
+                      <Text style={styles.durationText}>{check_in} - {check_out}</Text> : 
+                      <Text style={styles.durationText}></Text> 
+                    }
+                  </View>
                 </View>
               </View>
             </View>
+            <View style={styles.iconContainer}>
+              <TouchableOpacity onPress={this.toggleMeta.bind(this, 'priority')}>
+                <Entypo
+                  style = {{opacity: (this.props.pending ? 0.6 : 1), ...styles.box}}
+                  color =  {item.meta_values.includes('priority') ? '#F38A00' : 'darkgray'}
+                  name={'flag'}
+                  size={25}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={this.toggleMeta.bind(this, 'archived')}>
+                <Entypo
+                  style = {{opacity: (this.props.pending ? 0.6 : 1), ...styles.box}}
+                  color =  {item.meta_values.includes('archived') ? '#F38A00' : 'darkgray'}
+                  name={'box'}
+                  size={25}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.iconContainer}>
-            <Entypo
-              style = {styles.box}
-              color =  {item.meta_values.includes('priority') ? '#F38A00' : 'darkgray'}
-              name={'flag'}
-              size={25}
-            />
-            <Entypo
-              style = {styles.box}
-              color =  {item.meta_values.includes('archived') ? '#F38A00' : 'darkgray'}
-              name={'box'}
-              size={25}
-            />
+          <Text numberOfLines={3} style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}>{item.last_msg}</Text>
+          <View style={{flexDirection: 'row'}}>
+              <Text style= {styles.createTimeText}>{last_msg_on}</Text>
           </View>
-        </View>
-        <Text numberOfLines={3} style={[styles.contentText, {fontWeight: item.meta_values.includes('unread') ? '500': '300'}]}>{item.last_msg}</Text>
-        <View style={{flexDirection: 'row'}}>
-            <Text style= {styles.createTimeText}>{last_msg_on}</Text>
-        </View>
-        
         </TouchableOpacity>
       </View>
     );
